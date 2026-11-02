@@ -561,7 +561,8 @@ const RPC={dadosPublicos:['dados_publicos',[]],entrar:['entrar',['p_pin']],dados
   entrarGestao:['entrar_gestao',['p_pin']],dadosGestao:['dados_gestao',['p_pin']],salvarColab:['salvar_colab',['p_pin','p']],
   removerColab:['remover_colab',['p_pin','p_id']],salvarQuiz:['salvar_quiz',['p_pin','p']],alternarQuiz:['alternar_quiz',['p_pin','p_id']],
   removerQuiz:['remover_quiz',['p_pin','p_id']],salvarAvaliacoes:['salvar_avaliacoes',['p_pin','p_lista']],
-  salvarPremios:['salvar_premios',['p_pin','p']],trocarPinGestao:['trocar_pin_gestao',['p_pin','p_novo']]};
+  salvarPremios:['salvar_premios',['p_pin','p']],trocarPinGestao:['trocar_pin_gestao',['p_pin','p_novo']],
+  salvarGestor:['salvar_gestor',['p_pin','p']],removerGestor:['remover_gestor',['p_pin','p_id']]};
 const msg=e=>String((e&&e.message)||e||'Algo deu errado. Tente de novo.');
 async function call(fn,...args){
   if(DEMO)return new Promise((res,rej)=>setTimeout(()=>{try{const r=MOCK[fn](...args);res(JSON.parse(JSON.stringify(r===undefined?null:r)))}catch(e){rej(e)}},200));
@@ -612,7 +613,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261102200156';
+const APP_VERSION='20261102202634';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -847,7 +848,8 @@ function cHist(me){
 function vAdmin(){
   const tabs=[['avaliar','Avaliar'],['limpeza','Limpeza'],['cardapio','Cardápio'],['ranking','Ranking'],['quiz','Quizzes'],['equipe','Equipe'],['premios','Prêmios'],['ajustes','Ajustes']];
   const body=!S.adm?carregando('Abrindo a gestão…'):S.tab==='avaliar'?aAvaliar():S.tab==='limpeza'?aLimpeza():S.tab==='cardapio'?aCardapio():S.tab==='ranking'?aRanking():S.tab==='quiz'?aQuiz():S.tab==='equipe'?aEquipe():S.tab==='premios'?aPremios():aAjustes();
-  return topbar('Gestão · Natura',`<button class="ghost" data-act="adminOut">Sair</button>`)+
+  const quem=S.adm&&S.adm.eu&&S.adm.eu!=='Gestão'?'Gestão · '+String(S.adm.eu).split(' ')[0]:'Gestão · Natura';
+  return topbar(esc(quem),`<button class="ghost" data-act="adminOut">Sair</button>`)+
    `<nav class="tabs"><div class="wrap wide">${tabs.map(([k,l])=>`<button class="tab ${S.tab===k?'on':''}" data-act="tab" data-k="${k}">${l}</button>`).join('')}</div></nav>
    <main class="wrap wide stack">${body}</main>`+footer();
 }
@@ -939,7 +941,11 @@ function aPremios(){
 function aAjustes(){
   return `<h2 style="font-size:22px">Ajustes</h2>
    <div class="cards">
-    <div class="card"><b>PIN da gestão</b><p class="muted" style="margin:0;font-size:14px">6 números. Troque se mais alguém souber.</p><div class="acts"><button class="btn sm" data-act="changeAdminPin">Trocar PIN da gestão</button></div></div>
+    <div class="card" style="grid-column:1/-1"><div class="row" style="justify-content:space-between"><b>Gestoras (PIN individual)</b><button class="btn sm" data-act="gNovo">${ic('plus')} Adicionar</button></div>
+      <p class="muted" style="margin:0;font-size:14px">Cada gestora entra com o próprio PIN de 6 números, e o nome dela aparece no topo da gestão.</p>
+      ${(S.adm&&S.adm.gestores||[]).map(g=>`<div class="done"><span class="t"><b>${esc(g.nome)}</b>${g.ativo?'':' <span class="chip off">Inativa</span>'}<br><small class="muted">PIN <span class="pinv num">${esc(g.pin)}</span></small></span><button class="btn sm alt" data-act="gEdit" data-id="${esc(g.id)}">${ic('pencil')} Editar</button><button class="btn sm alt" data-act="gDel" data-id="${esc(g.id)}">${ic('trash')} Remover</button></div>`).join('')||'<p class="muted" style="margin:0">Nenhuma gestora cadastrada.</p>'}
+    </div>
+    <div class="card"><b>PIN geral da gestão</b><p class="muted" style="margin:0;font-size:14px">O PIN antigo, de uso geral. Continua valendo. Troque se mais alguém souber.</p><div class="acts"><button class="btn sm" data-act="changeAdminPin">Trocar PIN geral</button></div></div>
     <div class="card"><b>Rotina sugerida</b><ol style="color:inherit;font-size:14px;line-height:1.6;margin:0;padding-left:20px"><li>Todo dia útil, aba Avaliar: marque o que cada um cumpriu.</li><li>A cada 15 dias, crie um quiz.</li><li>No começo do ano, cadastre os prêmios do ano.</li><li>Em dezembro, veja o top 3 do ano de cada ranking.</li></ol></div>
     <div class="card"><b>Dados</b><p class="muted" style="margin:0;font-size:14px">Tudo fica guardado no Supabase, um banco de dados gratuito. Os PINs ficam protegidos: a equipe nunca vê o PIN dos colegas.</p>${S.adm&&S.adm.planilhaUrl?`<div class="acts"><a class="btn sm alt" href="${esc(S.adm.planilhaUrl)}" target="_blank" rel="noopener">Abrir planilha</a></div>`:''}</div>
    </div>`;
@@ -1140,6 +1146,22 @@ const A={
   changeAdminPin:()=>{M={};openModal(`<h2>Trocar PIN da gestão</h2><div class="fld"><label for="a-pin">Novo PIN (6 números)</label><input id="a-pin" type="tel" inputmode="numeric" maxlength="6" class="num"></div><p class="ferr"></p><div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="saveAdminPin">Salvar</button></div>`)},
   saveAdminPin:async(d,b)=>{const p=$('#a-pin').value.trim();if(!/^\d{6}$/.test(p))return ferr('Use exatamente 6 números.');busyBtn(b,true,'Salvando…');try{await call('trocarPinGestao',adminPin,p);adminPin=p;SS.set('qsn_gest',p);closeModal();toast('PIN da gestão atualizado')}catch(e){busyBtn(b,false,'Salvar');ferr(msg(e))}},
 };
+Object.assign(A,{
+  gNovo:()=>gestorForm(null),
+  gEdit:d=>gestorForm(d.id),
+  gDel:d=>{const g=S.adm.gestores.find(x=>x.id===d.id);confirmModal('Remover '+g.nome+'?','Ela não consegue mais entrar na gestão com o PIN '+g.pin+'.','Remover',async()=>{await acao('removerGestor',d.id);toast('Acesso removido')})},
+  gSalvar:async(d,b)=>{const p={id:M.id||'',nome:$('#g-nome').value.trim(),pin:$('#g-pin').value.trim(),ativo:$('#g-ativo').checked};
+    if(!p.nome)return ferr('Informe o nome.');if(!/^\d{6}$/.test(p.pin))return ferr('O PIN precisa ter exatamente 6 números.');
+    busyBtn(b,true,'Salvando…');try{await acao('salvarGestor',p);closeModal();toast(M.id?'Gestora atualizada':'Gestora adicionada')}catch(e){busyBtn(b,false,'Salvar');ferr(msg(e))}},
+});
+function gestorForm(id){
+  const g=id?S.adm.gestores.find(x=>x.id===id):null;M={id};
+  openModal(`<h2>${g?'Editar gestora':'Nova gestora'}</h2>
+   <div class="fld"><label for="g-nome">Nome</label><input id="g-nome" type="text" value="${esc(g?g.nome:'')}" autocomplete="off"></div>
+   <div class="fld"><label for="g-pin">PIN de 6 números</label><input id="g-pin" type="tel" inputmode="numeric" maxlength="6" class="num" value="${esc(g?g.pin:'')}"><span class="hint">Entregue o PIN só para a pessoa.</span></div>
+   <label class="check" style="margin-bottom:14px"><input id="g-ativo" type="checkbox" ${!g||g.ativo?'checked':''}> Ativa (pode entrar na gestão)</label>
+   <p class="ferr"></p><div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="gSalvar">Salvar</button></div>`);
+}
 A.instalar=async()=>{if(!instalarEvt)return;const ev=instalarEvt;instalarEvt=null;ev.prompt();try{await ev.userChoice}catch(e){}render()};
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();instalarEvt=e;render()});
 window.addEventListener('appinstalled',()=>{instalarEvt=null;toast('App instalado! Procure o ícone Quiz Natura.');render()});
