@@ -1,0 +1,906 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#283897">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Quiz Natura">
+<meta name="robots" content="noindex, nofollow">
+<title>Quiz Sodexo Natura</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap">
+<style>
+/* Sodexo identity: logo blue + red star, white brand bar. Layout: mobile-first single column for the team (keypad → placar → quiz); wide multi-column panel for management. */
+:root{
+  --bg:#F2F4FA;--surface:#FFFFFF;--sunk:#E7EAF4;--ink:#2A295C;--muted:#5B6285;--line:#D9DDEC;
+  --brand:#283897;--brand-ink:#FFFFFF;--accent:#DA2020;--accent-soft:#E4E8F8;--accent-ink:#1E2B7A;
+  --ok:#17845A;--ok-soft:#DDF2E8;--bad:#C0362C;--bad-soft:#FBE3E0;--bar:#FFFFFF;--bar-ink:#283897;
+  --display:'Nunito',ui-rounded,system-ui,sans-serif;
+  --body:'Nunito Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0D1130;--surface:#161C45;--sunk:#10153A;--ink:#E6E9F8;--muted:#9AA2CC;--line:#262E63;
+  --brand:#3A4DC4;--brand-ink:#FFFFFF;--accent:#FF5A4E;--accent-soft:#1F2A6B;--accent-ink:#D3DAFF;
+  --ok:#4CC38F;--ok-soft:#113426;--bad:#FF7A6E;--bad-soft:#3C1714;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D1130;--surface:#161C45;--sunk:#10153A;--ink:#E6E9F8;--muted:#9AA2CC;--line:#262E63;
+  --brand:#3A4DC4;--brand-ink:#FFFFFF;--accent:#FF5A4E;--accent-soft:#1F2A6B;--accent-ink:#D3DAFF;
+  --ok:#4CC38F;--ok-soft:#113426;--bad:#FF7A6E;--bad-soft:#3C1714;color-scheme:dark}
+
+html,body{min-height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bar)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap.wide{max-width:1120px}
+
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bar);color:var(--bar-ink);border-bottom:3px solid var(--brand);box-shadow:0 1px 0 var(--line)}
+.top .wrap{display:flex;align-items:center;gap:12px;min-height:60px}
+.brand{display:flex;align-items:center;gap:12px;font-family:var(--display);font-weight:900;font-size:19px;flex:1;min-width:0;color:var(--bar-ink)}
+.brand img{height:30px;width:auto;flex:none}
+.brand .sep{width:1px;height:30px;background:#C9CEE6;flex:none}
+.brand .q{line-height:1.05;letter-spacing:-.01em;min-width:0}
+.brand .q span{color:#DA2020}
+.brand small{display:block;font-family:var(--body);font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#5B6285}
+.ghost{background:transparent;border:1.5px solid #283897;color:#283897;border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600}
+
+main{padding-block:20px 48px}
+.stack{display:flex;flex-direction:column;gap:20px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.sec-h h2{font-size:19px}
+.eyebrow{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:12px 18px;font-weight:700;background:var(--brand);color:var(--brand-ink);min-height:48px}
+.btn.alt{background:var(--sunk);color:var(--ink)}
+.btn.warn{background:var(--bad);color:#fff}
+.btn.sm{min-height:36px;padding:7px 12px;font-size:14px;border-radius:9px}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.block{width:100%}
+.link{background:none;border:0;color:var(--brand);font-weight:600;text-decoration:underline;padding:8px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .link{color:var(--accent)}}
+:root[data-theme="dark"] .link{color:var(--accent)}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px}
+
+/* Login */
+.login{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding-top:28px}
+.login h1{font-size:28px}
+.dots{display:flex;gap:14px;margin:18px 0 6px}
+.dot{width:16px;height:16px;border-radius:50%;border:2px solid var(--brand);transition:background .12s}
+.dot.on{background:var(--brand)}
+.err{color:var(--bad);font-weight:600;min-height:24px;margin:0}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;width:100%;max-width:320px;margin:10px 0 18px}
+.pad button{height:68px;border-radius:18px;border:1px solid var(--line);background:var(--surface);font-family:var(--display);font-weight:600;font-size:28px;box-shadow:0 1px 0 var(--line)}
+.pad button:active{background:var(--sunk);transform:translateY(1px)}
+.pad .blank{visibility:hidden}
+.pad .bk{font-size:20px;font-family:var(--body);font-weight:600;color:var(--muted)}
+
+/* Avatars */
+.av{border-radius:50%;object-fit:cover;flex:none;display:grid;place-items:center;font-family:var(--display);font-weight:800;color:#fff;overflow:hidden;background:var(--brand)}
+.av img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* Score hero */
+.score{background:var(--brand);color:var(--brand-ink);border-radius:20px;padding:20px;display:grid;grid-template-columns:1fr auto;gap:4px 16px;align-items:end;position:relative;overflow:hidden}
+.score::after{content:"";position:absolute;right:-36px;top:-36px;width:150px;height:150px;border-radius:50%;background:#FFFFFF;opacity:.08}
+.score::before{content:"";position:absolute;right:18px;top:16px;width:14px;height:14px;background:var(--accent);clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.score .lbl{font-size:13px;font-weight:600;opacity:.85;grid-column:1/-1}
+.score .pts{font-family:var(--display);font-weight:800;font-size:56px;line-height:1}
+.score .pts span{font-size:20px;font-weight:600;margin-left:4px;opacity:.85}
+.score .pos{text-align:right;position:relative;z-index:1;padding-top:14px}
+.score .pos b{display:block;font-family:var(--display);font-size:30px;line-height:1}
+.score .meta{grid-column:1/-1;font-size:14px;opacity:.9;margin-top:6px}
+
+/* Quiz list */
+.qitem{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;min-height:64px}
+.qitem .t{flex:1;min-width:0;font-weight:600}
+.chip{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:3px 10px;font-size:13px;font-weight:700;white-space:nowrap}
+.chip.gold{background:var(--accent-soft);color:var(--accent-ink)}
+.chip.ok{background:var(--ok-soft);color:var(--ok)}
+.chip.bad{background:var(--bad-soft);color:var(--bad)}
+.chip.off{background:var(--sunk);color:var(--muted)}
+.list{display:flex;flex-direction:column;gap:10px}
+.done{display:flex;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px solid var(--line);font-size:15px}
+.done:last-child{border-bottom:0}
+.done .t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.empty{text-align:center;padding:22px 16px;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:14px}
+
+/* Ranking rows */
+.rk{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px}
+.rk:nth-child(odd){background:var(--sunk)}
+.rk.me{background:var(--accent-soft);color:var(--accent-ink)}
+.rk .p{width:28px;font-family:var(--display);font-weight:800;font-size:18px;text-align:center}
+.rk .n{flex:1;min-width:0}
+.rk .n b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rk .n small{color:var(--muted);font-size:13px}
+.rk.me .n small{color:inherit;opacity:.8}
+.rk .v{font-family:var(--display);font-weight:800;font-size:18px}
+.rk .v small{font-family:var(--body);font-weight:600;font-size:12px;opacity:.7}
+
+/* Quiz screen */
+.qhead{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.qtext{font-size:24px;margin:14px 0 18px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:16px;border-radius:14px;border:2px solid var(--line);background:var(--surface);font-weight:600;font-size:17px;min-height:60px}
+.opt .l{width:30px;height:30px;border-radius:50%;background:var(--sunk);display:grid;place-items:center;font-family:var(--display);font-weight:800;flex:none}
+.opt.sel{border-color:var(--brand)}
+.opt.sel .l{background:var(--brand);color:var(--brand-ink)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.right .l{background:var(--ok);color:#fff}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt.wrong .l{background:var(--bad);color:#fff}
+.verdict{border-radius:14px;padding:14px 16px;font-weight:700;font-size:17px}
+.verdict.ok{background:var(--ok-soft);color:var(--ok)}
+.verdict.bad{background:var(--bad-soft);color:var(--bad)}
+.sticky-cta{position:sticky;bottom:0;padding-block:12px calc(12px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--bg) 70%,transparent)}
+
+/* Admin */
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;background:var(--surface);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:4px}
+.tab{background:none;border:0;border-bottom:3px solid transparent;padding:14px 12px 11px;font-weight:700;color:var(--muted);white-space:nowrap}
+.tab.on{color:var(--ink);border-bottom-color:var(--accent)}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.toolbar .grp{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+select,input[type=text],input[type=number],input[type=month],input[type=tel],textarea{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px;width:100%}
+select{width:auto}
+textarea{min-height:84px;resize:vertical}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.stat b{display:block;font-family:var(--display);font-size:26px;line-height:1.1}
+.stat span{font-size:13px;color:var(--muted)}
+.podium{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:10px;align-items:end}
+.pd{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 8px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0}
+.pd.p1{background:var(--accent-soft);border-color:var(--accent);padding-block:20px}
+.pd .medal{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.pd.p1 .medal{color:var(--accent-ink)}
+.pd .nm{font-weight:700;font-size:14px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pd .pt{font-family:var(--display);font-weight:800;font-size:22px}
+.tbl-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:16px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+tr:last-child td{border-bottom:0}
+td.r,th.r{text-align:right}
+.who{display:flex;align-items:center;gap:10px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card .row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.card .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.card .qq{font-weight:700;font-size:16px}
+.card ol{margin:0;padding-left:20px;font-size:14px;color:var(--muted)}
+.card ol li.c{color:var(--ok);font-weight:700}
+.pinv{font-family:var(--display);font-weight:800;letter-spacing:.2em}
+.notice{background:var(--accent-soft);color:var(--accent-ink);border-radius:14px;padding:14px 16px;font-size:15px}
+
+/* Modal */
+.ov{position:fixed;inset:0;background:rgba(5,20,16,.55);z-index:20;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--bg);width:100%;max-width:560px;max-height:92vh;overflow:auto;border-radius:20px 20px 0 0;padding:20px max(16px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+@media (min-width:700px){.ov{align-items:center}.sheet{border-radius:20px;padding:24px}}
+.sheet h2{font-size:22px;margin-bottom:14px}
+.fld{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.fld label,.fld .lb{font-weight:600;font-size:14px}
+.fld .hint{font-size:13px;color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.optrow{display:flex;align-items:center;gap:10px}
+.optrow input[type=radio]{width:22px;height:22px;flex:none;accent-color:var(--ok)}
+.photo{display:flex;align-items:center;gap:14px}
+.ferr{color:var(--bad);font-weight:600;min-height:22px;margin:0 0 8px}
+.sheet .acts{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.check{display:flex;align-items:center;gap:10px;font-weight:600}
+.check input{width:22px;height:22px;accent-color:var(--brand)}
+
+.foot{background:#2A295C;color:#E4E6F4;margin-top:8px}
+.foot .wrap{padding-block:28px calc(28px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:14px}
+.foot.wide .wrap{max-width:1120px}
+.foot .fl{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.foot img{height:26px;width:auto}
+.foot .tag{font-family:var(--display);font-weight:800;font-size:15px;color:#fff}
+.foot .disc{border:1px solid rgba(255,255,255,.22);border-radius:12px;padding:12px 14px;font-size:14px;line-height:1.55;max-width:68ch}
+.foot .disc b{color:#fff}
+.foot .small{font-size:12px;color:#A9AED3}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:12px;font-weight:600;z-index:30;max-width:calc(100% - 32px);text-align:center}
+
+@media (max-width:420px){.stats{grid-template-columns:1fr 1fr 1fr}.stat b{font-size:22px}.qtext{font-size:21px}.score .pts{font-size:48px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style>*,*::before,*::after{box-sizing:border-box}body{margin:0}html{padding-top:env(safe-area-inset-top,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<style>
+.demo{background:#FFF1CC;color:#5A4200;font-size:13px;font-weight:700;text-align:center;padding:7px 16px}
+#confete{position:fixed;inset:0;pointer-events:none;z-index:40;width:100%;height:100%}
+.loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:40px 0;color:var(--muted);font-weight:600}
+.spin{width:20px;height:20px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--brand);animation:sp .8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.pad.busy{opacity:.5;pointer-events:none}
+a.btn{text-decoration:none}
+.pd .medal-e{font-size:30px;line-height:1}
+.pd .prz{font-size:12px;color:var(--muted);font-weight:600;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gchip{display:inline-flex;align-items:center;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:800;background:var(--accent-soft);color:var(--accent-ink);white-space:nowrap}
+
+/* Navegação inferior (equipe) */
+body.has-nav main{padding-bottom:110px}
+.bnav{position:fixed;left:0;right:0;bottom:0;z-index:15;background:var(--surface);border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));display:flex;justify-content:center}
+.bnav .in{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;width:100%;max-width:560px}
+.bnav button{background:none;border:0;border-radius:12px;padding:6px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;font-weight:700;color:var(--muted);position:relative}
+.bnav button .ic{font-size:21px;line-height:1.1}
+.bnav button.on{color:var(--brand);background:var(--accent-soft)}
+.bnav .dotn{position:absolute;top:4px;right:calc(50% - 18px);width:9px;height:9px;border-radius:50%;background:var(--accent)}
+
+/* Checklist */
+.chk{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;min-height:58px}
+.chk .bx{width:26px;height:26px;border-radius:8px;border:2px solid var(--line);display:grid;place-items:center;flex:none;font-weight:900;color:transparent}
+.chk.on{border-color:var(--ok);background:var(--ok-soft)}
+.chk.on .bx{background:var(--ok);border-color:var(--ok);color:#fff}
+.chk .t{flex:1;min-width:0}
+.chk .t b{display:block;font-size:15px}
+.chk .t small{display:block;color:var(--muted);font-size:13px;line-height:1.35}
+.prog{height:8px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.prog i{display:block;height:100%;background:var(--ok);border-radius:99px;transition:width .25s}
+.cta{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--accent-soft);color:var(--accent-ink);border:1.5px solid var(--brand);border-radius:16px;padding:14px 16px;font-weight:700}
+.cta .ic{font-size:26px}
+.miss{color:var(--bad);font-size:14px;font-weight:600}
+
+/* Avaliação (gestão) */
+.datebar{display:flex;align-items:center;gap:8px}
+.datebar .dt{flex:1;text-align:center;font-family:var(--display);font-weight:800;font-size:18px;text-transform:capitalize}
+.datebar .nb{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--surface);font-size:20px;font-weight:800}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;background:var(--sunk);padding:4px;border-radius:14px}
+.seg button{border:0;background:none;border-radius:10px;padding:9px 4px;font-weight:800;font-size:13px;color:var(--muted);line-height:1.2}
+.seg button small{display:block;font-weight:700;font-size:11px;opacity:.85}
+.seg button.on{background:var(--surface);color:var(--brand);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.pcard{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:12px}
+.pcard.done{border-color:color-mix(in srgb,var(--ok) 45%,var(--line))}
+.pcard .hd{display:flex;align-items:center;gap:10px}
+.pcard .hd .nm{flex:1;min-width:0}
+.pcard .hd .nm b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pcard .hd .nm small{color:var(--muted);font-size:12.5px}
+.pcard .sc{font-family:var(--display);font-weight:900;font-size:20px;text-align:right;line-height:1}
+.pcard .sc small{display:block;font-family:var(--body);font-size:11px;font-weight:700;color:var(--muted)}
+.crits{display:flex;flex-wrap:wrap;gap:8px}
+.crit{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 12px;font-size:14px;font-weight:700;color:var(--muted);display:inline-flex;align-items:center;gap:6px;min-height:40px}
+.crit .v{font-size:12px;opacity:.8}
+.crit.on{background:var(--ok-soft);border-color:var(--ok);color:var(--ok)}
+.pcard .acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.saved{font-size:12.5px;font-weight:700;color:var(--muted);margin-left:auto}
+.saved.ok{color:var(--ok)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px;align-items:start}
+.grid3>section{min-width:0}
+.qblock{border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--surface);margin-bottom:12px}
+.qblock .qh{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;font-weight:800}
+.qprog{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.corr{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+.corr:last-child{border-bottom:0}
+.corr .ic{flex:none;font-weight:900}
+.prizes{display:grid;gap:8px}
+.prize{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-weight:700;font-size:14px}
+.prize .m{font-size:22px}
+.daylist .done .t{white-space:normal}
+@media (max-width:420px){.seg button{font-size:12px}.crit{font-size:13px;padding:7px 10px}}
+</style>
+
+<div id="app"></div>
+<div id="modal"></div>
+<div id="toast" hidden></div>
+
+<script>
+const LOGO='data:image/png;base64,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';
+const LOGO_W='data:image/png;base64,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';
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const MESES=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+const DIAS=['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
+const pad2=n=>String(n).padStart(2,'0');
+const mesKey=(d=new Date())=>d.getFullYear()+'-'+pad2(d.getMonth()+1);
+const isoDia=(d=new Date())=>d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate());
+const deIso=s=>{const[y,m,d]=s.split('-').map(Number);return new Date(y,m-1,d)};
+const mesLabel=k=>{const[y,m]=String(k).split('-');return (MESES[+m-1]||k)+' de '+y};
+const mesCurto=k=>{const[y,m]=String(k).split('-');return (MESES[+m-1]||k)};
+const diaLabel=s=>{const d=deIso(s);return DIAS[d.getDay()]+', '+pad2(d.getDate())+'/'+pad2(d.getMonth()+1)};
+const util=s=>{const w=deIso(s).getDay();return w>=1&&w<=5};
+function passoUtil(s,dir){let d=deIso(s);do{d.setDate(d.getDate()+dir)}while(d.getDay()===0||d.getDay()===6);return isoDia(d)}
+function ultimoUtil(){const h=isoDia();return util(h)?h:passoUtil(h,-1)}
+const store=t=>({get(k){try{return window[t].getItem(k)}catch(e){return null}},set(k,v){try{v==null?window[t].removeItem(k):window[t].setItem(k,v)}catch(e){}}});
+const LS=store('localStorage'),SS=store('sessionStorage');
+const LETRAS='ABCD';
+
+/* ---------- Regras de pontuação (fáceis de mudar aqui) ---------- */
+const GRUPOS={
+  coz:{nome:'Cozinheiros',um:'Cozinheiro(a)',itens:[
+    ['epi','Uso de EPI',2,'Touca, avental e sapato fechado'],
+    ['apres','Apresentação pessoal',2,'Uniforme limpo e completo'],
+    ['balanca','Balança',2,'Pesar as preparações'],
+    ['amostras','Amostras',2,'Tirar as amostras do dia'],
+    ['etiquetas','Etiquetas',1,'Etiquetar com validade'],
+    ['organiz','Organização',1,'Bancada e utensílios em ordem'],
+    ['processos','Processos de qualidade',2,'Seguir os processos de qualidade'],
+    ['fogao','Fogão e pass-through limpos',1,'Entregar limpos no fim do turno'],
+    ['incentivo','Incentivar o time',2,'Incentivar o time a pesar e tirar amostras','extra']]},
+  ofc:{nome:'Oficiais de cozinha',um:'Oficial de cozinha',itens:[
+    ['epi','Uso de EPI',2,'Touca, avental, luvas e sapato fechado'],
+    ['apres','Apresentação pessoal',2,'Uniforme limpo e completo'],
+    ['organiz','Organização',1,'Área e utensílios em ordem'],
+    ['processos','Cumprimento dos processos',2,'Seguir os processos de qualidade'],
+    ['amostras','Coleta de amostras',2,'Coletar as amostras do dia'],
+    ['balanca','Balança',2,'Pesar as preparações']]},
+  lim:{nome:'Oficiais de limpeza',um:'Oficial de limpeza',itens:[
+    ['epi','Uso de EPI',2,'Luvas, avental, máscara e bota'],
+    ['apres','Apresentação pessoal',2,'Uniforme limpo e completo'],
+    ['organiz','Organização',1,'Carrinho e materiais em ordem'],
+    ['processos','Processos de qualidade',2,'Seguir os processos de qualidade'],
+    ['area','Entrega da área limpa',1,'Entregar a área limpa'],
+    ['missoes','Missões diárias',2,'Cumprir as rotinas do dia']]}
+};
+const ORDEM_G=['coz','ofc','lim'];
+const QUIZ_PART=3, QUIZ_BONUS=[5,3,1];
+function itensDe(c){const g=GRUPOS[c&&c.grupo];return g?g.itens.filter(i=>i[4]!=='extra'||c.extra):[]}
+function maxDia(c){return itensDe(c).reduce((s,i)=>s+i[2],0)}
+function ptsItens(c,ids){const set=new Set(ids);return itensDe(c).reduce((s,i)=>s+(set.has(i[0])?i[2]:0),0)}
+
+/* ---------- Conexão com o Supabase ---------- */
+const SUPA_URL='https://qnimcdnalsubrdoppiig.supabase.co';
+const SUPA_KEY='sb_publishable_7JIZUg8xGvZFV9RFZ53XNQ_bdSOzAbE';
+const DEMO=!/^https:\/\//.test(SUPA_URL);
+const RPC={dadosPublicos:['dados_publicos',[]],entrar:['entrar',['p_pin']],dadosColab:['dados_colab',['p_pin']],
+  salvarChecklist:['salvar_checklist',['p_pin','p_data','p_itens']],responderQuiz:['responder_quiz',['p_pin','p_quiz','p_escolhas']],
+  entrarGestao:['entrar_gestao',['p_pin']],dadosGestao:['dados_gestao',['p_pin']],salvarColab:['salvar_colab',['p_pin','p']],
+  removerColab:['remover_colab',['p_pin','p_id']],salvarQuiz:['salvar_quiz',['p_pin','p']],alternarQuiz:['alternar_quiz',['p_pin','p_id']],
+  removerQuiz:['remover_quiz',['p_pin','p_id']],salvarAvaliacoes:['salvar_avaliacoes',['p_pin','p_lista']],
+  salvarPremios:['salvar_premios',['p_pin','p']],trocarPinGestao:['trocar_pin_gestao',['p_pin','p_novo']]};
+const msg=e=>String((e&&e.message)||e||'Algo deu errado. Tente de novo.');
+async function call(fn,...args){
+  if(DEMO)return new Promise((res,rej)=>setTimeout(()=>{try{const r=MOCK[fn](...args);res(JSON.parse(JSON.stringify(r===undefined?null:r)))}catch(e){rej(e)}},200));
+  const [nome,params]=RPC[fn],body={};
+  params.forEach((k,i)=>body[k]=args[i]===undefined?null:args[i]);
+  const h={'Content-Type':'application/json',apikey:SUPA_KEY};
+  if(/^eyJ/.test(SUPA_KEY))h.Authorization='Bearer '+SUPA_KEY;
+  let r;
+  try{r=await fetch(SUPA_URL.replace(/\/$/,'')+'/rest/v1/rpc/'+nome,{method:'POST',headers:h,body:JSON.stringify(body)})}
+  catch(e){throw new Error('Sem conexão com a internet. Confira e tente de novo.')}
+  let j=null;try{j=await r.json()}catch(e){}
+  if(!r.ok)throw new Error((j&&j.message)||'O servidor não respondeu. Tente de novo em instantes.');
+  if(j&&j.erro)throw new Error(j.erro);
+  return j;
+}
+const MOCK=(()=>{
+  const m=mesKey();
+  const nomes=[['Ana (exemplo)','coz','1111',true],['Bia (exemplo)','coz','1112',false],['Caio (exemplo)','coz','1113',false],['Davi (exemplo)','ofc','2221',false],['Eva (exemplo)','ofc','2222',false],['Fábio (exemplo)','lim','3331',false],['Gil (exemplo)','lim','3332',false]];
+  const db={pin:'123456',equipe:nomes.map(([nome,grupo,pin,extra],i)=>({id:'e'+i,nome,grupo,pin,extra,ativo:true,foto:'',criado:''})),
+    quizzes:[{id:'q1',titulo:'Boas práticas: semana 1',mes:m,ativo:true,criado:'1',perguntas:[
+      {p:'Qual a temperatura mínima para manter alimentos quentes no balcão térmico?',ops:['40 °C','50 °C','60 °C','75 °C'],c:2},
+      {p:'Na lavagem das mãos, por quanto tempo esfregamos com sabão, no mínimo?',ops:['5 segundos','10 segundos','20 segundos','Não importa'],c:2},
+      {p:'Onde guardar os produtos de limpeza?',ops:['Junto dos alimentos secos','Em área separada dos alimentos','Na câmara fria','Embaixo da pia da cozinha'],c:1}]}],
+    respostas:[],avaliacoes:[],checks:[],premios:[{mes:m,p1:'Vale-compras R$ 100',p2:'Kit cuidados pessoais',p3:'Folga de 2 horas'}]};
+  let d=deIso(isoDia());d.setDate(1);const hoje=isoDia();
+  while(isoDia(d)<hoje){const s=isoDia(d);if(util(s))db.equipe.forEach(c=>{const its=itensDe(c).filter(()=>Math.random()>.18).map(i=>i[0]);db.avaliacoes.push({id:c.id+'_'+s,colabId:c.id,data:s,mes:m,itens:its,pontos:ptsItens(c,its)})});d.setDate(d.getDate()+1)}
+  [['e1',3],['e2',2],['e3',3],['e5',1],['e6',2]].forEach(([c,a],i)=>db.respostas.push({id:c+'_q1',colabId:c,quizId:'q1',mes:m,acertos:a,total:3,em:new Date(Date.now()-9e6+i*6e5).toISOString()}));
+  const chk=p=>{if(String(p)!==db.pin)throw new Error('PIN da gestão incorreto.')};
+  const byPin=p=>{const c=db.equipe.find(x=>x.pin===String(p)&&x.ativo);if(!c)throw new Error('PIN não encontrado ou inativo. Confira com a gestão.');return c};
+  const base=s=>({equipe:s?db.equipe:db.equipe.map(({pin,...c})=>c),quizzes:s?db.quizzes:db.quizzes.map(q=>({...q,perguntas:q.perguntas.map(x=>({p:x.p,ops:x.ops}))})),respostas:db.respostas,avaliacoes:db.avaliacoes,premios:db.premios,temGestao:true});
+  return{
+    dadosPublicos:()=>base(false),
+    entrar:p=>{const c=byPin(p);return{id:c.id,nome:c.nome}},
+    dadosColab:p=>{const c=byPin(p);return{...base(false),meusChecks:db.checks.filter(x=>x.colabId===c.id)}},
+    salvarChecklist:(p,data,itens)=>{const c=byPin(p);db.checks=db.checks.filter(x=>!(x.colabId===c.id&&x.data===data));db.checks.push({colabId:c.id,data,itens});return true},
+    responderQuiz:(p,qid,es)=>{const c=byPin(p);const q=db.quizzes.find(x=>x.id===qid);if(!q||!q.ativo)throw new Error('Este quiz não está mais disponível.');if(db.respostas.some(r=>r.id===c.id+'_'+q.id))throw new Error('Você já respondeu este quiz.');let a=0;q.perguntas.forEach((x,i)=>{if(es[i]===x.c)a++});db.respostas.push({id:c.id+'_'+q.id,colabId:c.id,quizId:q.id,mes:q.mes,acertos:a,total:q.perguntas.length,em:new Date().toISOString()});return{acertos:a,total:q.perguntas.length,corretas:q.perguntas.map(x=>x.c)}},
+    entrarGestao:p=>{chk(p);return true},
+    dadosGestao:p=>{chk(p);return{...base(true),checks:db.checks,planilhaUrl:''}},
+    salvarColab:(p,x)=>{chk(p);if(db.equipe.some(c=>c.pin===x.pin&&c.id!==x.id))throw new Error('Esse PIN já é de outra pessoa. Toque em Gerar outro.');const o=db.equipe.find(c=>c.id===x.id);if(o)Object.assign(o,x);else db.equipe.push({...x,id:'e'+Date.now()});return true},
+    removerColab:(p,id)=>{chk(p);db.equipe=db.equipe.filter(c=>c.id!==id);return true},
+    salvarQuiz:(p,x)=>{chk(p);const o=db.quizzes.find(q=>q.id===x.id);if(o)Object.assign(o,x);else db.quizzes.push({...x,id:'q'+Date.now(),criado:String(Date.now())});return true},
+    alternarQuiz:(p,id)=>{chk(p);const q=db.quizzes.find(x=>x.id===id);q.ativo=!q.ativo;return{ativo:q.ativo}},
+    removerQuiz:(p,id)=>{chk(p);db.respostas=db.respostas.filter(r=>r.quizId!==id);db.quizzes=db.quizzes.filter(q=>q.id!==id);return true},
+    salvarAvaliacoes:(p,l)=>{chk(p);l.forEach(a=>{const id=a.colabId+'_'+a.data;db.avaliacoes=db.avaliacoes.filter(x=>x.id!==id);if(a.itens!==null)db.avaliacoes.push({id,colabId:a.colabId,data:a.data,mes:a.data.slice(0,7),itens:a.itens,pontos:a.pontos})});return true},
+    salvarPremios:(p,x)=>{chk(p);db.premios=db.premios.filter(y=>y.mes!==x.mes);db.premios.push(x);return true},
+    trocarPinGestao:(p,n)=>{chk(p);db.pin=n;return true},
+  };
+})();
+
+/* ---------- Estado ---------- */
+const S={pub:null,adm:null,status:'loading',errMsg:'',me:null,view:'login',ctab:'hoje',pin:'',pinErr:'',busy:false,
+  tab:'avaliar',dia:ultimoUtil(),grupo:'coz',mesAdmin:mesKey(),mesQuiz:mesKey(),mesPremio:mesKey(),
+  play:null,check:new Set(),checkDia:null};
+try{S.me=JSON.parse(LS.get('qsn_me')||'null')}catch(e){}
+let adminPin=SS.get('qsn_gest');
+if(S.me)S.view='home';
+if(adminPin)S.view='admin';
+
+/* ---------- Cálculos ---------- */
+function equipeMap(d){const m={};(d?d.equipe:[]).forEach(c=>m[c.id]=c);return m}
+function quizPontos(d){
+  const out={},em=equipeMap(d);
+  d.quizzes.forEach(q=>ORDEM_G.forEach(g=>{
+    const rs=d.respostas.filter(r=>r.quizId===q.id&&em[r.colabId]&&em[r.colabId].grupo===g)
+      .sort((a,b)=>b.acertos-a.acertos||String(a.em).localeCompare(String(b.em)));
+    rs.forEach((r,i)=>{const bonus=r.acertos>0&&i<3?QUIZ_BONUS[i]:0;out[r.id]={pts:QUIZ_PART+bonus,pos:i+1,bonus}});
+  }));
+  return out;
+}
+function placar(d,mes){
+  const t={},qp=quizPontos(d);
+  const get=id=>t[id]||(t[id]={aval:0,quiz:0,dias:0,nq:0});
+  d.avaliacoes.forEach(a=>{if(a.mes===mes){const o=get(a.colabId);o.aval+=Number(a.pontos)||0;o.dias++}});
+  d.respostas.forEach(r=>{if(r.mes===mes&&qp[r.id]){const o=get(r.colabId);o.quiz+=qp[r.id].pts;o.nq++}});
+  Object.values(t).forEach(o=>o.total=o.aval+o.quiz);
+  return t;
+}
+function ranking(d,mes,g){
+  if(!d)return[];
+  const t=placar(d,mes);
+  const list=d.equipe.filter(c=>c.grupo===g&&(c.ativo||t[c.id])).map(c=>Object.assign({c},t[c.id]||{aval:0,quiz:0,dias:0,nq:0,total:0}));
+  list.sort((a,b)=>b.total-a.total||b.aval-a.aval||String(a.c.nome).localeCompare(String(b.c.nome),'pt-BR'));
+  let pos=0,prev=null;list.forEach((x,i)=>{if(prev===null||x.total!==prev){pos=i+1;prev=x.total}x.pos=pos});
+  return list;
+}
+function premioDe(d,mes){return (d&&d.premios.find(p=>p.mes===mes))||{p1:'',p2:'',p3:''}}
+function meses(d){const s=new Set([mesKey()]);if(d){d.avaliacoes.forEach(a=>a.mes&&s.add(a.mes));d.respostas.forEach(r=>r.mes&&s.add(r.mes));d.quizzes.forEach(q=>q.mes&&s.add(q.mes));d.premios.forEach(p=>p.mes&&s.add(p.mes))}return[...s].sort().reverse()}
+function avalDe(d,colabId,dia){return d.avaliacoes.find(a=>a.colabId===colabId&&a.data===dia)}
+function eu(){return S.pub&&S.me?S.pub.equipe.find(c=>c.id===S.me.id):null}
+function quizzesAbertos(){return S.pub?S.pub.quizzes.filter(q=>q.ativo&&q.mes===mesKey()):[]}
+function minhaResp(qid){return S.pub&&S.me?S.pub.respostas.find(r=>r.colabId===S.me.id&&r.quizId===qid):null}
+const MED={1:'🥇',2:'🥈',3:'🥉'};
+
+/* ---------- Helpers de tela ---------- */
+function initials(n){return String(n||'?').trim().split(/\s+/).slice(0,2).map(p=>p[0]||'').join('').toUpperCase()}
+function hue(s){let h=0;for(const ch of String(s))h=(h*31+ch.charCodeAt(0))%360;return h}
+function avatar(c,size){
+  const st=`width:${size}px;height:${size}px;font-size:${Math.round(size*.38)}px`;
+  if(c&&c.foto)return `<span class="av" style="${st}"><img src="${esc(c.foto)}" alt=""></span>`;
+  return `<span class="av" style="${st};background:hsl(${hue(c&&c.nome)} 45% 40%)">${esc(initials(c&&c.nome))}</span>`;
+}
+let toastT;
+function toast(t){const e=$('#toast');e.textContent=t;e.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>e.hidden=true,3000)}
+function topbar(sub,right){
+  return `${DEMO?'<div class="demo">Modo demonstração com dados de exemplo. Equipe: PIN 1111 · Gestão: 123456</div>':''}<header class="top"><div class="wrap ${S.view==='admin'?'wide':''}"><div class="brand"><img src="${LOGO}" alt="Sodexo"><span class="sep" aria-hidden="true"></span><div class="q">Quiz<span>.</span>${sub?`<small>${sub}</small>`:''}</div></div>${right||''}</div></header>`;
+}
+function footer(){
+  return `<footer class="foot ${S.view==='admin'?'wide':''}"><div class="wrap">
+    <div class="fl"><img src="${LOGO_W}" alt="Sodexo"><span class="tag">Quiz · Unidade Natura</span></div>
+    <p class="disc"><b>Ferramenta interna, não oficial.</b> Este portal não é um sistema da Sodexo nem da Natura. Foi criado pela gestão da unidade para atividades internas da equipe, como quizzes, avaliações diárias e premiações do mês. Não informe aqui senhas, documentos ou dados pessoais além do seu PIN.</p>
+    <span class="small">Uso exclusivo da equipe Sodexo na unidade Natura.</span>
+  </div></footer>`;
+}
+function keypad(){
+  const k=[1,2,3,4,5,6,7,8,9];
+  return `<div class="pad ${S.busy?'busy':''}" role="group" aria-label="Teclado do PIN">${k.map(n=>`<button data-act="key" data-k="${n}">${n}</button>`).join('')}<button class="blank" tabindex="-1" aria-hidden="true"></button><button data-act="key" data-k="0">0</button><button class="bk" data-act="key" data-k="del" aria-label="Apagar">Apagar</button></div>`;
+}
+function dots(n){return `<div class="dots" aria-hidden="true">${Array.from({length:n},(_,i)=>`<span class="dot ${i<S.pin.length?'on':''}"></span>`).join('')}</div>`}
+function carregando(t){return `<div class="loading"><span class="spin"></span>${t||'Carregando…'}</div>`}
+function falha(){return `<div class="notice">Não foi possível carregar agora. ${esc(S.errMsg)} <button class="link" data-act="retry">Tentar de novo</button></div>`}
+function rkRow(x,meId){
+  return `<div class="rk ${x.c.id===meId?'me':''}"><span class="p num">${x.pos}</span>${avatar(x.c,36)}<span class="n"><b>${esc(x.c.nome)}${x.c.id===meId?' (você)':''}</b><small class="num">Avaliação ${x.aval} · Quiz ${x.quiz}</small></span><span class="v num">${x.total}<small> pts</small></span></div>`;
+}
+function prizesHtml(p){
+  const l=[[1,p.p1],[2,p.p2],[3,p.p3]].filter(x=>x[1]);
+  return l.length?`<div class="prizes">${l.map(([i,t])=>`<div class="prize"><span class="m">${MED[i]}</span><span>${esc(t)}</span></div>`).join('')}</div>`:'';
+}
+
+/* ---------- Telas: login ---------- */
+function vLogin(){
+  return topbar('Unidade Natura')+`<main class="wrap login">
+    ${S.status==='err'?falha():''}
+    <h1>Digite seu PIN</h1>
+    <p class="muted">São 4 números, entregues pela gestão da unidade.</p>
+    ${dots(4)}<p class="err" role="alert">${S.busy?'Conferindo…':esc(S.pinErr)}</p>
+    ${keypad()}
+    <button class="link" data-act="goAdmin">Área da gestão</button>
+  </main>`;
+}
+function vAdminLogin(){
+  const setup=S.pub&&!S.pub.temGestao;
+  return topbar('Gestão · Natura')+`<main class="wrap login">
+    ${S.status==='err'?falha():''}
+    <h1>${setup?'Crie o PIN da gestão':'PIN da gestão'}</h1>
+    <p class="muted">${setup?'Escolha 6 números. Anote antes de digitar.':'São 6 números.'}</p>
+    ${dots(6)}<p class="err" role="alert">${S.busy?'Conferindo…':esc(S.pinErr)}</p>
+    ${keypad()}
+    <button class="link" data-act="goTeam">Voltar para a área do colaborador</button>
+  </main>`;
+}
+
+/* ---------- Telas: equipe ---------- */
+function bnav(){
+  const pend=quizzesAbertos().some(q=>!minhaResp(q.id));
+  const t=[['hoje','✅','Hoje'],['quiz','🧠','Quiz'],['ranking','🏆','Ranking'],['hist','📅','Histórico']];
+  return `<nav class="bnav" aria-label="Menu"><div class="in">${t.map(([k,ic,l])=>`<button class="${S.ctab===k?'on':''}" data-act="ctab" data-k="${k}"><span class="ic" aria-hidden="true">${ic}</span>${l}${k==='quiz'&&pend?'<span class="dotn" aria-label="quiz novo"></span>':''}</button>`).join('')}</div></nav>`;
+}
+function vHome(){
+  const sair=`<button class="ghost" data-act="logout">Sair</button>`;
+  const me=eu();
+  if(!S.pub||!me)return topbar('Unidade Natura',sair)+`<main class="wrap">${S.status==='err'?falha():carregando()}</main>`;
+  if(!GRUPOS[me.grupo])return topbar('Unidade Natura',sair)+`<main class="wrap"><div class="empty">Olá, ${esc(me.nome)}! Seu cadastro ainda está sem grupo. Peça para a gestão escolher seu grupo na aba Equipe.</div></main>`;
+  let body;
+  if(S.play)return vPlay();
+  if(S.ctab==='quiz')body=cQuiz(me);else if(S.ctab==='ranking')body=cRanking(me);else if(S.ctab==='hist')body=cHist(me);else body=cHoje(me);
+  return topbar(GRUPOS[me.grupo]?GRUPOS[me.grupo].nome:'Unidade Natura',sair)+`<main class="wrap stack">${body}</main>`+footer()+bnav();
+}
+function scoreCard(me){
+  const mes=mesKey(),rk=ranking(S.pub,mes,me.grupo),mine=rk.find(x=>x.c.id===me.id)||{total:0,aval:0,quiz:0,pos:'-'};
+  return `<section class="score">
+    <div class="lbl">Seus pontos em ${esc(mesLabel(mes))}</div>
+    <div class="pts num">${mine.total}<span>pts</span></div>
+    <div class="pos"><b class="num">${MED[mine.pos]||''} ${mine.pos}º</b><small>de ${rk.length}</small></div>
+    <div class="meta num">Avaliações ${mine.aval} pts · Quiz ${mine.quiz} pts</div>
+  </section>`;
+}
+function cHoje(me){
+  const hoje=isoDia(),its=itensDe(me);
+  if(S.checkDia!==hoje){const c=(S.pub.meusChecks||[]).find(x=>x.data===hoje);S.check=new Set(c?c.itens:[]);S.checkDia=hoje}
+  const feitos=its.filter(i=>S.check.has(i[0])).length;
+  const pend=quizzesAbertos().filter(q=>!minhaResp(q.id));
+  const ult=S.pub.avaliacoes.filter(a=>a.colabId===me.id).sort((a,b)=>b.data.localeCompare(a.data))[0];
+  let ultHtml='';
+  if(ult){const set=new Set(ult.itens);const falt=its.filter(i=>!set.has(i[0]));
+    ultHtml=`<section><div class="sec-h"><h2>Sua última avaliação</h2><span class="muted" style="font-size:14px;text-transform:capitalize">${esc(diaLabel(ult.data))}</span></div>
+    <div class="panel"><div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px"><b style="font-family:var(--display);font-size:26px" class="num">${ult.pontos} <small class="muted" style="font-size:15px">de ${maxDia(me)} pts</small></b>${falt.length?'':'<span class="chip ok">Dia perfeito ⭐</span>'}</div>
+    ${falt.length?`<p class="miss" style="margin:8px 0 0">Faltou: ${falt.map(i=>esc(i[1])).join(', ')}</p>`:''}</div></section>`}
+  return `<div style="display:flex;align-items:center;gap:12px">${avatar(me,52)}<div style="flex:1;min-width:0"><div class="eyebrow">Olá,</div><h1 style="font-size:24px">${esc(String(me.nome).split(' ')[0])}</h1></div><span class="gchip">${esc(GRUPOS[me.grupo].um)}</span></div>
+    ${scoreCard(me)}
+    ${pend.length?`<button class="cta" data-act="ctab" data-k="quiz"><span class="ic">🧠</span><span style="flex:1">Tem ${pend.length>1?pend.length+' quizzes':'quiz'} para responder!<br><small style="font-weight:600">Vale ${QUIZ_PART} pts + bônus para o top 3 do seu grupo</small></span><span>›</span></button>`:''}
+    <section>
+      <div class="sec-h"><h2>Checklist de hoje</h2><span class="muted num" style="font-size:14px">${feitos}/${its.length}</span></div>
+      ${util(hoje)?`<div class="prog" style="margin-bottom:12px"><i style="width:${its.length?Math.round(feitos/its.length*100):0}%"></i></div>
+      <div class="list">${its.map(i=>`<button class="chk ${S.check.has(i[0])?'on':''}" data-act="chk" data-k="${i[0]}" aria-pressed="${S.check.has(i[0])}"><span class="bx">✓</span><span class="t"><b>${esc(i[1])}</b><small>${esc(i[3])}</small></span><span class="chip gold num">${i[2]} pt${i[2]>1?'s':''}</span></button>`).join('')}</div>
+      <p class="muted" style="font-size:13px;margin:10px 0 0">O checklist é para você se organizar. Os pontos são dados pela gestão na avaliação do dia.</p>`
+      :`<div class="empty">Hoje é fim de semana. O checklist volta na segunda. Bom descanso! 😊</div>`}
+    </section>
+    ${ultHtml}`;
+}
+function cQuiz(me){
+  const qs=quizzesAbertos(),qp=quizPontos(S.pub);
+  const pend=qs.filter(q=>!minhaResp(q.id)),feitos=qs.filter(q=>minhaResp(q.id));
+  return `<div><h1 style="font-size:24px">Quiz</h1><p class="muted" style="margin:4px 0 0">Participar vale ${QUIZ_PART} pts. Os 3 que mais acertarem no seu grupo ganham +5, +3 e +1. Empate: vale quem terminou primeiro.</p></div>
+    <section><div class="sec-h"><h2>Para responder</h2><span class="chip gold num">${pend.length}</span></div>
+    ${pend.length?`<div class="list">${pend.map(q=>`<button class="qitem" data-act="startQuiz" data-id="${esc(q.id)}"><span class="t">${esc(q.titulo)}<br><small class="muted" style="font-weight:600">${q.perguntas.length} pergunta${q.perguntas.length>1?'s':''}</small></span><span class="chip gold">Começar ›</span></button>`).join('')}</div>`
+    :`<div class="empty">${qs.length?'🎉 Você respondeu todos os quizzes do mês.':'Nenhum quiz liberado agora. Volte em breve.'}</div>`}</section>
+    ${feitos.length?`<section><div class="sec-h"><h2>Já respondidos</h2></div><div class="panel" style="padding-block:6px">${feitos.map(q=>{const r=minhaResp(q.id),p=qp[r.id]||{pts:QUIZ_PART,pos:'-'};return `<div class="done"><span class="t">${esc(q.titulo)}<br><small class="muted num">${r.acertos}/${r.total} acertos · ${p.pos}º no grupo</small></span><span class="chip ok num">+${p.pts}</span></div>`}).join('')}</div></section>`:''}`;
+}
+function vPlay(){
+  const P=S.play,q=S.pub.quizzes.find(x=>x.id===P.qid);
+  const voltar=`<button class="ghost" data-act="exitQuiz">Sair</button>`;
+  if(!q)return topbar('',voltar)+`<main class="wrap"><div class="empty">Este quiz não está mais disponível.</div></main>`;
+  if(P.res){
+    const r=P.res,boa=r.acertos/r.total>=.5;
+    return topbar('',`<button class="ghost" data-act="exitQuiz">Fechar</button>`)+`<main class="wrap stack">
+      <div class="verdict ${boa?'ok':'bad'}" role="status" style="font-size:20px">${boa?'Mandou bem!':'Valeu a participação!'} Você acertou ${r.acertos} de ${r.total}.</div>
+      <div class="panel"><b>+${QUIZ_PART} pontos garantidos</b> por participar. Se você ficar entre os 3 que mais acertaram no seu grupo, ganha o bônus (+5, +3 ou +1). Acompanhe na aba Ranking.</div>
+      <section><div class="sec-h"><h2>Correção</h2></div><div class="panel" style="padding-block:4px">${q.perguntas.map((x,i)=>{const ok=P.esc[i]===r.corretas[i];return `<div class="corr"><span class="ic" style="color:var(--${ok?'ok':'bad'})">${ok?'✓':'✗'}</span><span><b>${esc(x.p)}</b><br>${ok?'':`<span class="miss">Sua resposta: ${esc(x.ops[P.esc[i]]||'—')}</span><br>`}<span style="color:var(--ok);font-weight:700">Certa: ${esc(x.ops[r.corretas[i]])}</span></span></div>`}).join('')}</div></section>
+      <button class="btn block" data-act="exitQuiz">Voltar</button></main>`;
+  }
+  const x=q.perguntas[P.i],n=q.perguntas.length,ult=P.i===n-1,sel=P.esc[P.i];
+  return topbar('',voltar)+`<main class="wrap">
+    <div class="qprog"><span class="eyebrow">${esc(q.titulo)}</span><span class="chip gold num">${P.i+1} de ${n}</span></div>
+    <div class="prog"><i style="width:${Math.round((P.i)/n*100)}%"></i></div>
+    <h1 class="qtext">${esc(x.p)}</h1>
+    <div class="list">${x.ops.map((t,i)=>String(t).trim()?`<button class="opt ${sel===i?'sel':''}" data-act="pickQ" data-i="${i}" ${S.busy?'disabled':''}><span class="l">${LETRAS[i]}</span><span>${esc(t)}</span></button>`:'').join('')}</div>
+    <div class="sticky-cta" style="margin-top:18px;display:flex;gap:10px">
+      ${P.i>0?`<button class="btn alt" data-act="prevQ" ${S.busy?'disabled':''}>‹ Voltar</button>`:''}
+      <button class="btn block" data-act="${ult?'sendQuiz':'nextQ'}" ${sel==null||S.busy?'disabled':''}>${S.busy?'Enviando…':ult?'Enviar respostas':'Próxima ›'}</button>
+    </div>
+  </main>`;
+}
+function cRanking(me){
+  const mes=mesKey(),rk=ranking(S.pub,mes,me.grupo),p=premioDe(S.pub,mes);
+  const mine=rk.find(x=>x.c.id===me.id);
+  return `<div><h1 style="font-size:24px">Ranking · ${esc(GRUPOS[me.grupo].nome)}</h1><p class="muted" style="margin:4px 0 0;text-transform:none">${esc(mesLabel(mes))}. Zera todo mês. Soma as avaliações (segunda a sexta) e os quizzes.</p></div>
+    ${prizesHtml(p)?`<section><div class="sec-h"><h2>Prêmios do mês</h2></div>${prizesHtml(p)}</section>`:''}
+    <section><div class="sec-h"><h2>Classificação</h2><button class="link" data-act="refresh" style="padding:0">Atualizar</button></div>
+    <div class="panel" style="padding:6px">${rk.map(x=>rkRow(x,me.id)).join('')||'<p class="muted" style="padding:10px">Ninguém no grupo ainda.</p>'}</div></section>
+    ${mine&&mine.pos>3&&rk.length>=3?`<p class="muted" style="margin:0">Faltam <b class="num">${Math.max(0,rk[2].total-mine.total+1)} pts</b> para você entrar no top 3. Bora! 💪</p>`:''}`;
+}
+function cHist(me){
+  const mes=mesKey();
+  const dias=S.pub.avaliacoes.filter(a=>a.colabId===me.id&&a.mes===mes).sort((a,b)=>b.data.localeCompare(a.data));
+  const passados=meses(S.pub).filter(m=>m<mes);
+  return `<div><h1 style="font-size:24px">Histórico</h1></div>
+    <section><div class="sec-h"><h2>Este mês, dia a dia</h2></div>
+    ${dias.length?`<div class="panel daylist" style="padding-block:4px">${dias.map(a=>`<div class="done"><span class="t" style="text-transform:capitalize">${esc(diaLabel(a.data))}</span><span class="chip ${a.pontos>=maxDia(me)?'ok':'gold'} num">${a.pontos}/${maxDia(me)}</span></div>`).join('')}</div>`:'<div class="empty">Nenhuma avaliação neste mês ainda.</div>'}</section>
+    <section><div class="sec-h"><h2>Meses anteriores</h2></div>
+    ${passados.length?`<div class="list">${passados.map(m=>{const rk=ranking(S.pub,m,me.grupo),mine=rk.find(x=>x.c.id===me.id),p=premioDe(S.pub,m);
+      return `<div class="panel"><div class="sec-h" style="margin-bottom:6px"><h2 style="text-transform:capitalize;font-size:17px">${esc(mesLabel(m))}</h2>${mine?`<span class="chip gold num">Você: ${mine.pos}º · ${mine.total} pts</span>`:''}</div>
+      ${rk.slice(0,3).filter(x=>x.total>0).map(x=>`<div class="done"><span>${MED[x.pos]||x.pos+'º'}</span><span class="t">${esc(x.c.nome)}${p['p'+x.pos]?` <small class="muted">· ${esc(p['p'+x.pos])}</small>`:''}</span><span class="num muted">${x.total} pts</span></div>`).join('')||'<p class="muted" style="margin:0">Sem pontuação.</p>'}</div>`}).join('')}</div>`:'<div class="empty">O histórico aparece aqui a partir do próximo mês.</div>'}</section>`;
+}
+
+/* ---------- Telas: gestão ---------- */
+function vAdmin(){
+  const tabs=[['avaliar','Avaliar'],['ranking','Ranking'],['quiz','Quizzes'],['equipe','Equipe'],['premios','Prêmios'],['ajustes','Ajustes']];
+  const body=!S.adm?carregando('Abrindo a gestão…'):S.tab==='avaliar'?aAvaliar():S.tab==='ranking'?aRanking():S.tab==='quiz'?aQuiz():S.tab==='equipe'?aEquipe():S.tab==='premios'?aPremios():aAjustes();
+  return topbar('Gestão · Natura',`<button class="ghost" data-act="adminOut">Sair</button>`)+
+   `<nav class="tabs"><div class="wrap wide">${tabs.map(([k,l])=>`<button class="tab ${S.tab===k?'on':''}" data-act="tab" data-k="${k}">${l}</button>`).join('')}</div></nav>
+   <main class="wrap wide stack">${body}</main>`+footer();
+}
+function mesSelect(id,val,extra){const ms=meses(S.adm);(extra||[]).forEach(m=>{if(!ms.includes(m))ms.unshift(m)});ms.sort().reverse();return `<select id="${id}" aria-label="Mês">${ms.map(m=>`<option value="${m}" ${m===val?'selected':''}>${esc(mesLabel(m))}</option>`).join('')}</select>`}
+function aAvaliar(){
+  const d=S.adm,dia=S.dia;
+  const contar=g=>{const cs=d.equipe.filter(c=>c.grupo===g&&c.ativo);return [cs.filter(c=>avalDe(d,c.id,dia)).length,cs.length]};
+  const cs=d.equipe.filter(c=>c.grupo===S.grupo&&c.ativo).sort((a,b)=>String(a.nome).localeCompare(String(b.nome),'pt-BR'));
+  const semAval=cs.filter(c=>!avalDe(d,c.id,dia)).length;
+  return `<div class="datebar"><button class="nb" data-act="dia" data-k="-1" aria-label="Dia útil anterior">‹</button><div class="dt">${esc(diaLabel(dia))}${dia===isoDia()?' · hoje':''}</div><button class="nb" data-act="dia" data-k="1" aria-label="Próximo dia útil">›</button></div>
+    ${dia!==ultimoUtil()?`<div style="text-align:center;margin-top:-10px"><button class="link" data-act="diaHoje">Voltar para ${util(isoDia())?'hoje':'o último dia útil'}</button></div>`:''}
+    <div class="seg">${ORDEM_G.map(g=>{const[a,t]=contar(g);return `<button class="${S.grupo===g?'on':''}" data-act="grupo" data-k="${g}">${esc(GRUPOS[g].nome)}<small class="num">${a}/${t} avaliados</small></button>`}).join('')}</div>
+    ${semAval?`<button class="btn alt block" data-act="tudoCerto">✓ Marcar “tudo certo” para quem falta (${semAval})</button>`:''}
+    <div class="list">${cs.map(c=>pcard(c,dia)).join('')||'<div class="empty">Ninguém ativo neste grupo. Cadastre na aba Equipe.</div>'}</div>
+    <p class="muted" style="font-size:13px;margin:0">Toque nos itens que a pessoa cumpriu. Salva sozinho. Verde = cumpriu.</p>`;
+}
+function pcard(c,dia){
+  const a=avalDe(S.adm,c.id,dia),its=itensDe(c),set=new Set(a?a.itens:[]);
+  const ck=(S.adm.checks||[]).find(x=>x.colabId===c.id&&x.data===dia);
+  const st=PEND[c.id+'_'+dia]?'<span class="saved">Salvando…</span>':a?'<span class="saved ok">Salvo ✓</span>':'<span class="saved">Não avaliado</span>';
+  return `<div class="pcard ${a?'done':''}"><div class="hd">${avatar(c,42)}<div class="nm"><b>${esc(c.nome)}</b><small>${ck?`Checklist dele(a): ${ck.itens.length}/${its.length}`:'Sem checklist hoje'}</small></div><div class="sc num">${a?a.pontos:'–'}<small>de ${maxDia(c)}</small></div></div>
+    <div class="crits">${its.map(i=>`<button class="crit ${set.has(i[0])?'on':''}" data-act="crit" data-id="${esc(c.id)}" data-k="${i[0]}" aria-pressed="${set.has(i[0])}">${set.has(i[0])?'✓ ':''}${esc(i[1])} <span class="v">${i[2]}</span></button>`).join('')}</div>
+    <div class="acts"><button class="btn sm alt" data-act="allOn" data-id="${esc(c.id)}">Tudo certo</button><button class="btn sm alt" data-act="allOff" data-id="${esc(c.id)}">Nada cumprido</button>${a?`<button class="link" style="padding:4px" data-act="clearAval" data-id="${esc(c.id)}">Desfazer</button>`:''}${st}</div></div>`;
+}
+function aRanking(){
+  const d=S.adm,mes=S.mesAdmin,p=premioDe(d,mes);
+  const nAval=d.avaliacoes.filter(a=>a.mes===mes).length,nQ=d.quizzes.filter(q=>q.mes===mes).length;
+  const bloco=g=>{const rk=ranking(d,mes,g),top=rk.filter(x=>x.total>0).slice(0,3);
+    const pd=(x,cls)=>x?`<div class="pd ${cls}"><span class="medal-e">${MED[x.pos]||x.pos+'º'}</span>${avatar(x.c,cls==='p1'?64:52)}<span class="nm">${esc(x.c.nome)}</span><span class="pt num">${x.total}</span>${p['p'+x.pos]?`<span class="prz">${esc(p['p'+x.pos])}</span>`:''}</div>`:'<div></div>';
+    return `<section class="stack" style="gap:12px"><h2 style="font-size:20px">${esc(GRUPOS[g].nome)}</h2>
+      ${top.length?`<div class="podium">${pd(top[1],'p2')}${pd(top[0],'p1')}${pd(top[2],'p3')}</div>`:'<div class="empty">Sem pontos ainda.</div>'}
+      <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Nome</th><th class="r">Aval.</th><th class="r">Quiz</th><th class="r">Total</th></tr></thead><tbody>${rk.map(x=>`<tr><td class="num">${x.pos}º</td><td><span class="who">${avatar(x.c,28)}${esc(x.c.nome)}</span></td><td class="r num">${x.aval}</td><td class="r num">${x.quiz}</td><td class="r num"><b>${x.total}</b></td></tr>`).join('')}</tbody></table></div></section>`};
+  return `<div class="toolbar"><div class="grp"><h2 style="font-size:22px">Ranking de</h2>${mesSelect('selMesRk',mes)}</div><div class="grp"><button class="btn sm alt" data-act="reloadAdm">Atualizar</button>${d.planilhaUrl?`<a class="btn sm alt" href="${esc(d.planilhaUrl)}" target="_blank" rel="noopener">Abrir planilha</a>`:''}</div></div>
+    <div class="stats"><div class="stat"><b class="num">${nAval}</b><span>avaliações no mês</span></div><div class="stat"><b class="num">${nQ}</b><span>quizzes no mês</span></div><div class="stat"><b class="num">${[p.p1,p.p2,p.p3].filter(Boolean).length}/3</b><span>prêmios cadastrados</span></div></div>
+    <div class="grid3">${ORDEM_G.map(bloco).join('')}</div>`;
+}
+function aQuiz(){
+  const d=S.adm,mes=S.mesQuiz,qs=d.quizzes.filter(q=>q.mes===mes).sort((a,b)=>String(a.criado).localeCompare(String(b.criado)));
+  const nAt=d.equipe.filter(c=>c.ativo).length;
+  return `<div class="toolbar"><div class="grp"><h2 style="font-size:22px">Quizzes de</h2>${mesSelect('selMesQz',mes)}</div><button class="btn sm" data-act="newQuiz">Novo quiz</button></div>
+   <p class="muted" style="margin:0">Participar vale ${QUIZ_PART} pts. Em cada grupo, os 3 que mais acertarem ganham +5, +3 e +1 (empate: quem terminou primeiro).</p>
+   ${qs.length?`<div class="cards">${qs.map(q=>{const rs=d.respostas.filter(r=>r.quizId===q.id);
+     return `<div class="card"><div class="row">${q.ativo?'<span class="chip ok">Liberado</span>':'<span class="chip off">Pausado</span>'}<span class="chip gold num">${q.perguntas.length} pergunta${q.perguntas.length>1?'s':''}</span></div>
+     <div class="qq">${esc(q.titulo)}</div>
+     <div class="muted num" style="font-size:14px">${rs.length}/${nAt} responderam</div>
+     <div class="acts"><button class="btn sm alt" data-act="editQuiz" data-id="${esc(q.id)}">Editar</button><button class="btn sm alt" data-act="toggleQuiz" data-id="${esc(q.id)}">${q.ativo?'Pausar':'Liberar'}</button><button class="btn sm alt" data-act="delQuiz" data-id="${esc(q.id)}">Excluir</button></div></div>`}).join('')}</div>`
+   :`<div class="empty">Nenhum quiz em ${esc(mesLabel(mes))}. Toque em “Novo quiz”.</div>`}`;
+}
+function aEquipe(){
+  const d=S.adm;
+  const semG=d.equipe.filter(c=>!GRUPOS[c.grupo]);
+  const card=c=>`<div class="card"><div class="row">${avatar(c,48)}<div style="min-width:0;flex:1"><b style="display:block">${esc(c.nome)}</b><span class="muted" style="font-size:13px">${GRUPOS[c.grupo]?esc(GRUPOS[c.grupo].um):'Sem grupo'}${c.extra?' · +2 incentivo':''}</span></div></div>
+     <div class="row" style="justify-content:space-between"><span>PIN <span class="pinv num">${esc(c.pin)}</span></span>${c.ativo?'':'<span class="chip off">Inativo</span>'}</div>
+     <div class="acts"><button class="btn sm alt" data-act="editColab" data-id="${esc(c.id)}">Editar</button><button class="btn sm alt" data-act="delColab" data-id="${esc(c.id)}">Remover</button></div></div>`;
+  const ord=l=>[...l].sort((a,b)=>String(a.nome).localeCompare(String(b.nome),'pt-BR'));
+  return `<div class="toolbar"><h2 style="font-size:22px">Equipe <span class="muted num" style="font-size:16px">(${d.equipe.length})</span></h2><button class="btn sm" data-act="newColab">Adicionar colaborador</button></div>
+   ${semG.length?`<div class="notice">${semG.length} pessoa${semG.length>1?'s estão':' está'} sem grupo e não aparece${semG.length>1?'m':''} em nenhum ranking. Toque em Editar e escolha o grupo.</div><div class="cards">${ord(semG).map(card).join('')}</div>`:''}
+   ${ORDEM_G.map(g=>{const l=ord(d.equipe.filter(c=>c.grupo===g));return `<section><div class="sec-h"><h2>${esc(GRUPOS[g].nome)}</h2><span class="muted num">${l.length}</span></div>${l.length?`<div class="cards">${l.map(card).join('')}</div>`:'<div class="empty">Ninguém neste grupo.</div>'}</section>`}).join('')}`;
+}
+function aPremios(){
+  const mes=S.mesPremio,p=premioDe(S.adm,mes),prox=(()=>{const d=new Date();d.setDate(1);d.setMonth(d.getMonth()+1);return mesKey(d)})();
+  return `<div class="toolbar"><div class="grp"><h2 style="font-size:22px">Prêmios de</h2>${mesSelect('selMesPr',mes,[prox])}</div></div>
+   <div class="panel stack" style="gap:4px;max-width:620px">
+    <p class="muted" style="margin:0 0 10px">Os 3 prêmios valem para o top 3 de <b>cada</b> ranking: Cozinheiros, Oficiais de cozinha e Oficiais de limpeza. Aparecem para a equipe na aba Ranking e no histórico.</p>
+    ${[1,2,3].map(i=>`<div class="fld"><label for="pr${i}">${MED[i]} ${i}º lugar</label><input id="pr${i}" type="text" value="${esc(p['p'+i])}" placeholder="${['Ex.: Vale-compras R$ 100','Ex.: Kit cuidados pessoais','Ex.: Folga de 2 horas'][i-1]}"></div>`).join('')}
+    <div><button class="btn" data-act="savePremios">Salvar prêmios</button></div>
+   </div>`;
+}
+function aAjustes(){
+  return `<h2 style="font-size:22px">Ajustes</h2>
+   <div class="cards">
+    <div class="card"><b>PIN da gestão</b><p class="muted" style="margin:0;font-size:14px">6 números. Troque se mais alguém souber.</p><div class="acts"><button class="btn sm" data-act="changeAdminPin">Trocar PIN da gestão</button></div></div>
+    <div class="card"><b>Rotina sugerida</b><ol style="color:inherit;font-size:14px;line-height:1.6;margin:0;padding-left:20px"><li>Todo dia útil, aba Avaliar: marque o que cada um cumpriu.</li><li>Uma vez por semana, crie um quiz.</li><li>No começo do mês, cadastre os prêmios.</li><li>No fim do mês, veja o top 3 de cada ranking.</li></ol></div>
+    <div class="card"><b>Dados</b><p class="muted" style="margin:0;font-size:14px">Tudo fica guardado no Supabase, um banco de dados gratuito. Os PINs ficam protegidos: a equipe nunca vê o PIN dos colegas.</p>${S.adm&&S.adm.planilhaUrl?`<div class="acts"><a class="btn sm alt" href="${esc(S.adm.planilhaUrl)}" target="_blank" rel="noopener">Abrir planilha</a></div>`:''}</div>
+   </div>`;
+}
+function render(){
+  const v=S.view;
+  document.body.classList.toggle('has-nav',v==='home'&&!S.play);
+  $('#app').innerHTML=v==='login'?vLogin()+footer():v==='home'?vHome():v==='adminLogin'?vAdminLogin()+footer():vAdmin();
+}
+
+/* ---------- Dados ---------- */
+async function carregar(silencioso){
+  try{
+    if(S.me){S.pub=await call('dadosColab',S.me.pin)}else{S.pub=await call('dadosPublicos')}
+    S.status='ok';
+  }catch(e){
+    if(S.me&&/PIN/.test(msg(e))){S.me=null;LS.set('qsn_me',null);S.view='login';S.pinErr=msg(e)}
+    else if(!silencioso){S.status='err';S.errMsg=msg(e)}
+  }
+  render();
+}
+async function carregarGestao(){
+  try{S.adm=await call('dadosGestao',adminPin);S.status='ok'}
+  catch(e){adminPin=null;SS.set('qsn_gest',null);S.view='adminLogin';S.pinErr=msg(e)}
+  render();
+}
+async function acao(fn,...args){const r=await call(fn,adminPin,...args);await carregarGestao();return r}
+
+/* Avaliações: salvamento automático em lote */
+const PEND={};let pendT=null,salvando=false;
+function setAval(c,dia,itens){
+  const d=S.adm,id=c.id+'_'+dia;
+  d.avaliacoes=d.avaliacoes.filter(a=>a.id!==id);
+  if(itens!==null)d.avaliacoes.push({id,colabId:c.id,data:dia,mes:dia.slice(0,7),itens,pontos:ptsItens(c,itens)});
+  PEND[id]={colabId:c.id,data:dia,itens,pontos:itens===null?0:ptsItens(c,itens)};
+  clearTimeout(pendT);pendT=setTimeout(flush,900);
+  render();
+}
+async function flush(){
+  if(salvando){pendT=setTimeout(flush,500);return}
+  const ids=Object.keys(PEND);if(!ids.length)return;
+  const lote=ids.map(k=>PEND[k]);ids.forEach(k=>delete PEND[k]);
+  salvando=true;
+  try{await call('salvarAvaliacoes',adminPin,lote)}
+  catch(e){lote.forEach(a=>{const k=a.colabId+'_'+a.data;if(!PEND[k])PEND[k]=a});toast('Não salvou: '+msg(e)+' Tentando de novo…');pendT=setTimeout(flush,4000)}
+  salvando=false;render();
+}
+window.addEventListener('beforeunload',e=>{if(Object.keys(PEND).length){e.preventDefault();e.returnValue=''}});
+
+/* Checklist: salvamento automático */
+let chkT=null;
+function salvarCheck(){clearTimeout(chkT);const dia=S.checkDia,itens=[...S.check];chkT=setTimeout(async()=>{try{await call('salvarChecklist',S.me.pin,dia,itens);const l=S.pub.meusChecks||(S.pub.meusChecks=[]);const o=l.find(x=>x.data===dia);if(o)o.itens=itens;else l.push({data:dia,itens})}catch(e){toast('Não salvou o checklist: '+msg(e))}},700)}
+
+/* ---------- Confete ---------- */
+function confete(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const c=document.createElement('canvas');c.id='confete';document.body.appendChild(c);
+  const W=innerWidth,H=innerHeight,dpr=devicePixelRatio||1;c.width=W*dpr;c.height=H*dpr;
+  const x=c.getContext('2d');x.scale(dpr,dpr);
+  const cores=['#283897','#DA2020','#F2B632','#3FA7E0','#2BB673'];
+  const ps=Array.from({length:120},()=>({x:W/2+(Math.random()-.5)*60,y:H*.4,vx:(Math.random()-.5)*14,vy:-Math.random()*13-5,r:Math.random()*6+5,c:cores[Math.random()*cores.length|0],a:Math.random()*6,va:(Math.random()-.5)*.35}));
+  const t0=performance.now();
+  (function f(t){x.clearRect(0,0,W,H);ps.forEach(p=>{p.vy+=.38;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.a+=p.va;x.save();x.translate(p.x,p.y);x.rotate(p.a);x.fillStyle=p.c;x.fillRect(-p.r/2,-p.r/4,p.r,p.r/2);x.restore()});
+    if(t-t0<2300)requestAnimationFrame(f);else c.remove()})(t0);
+}
+
+/* ---------- Modais ---------- */
+let M={};
+function openModal(html){$('#modal').innerHTML=`<div class="ov" data-act="ovClose"><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`}
+function closeModal(){$('#modal').innerHTML='';M={}}
+function ferr(t){const e=$('#modal .ferr');if(e)e.textContent=t}
+function busyBtn(b,on,label){if(!b)return;b.disabled=on;if(label)b.textContent=label}
+function confirmModal(title,text,label,fn){M={confirm:fn};openModal(`<h2>${esc(title)}</h2><p>${esc(text)}</p><p class="ferr"></p><div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn warn" data-act="doConfirm">${esc(label)}</button></div>`)}
+function resizeImg(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>{const img=new Image();img.onload=()=>{const s=128,c=document.createElement('canvas');c.width=c.height=s;const x=c.getContext('2d');const m=Math.min(img.width,img.height);x.drawImage(img,(img.width-m)/2,(img.height-m)/2,m,m,0,0,s,s);let q=.78,u=c.toDataURL('image/jpeg',q);while(u.length>20000&&q>.3){q-=.12;u=c.toDataURL('image/jpeg',q)}res(u)};img.onerror=rej;img.src=r.result};r.onerror=rej;r.readAsDataURL(file)})}
+function freePin(){const used=new Set(S.adm.equipe.map(c=>c.pin));for(let i=0;i<500;i++){const p=String(Math.floor(Math.random()*10000)).padStart(4,'0');if(!used.has(p)&&new Set(p).size>2)return p}return ''}
+function colabForm(id){
+  const c=id?S.adm.equipe.find(x=>x.id===id):null;M={id,foto:c?c.foto||'':''};
+  const g=c&&GRUPOS[c.grupo]?c.grupo:S.grupo;
+  openModal(`<h2>${c?'Editar colaborador':'Novo colaborador'}</h2>
+   <div class="fld"><span class="lb">Foto</span><div class="photo"><span id="fprev">${avatar({nome:c?c.nome:'?',foto:M.foto},72)}</span><div style="display:flex;flex-direction:column;gap:6px"><label class="btn sm alt" for="f-foto" style="cursor:pointer">Escolher foto</label><input id="f-foto" type="file" accept="image/*" hidden>${M.foto?'<button class="link" style="padding:0;text-align:left" data-act="rmFoto">Remover foto</button>':''}</div></div></div>
+   <div class="fld"><label for="f-nome">Nome</label><input id="f-nome" type="text" value="${esc(c?c.nome:'')}" autocomplete="off"></div>
+   <div class="fld"><label for="f-grupo">Grupo (define o ranking)</label><select id="f-grupo" style="width:100%">${ORDEM_G.map(k=>`<option value="${k}" ${k===g?'selected':''}>${esc(GRUPOS[k].nome)}</option>`).join('')}</select></div>
+   <label class="check" id="f-extra-w" style="margin-bottom:14px" ${g==='coz'?'':'hidden'}><input id="f-extra" type="checkbox" ${c&&c.extra?'checked':''}> Avaliar também “Incentivar o time” (+2)</label>
+   <div class="fld"><label for="f-pin">PIN de 4 números</label><div style="display:flex;gap:8px"><input id="f-pin" type="tel" inputmode="numeric" maxlength="4" value="${esc(c?c.pin:freePin())}" class="num"><button class="btn sm alt" data-act="genPin" style="min-height:44px">Gerar outro</button></div><span class="hint">Entregue o PIN só para a pessoa.</span></div>
+   <label class="check" style="margin-bottom:14px"><input id="f-ativo" type="checkbox" ${!c||c.ativo?'checked':''}> Ativo (aparece no ranking e pode entrar)</label>
+   <p class="ferr"></p>
+   <div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="saveColab">Salvar</button></div>`);
+  $('#f-foto').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{M.foto=await resizeImg(f);$('#fprev').innerHTML=avatar({foto:M.foto},72)}catch(err){ferr('Não foi possível ler essa imagem. Tente outra.')}});
+  $('#f-grupo').addEventListener('change',e=>{$('#f-extra-w').hidden=e.target.value!=='coz'});
+}
+function quizForm(id){
+  const q=id?S.adm.quizzes.find(x=>x.id===id):null;
+  M={id,perg:q?JSON.parse(JSON.stringify(q.perguntas)):[{p:'',ops:['','','',''],c:-1}]};
+  const nr=q?S.adm.respostas.filter(r=>r.quizId===id).length:0;
+  openModal(`<h2>${q?'Editar quiz':'Novo quiz'}</h2>
+   ${nr?`<div class="notice" style="margin-bottom:14px">${nr} pessoa${nr>1?'s já responderam':' já respondeu'}. Mudar as respostas certas não recalcula quem já respondeu.</div>`:''}
+   <div class="fld"><label for="q-tit">Nome do quiz</label><input id="q-tit" type="text" value="${esc(q?q.titulo:'')}" placeholder="Ex.: Boas práticas · semana 1"></div>
+   <div class="two"><div class="fld"><label for="q-mes">Mês</label><input id="q-mes" type="month" value="${esc(q?q.mes:S.mesQuiz)}"></div><label class="check" style="align-self:end;margin-bottom:22px"><input id="q-ativo" type="checkbox" ${!q||q.ativo?'checked':''}> Liberado</label></div>
+   <div id="q-list"></div>
+   <button class="btn sm alt" data-act="addPerg" style="margin-bottom:14px">+ Adicionar pergunta</button>
+   <p class="ferr"></p>
+   <div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="saveQuiz">Salvar quiz</button></div>`);
+  renderPergs();
+}
+function lerPergs(){M.perg=M.perg.map((x,i)=>({p:($('#qp'+i)||{}).value||'',ops:[0,1,2,3].map(j=>($('#qo'+i+'_'+j)||{}).value||''),c:(()=>{const s=document.querySelector(`input[name=qc${i}]:checked`);return s?+s.value:-1})()}))}
+function renderPergs(){
+  $('#q-list').innerHTML=M.perg.map((x,i)=>`<div class="qblock"><div class="qh"><span>Pergunta ${i+1}</span>${M.perg.length>1?`<button class="link" style="padding:0" data-act="rmPerg" data-i="${i}">Remover</button>`:''}</div>
+    <div class="fld"><textarea id="qp${i}" placeholder="Escreva a pergunta" aria-label="Pergunta ${i+1}">${esc(x.p)}</textarea></div>
+    <span class="hint muted" style="font-size:13px">Marque a bolinha da alternativa certa.</span>
+    ${[0,1,2,3].map(j=>`<div class="optrow" style="margin-top:6px"><input type="radio" name="qc${i}" value="${j}" ${x.c===j?'checked':''} aria-label="Alternativa ${LETRAS[j]} é a certa"><input id="qo${i}_${j}" type="text" placeholder="Alternativa ${LETRAS[j]}" value="${esc(x.ops[j]||'')}"></div>`).join('')}</div>`).join('');
+}
+
+/* ---------- Ações ---------- */
+async function pressKey(k){
+  if(S.busy)return;
+  const L=S.view==='adminLogin'?6:4;
+  if(k==='del'){S.pin=S.pin.slice(0,-1);S.pinErr='';render();return}
+  if(S.pin.length>=L)return;
+  S.pin+=k;S.pinErr='';render();
+  if(S.pin.length<L)return;
+  const pin=S.pin;S.busy=true;render();
+  try{
+    if(S.view==='login'){const r=await call('entrar',pin);S.me={id:r.id,nome:r.nome,pin};LS.set('qsn_me',JSON.stringify(S.me));S.view='home';S.ctab='hoje';S.pub=null;S.busy=false;S.pin='';render();await carregar();return}
+    else{await call('entrarGestao',pin);adminPin=pin;SS.set('qsn_gest',pin);S.view='admin';S.adm=null;S.busy=false;S.pin='';render();await carregarGestao();return}
+  }catch(e){S.pinErr=msg(e)}
+  S.pin='';S.busy=false;render();
+}
+const A={
+  key:d=>pressKey(d.k),
+  retry:()=>{S.status='loading';render();carregar()},
+  refresh:()=>carregar(),
+  reloadAdm:()=>carregarGestao(),
+  goAdmin:()=>{S.view='adminLogin';S.pin='';S.pinErr='';render();scrollTo(0,0)},
+  goTeam:()=>{S.view=S.me?'home':'login';S.pin='';S.pinErr='';render();if(S.me)carregar()},
+  logout:()=>{S.me=null;LS.set('qsn_me',null);S.view='login';S.pin='';S.play=null;S.pub=null;render();carregar(true)},
+  adminOut:()=>{adminPin=null;S.adm=null;SS.set('qsn_gest',null);S.view=S.me?'home':'login';render();carregar()},
+  ctab:d=>{S.ctab=d.k;render();scrollTo(0,0)},
+  chk:d=>{if(S.check.has(d.k))S.check.delete(d.k);else S.check.add(d.k);render();salvarCheck()},
+  startQuiz:d=>{S.play={qid:d.id,i:0,esc:[],res:null};render();scrollTo(0,0)},
+  pickQ:d=>{S.play.esc[S.play.i]=+d.i;render()},
+  nextQ:()=>{S.play.i++;render();scrollTo(0,0)},
+  prevQ:()=>{S.play.i--;render();scrollTo(0,0)},
+  exitQuiz:()=>{S.play=null;S.ctab='quiz';render();scrollTo(0,0)},
+  sendQuiz:async()=>{
+    const P=S.play;S.busy=true;render();
+    try{P.res=await call('responderQuiz',S.me.pin,P.qid,P.esc);S.busy=false;render();scrollTo(0,0);if(P.res.acertos/P.res.total>=.5)confete();carregar(true)}
+    catch(e){S.busy=false;toast(msg(e));render()}
+  },
+  tab:d=>{S.tab=d.k;render()},
+  dia:d=>{S.dia=passoUtil(S.dia,+d.k);render()},
+  diaHoje:()=>{S.dia=ultimoUtil();render()},
+  grupo:d=>{S.grupo=d.k;render()},
+  crit:d=>{const c=S.adm.equipe.find(x=>x.id===d.id),a=avalDe(S.adm,c.id,S.dia),set=new Set(a?a.itens:[]);set.has(d.k)?set.delete(d.k):set.add(d.k);setAval(c,S.dia,[...set])},
+  allOn:d=>{const c=S.adm.equipe.find(x=>x.id===d.id);setAval(c,S.dia,itensDe(c).map(i=>i[0]))},
+  allOff:d=>{const c=S.adm.equipe.find(x=>x.id===d.id);setAval(c,S.dia,[])},
+  clearAval:d=>{const c=S.adm.equipe.find(x=>x.id===d.id);setAval(c,S.dia,null)},
+  tudoCerto:()=>{S.adm.equipe.filter(c=>c.grupo===S.grupo&&c.ativo&&!avalDe(S.adm,c.id,S.dia)).forEach(c=>setAval(c,S.dia,itensDe(c).map(i=>i[0])));toast('Marcado. Ajuste quem não cumpriu algum item.')},
+  newColab:()=>colabForm(null),
+  editColab:d=>colabForm(d.id),
+  genPin:()=>{$('#f-pin').value=freePin()},
+  rmFoto:()=>{M.foto='';$('#fprev').innerHTML=avatar({nome:$('#f-nome').value||'?'},72)},
+  saveColab:async(d,b)=>{
+    const data={id:M.id||'',nome:$('#f-nome').value.trim(),grupo:$('#f-grupo').value,extra:$('#f-grupo').value==='coz'&&$('#f-extra').checked,pin:$('#f-pin').value.trim(),ativo:$('#f-ativo').checked,foto:M.foto||''};
+    if(!data.nome)return ferr('Informe o nome.');
+    if(!/^\d{4}$/.test(data.pin))return ferr('O PIN precisa ter exatamente 4 números.');
+    busyBtn(b,true,'Salvando…');
+    try{await acao('salvarColab',data);closeModal();toast(M.id?'Colaborador atualizado':'Colaborador adicionado')}
+    catch(e){busyBtn(b,false,'Salvar');ferr(msg(e))}
+  },
+  delColab:d=>{const c=S.adm.equipe.find(x=>x.id===d.id);confirmModal('Remover '+c.nome+'?','A pessoa sai da equipe e dos rankings. Para só pausar, use Editar e desmarque "Ativo".','Remover',async()=>{await acao('removerColab',d.id);toast('Colaborador removido')})},
+  newQuiz:()=>quizForm(null),
+  editQuiz:d=>quizForm(d.id),
+  addPerg:()=>{lerPergs();M.perg.push({p:'',ops:['','','',''],c:-1});renderPergs();const t=$('#qp'+(M.perg.length-1));t&&t.focus()},
+  rmPerg:d=>{lerPergs();M.perg.splice(+d.i,1);renderPergs()},
+  saveQuiz:async(d,b)=>{
+    lerPergs();
+    const data={id:M.id||'',titulo:$('#q-tit').value.trim(),mes:$('#q-mes').value,ativo:$('#q-ativo').checked,perguntas:M.perg.filter(x=>x.p.trim())};
+    if(!data.titulo)return ferr('Dê um nome ao quiz.');
+    if(!data.perguntas.length)return ferr('Escreva pelo menos 1 pergunta.');
+    for(let i=0;i<data.perguntas.length;i++){const x=data.perguntas[i];if(x.ops.filter(o=>o.trim()).length<2)return ferr(`Pergunta ${i+1}: preencha pelo menos 2 alternativas.`);if(x.c<0||!x.ops[x.c].trim())return ferr(`Pergunta ${i+1}: marque a bolinha da alternativa certa.`)}
+    if(!/^\d{4}-\d{2}$/.test(data.mes))return ferr('Escolha o mês do quiz.');
+    busyBtn(b,true,'Salvando…');
+    try{await acao('salvarQuiz',data);S.mesQuiz=data.mes;closeModal();render();toast(M.id?'Quiz atualizado':'Quiz criado')}
+    catch(e){busyBtn(b,false,'Salvar quiz');ferr(msg(e))}
+  },
+  toggleQuiz:async d=>{try{const a=await acao('alternarQuiz',d.id);toast(a&&a.ativo?'Quiz liberado':'Quiz pausado')}catch(e){toast(msg(e))}},
+  delQuiz:d=>{const n=S.adm.respostas.filter(r=>r.quizId===d.id).length;confirmModal('Excluir este quiz?',n?`Os pontos de ${n} resposta${n>1?'s':''} a este quiz também saem do ranking.`:'Ninguém respondeu ainda.','Excluir',async()=>{await acao('removerQuiz',d.id);toast('Quiz excluído')})},
+  savePremios:async(d,b)=>{const p={mes:S.mesPremio,p1:$('#pr1').value.trim(),p2:$('#pr2').value.trim(),p3:$('#pr3').value.trim()};busyBtn(b,true,'Salvando…');try{await acao('salvarPremios',p);toast('Prêmios salvos')}catch(e){toast(msg(e));busyBtn(b,false,'Salvar prêmios')}},
+  doConfirm:async(d,b)=>{if(!M.confirm)return;busyBtn(b,true);try{await M.confirm();closeModal()}catch(e){busyBtn(b,false);ferr(msg(e))}},
+  close:closeModal,
+  ovClose:(d,b,e)=>{if(e.target===b)closeModal()},
+  changeAdminPin:()=>{M={};openModal(`<h2>Trocar PIN da gestão</h2><div class="fld"><label for="a-pin">Novo PIN (6 números)</label><input id="a-pin" type="tel" inputmode="numeric" maxlength="6" class="num"></div><p class="ferr"></p><div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="saveAdminPin">Salvar</button></div>`)},
+  saveAdminPin:async(d,b)=>{const p=$('#a-pin').value.trim();if(!/^\d{6}$/.test(p))return ferr('Use exatamente 6 números.');busyBtn(b,true,'Salvando…');try{await call('trocarPinGestao',adminPin,p);adminPin=p;SS.set('qsn_gest',p);closeModal();toast('PIN da gestão atualizado')}catch(e){busyBtn(b,false,'Salvar');ferr(msg(e))}},
+};
+document.addEventListener('click',e=>{
+  const b=e.target.closest('[data-act]');if(!b)return;
+  const f=A[b.dataset.act];if(!f)return;
+  if(b.dataset.act!=='ovClose')e.preventDefault();
+  f(b.dataset,b,e);
+});
+document.addEventListener('change',e=>{
+  if(e.target.id==='selMesRk'){S.mesAdmin=e.target.value;render()}
+  if(e.target.id==='selMesQz'){S.mesQuiz=e.target.value;render()}
+  if(e.target.id==='selMesPr'){S.mesPremio=e.target.value;render()}
+});
+document.addEventListener('keydown',e=>{
+  if($('#modal').innerHTML){if(e.key==='Escape')closeModal();return}
+  if(S.view!=='login'&&S.view!=='adminLogin')return;
+  if(/^\d$/.test(e.key))pressKey(e.key);else if(e.key==='Backspace')pressKey('del');
+});
+setInterval(()=>{if(document.visibilityState!=='visible'||$('#modal').innerHTML||S.busy||S.play)return;if(S.view==='home')carregar(true);else if(S.view==='admin'&&adminPin&&!Object.keys(PEND).length&&S.tab!=='avaliar')carregarGestao()},60000);
+
+/* ---------- Início ---------- */
+render();
+if(S.view==='admin')carregarGestao();
+carregar();
+try{if(new URLSearchParams(location.search).has('gestao')&&S.view!=='admin'){S.view='adminLogin';S.pin='';S.pinErr='';render()}}catch(e){}
+</script>
+
+</body>
+</html>
