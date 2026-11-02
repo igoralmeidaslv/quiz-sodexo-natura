@@ -8,6 +8,12 @@
 <meta name="apple-mobile-web-app-title" content="Quiz Natura">
 <meta name="robots" content="noindex, nofollow">
 <title>Quiz Sodexo Natura</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&display=swap">
@@ -401,6 +407,18 @@ const MOCK=(()=>{
   };
 })();
 
+/* ---------- App (PWA) ---------- */
+const APP_VERSION='20261102190245';
+let instalarEvt=null;
+const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
+const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+function instalarHtml(){
+  if(STANDALONE)return '';
+  if(instalarEvt)return `<button class="btn alt" data-act="instalar" style="margin-top:6px">📲 Instalar o app no celular</button>`;
+  if(IOS)return `<p class="muted" style="font-size:13px;text-align:center;margin:6px 0 0;max-width:320px">📲 Para instalar no iPhone: toque em <b>Compartilhar</b> e depois em <b>Adicionar à Tela de Início</b>.</p>`;
+  return '';
+}
+
 /* ---------- Estado ---------- */
 const S={pub:null,adm:null,status:'loading',errMsg:'',me:null,view:'login',ctab:'hoje',pin:'',pinErr:'',busy:false,
   tab:'avaliar',dia:ultimoUtil(),grupo:'coz',mesAdmin:mesKey(),mesQuiz:mesKey(),mesPremio:mesKey(),
@@ -489,6 +507,7 @@ function vLogin(){
     ${dots(4)}<p class="err" role="alert">${S.busy?'Conferindo…':esc(S.pinErr)}</p>
     ${keypad()}
     <button class="link" data-act="goAdmin">Área da gestão</button>
+    ${instalarHtml()}
   </main>`;
 }
 function vAdminLogin(){
@@ -500,6 +519,7 @@ function vAdminLogin(){
     ${dots(6)}<p class="err" role="alert">${S.busy?'Conferindo…':esc(S.pinErr)}</p>
     ${keypad()}
     <button class="link" data-act="goTeam">Voltar para a área do colaborador</button>
+    ${instalarHtml()}
   </main>`;
 }
 
@@ -890,6 +910,29 @@ const A={
   changeAdminPin:()=>{M={};openModal(`<h2>Trocar PIN da gestão</h2><div class="fld"><label for="a-pin">Novo PIN (6 números)</label><input id="a-pin" type="tel" inputmode="numeric" maxlength="6" class="num"></div><p class="ferr"></p><div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="saveAdminPin">Salvar</button></div>`)},
   saveAdminPin:async(d,b)=>{const p=$('#a-pin').value.trim();if(!/^\d{6}$/.test(p))return ferr('Use exatamente 6 números.');busyBtn(b,true,'Salvando…');try{await call('trocarPinGestao',adminPin,p);adminPin=p;SS.set('qsn_gest',p);closeModal();toast('PIN da gestão atualizado')}catch(e){busyBtn(b,false,'Salvar');ferr(msg(e))}},
 };
+A.instalar=async()=>{if(!instalarEvt)return;const ev=instalarEvt;instalarEvt=null;ev.prompt();try{await ev.userChoice}catch(e){}render()};
+window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();instalarEvt=e;render()});
+window.addEventListener('appinstalled',()=>{instalarEvt=null;toast('App instalado! Procure o ícone Quiz Natura.');render()});
+
+/* Atualização forçada: compara a versão do app com a publicada */
+let esperandoAtt=false;
+function aplicarAtualizacao(){
+  const ocupado=Object.keys(PEND).length||S.busy||S.play||$('#modal').innerHTML;
+  if(ocupado){esperandoAtt=true;setTimeout(aplicarAtualizacao,3000);return}
+  toast('Nova versão! Atualizando o app…');
+  setTimeout(()=>location.reload(),700);
+}
+async function checarVersao(){
+  if(esperandoAtt||DEMO)return;
+  try{const r=await fetch('./version.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)return;const v=(await r.json()).v;if(v&&v!==APP_VERSION)aplicarAtualizacao()}catch(e){}
+}
+if('serviceWorker' in navigator&&location.protocol==='https:'){
+  navigator.serviceWorker.register('./sw.js',{updateViaCache:'none'}).then(reg=>{setInterval(()=>{reg.update().catch(()=>{})},60000)}).catch(()=>{});
+}
+setInterval(()=>{if(document.visibilityState==='visible')checarVersao()},60000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')checarVersao()});
+setTimeout(checarVersao,4000);
+
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-act]');if(!b)return;
   const f=A[b.dataset.act];if(!f)return;
