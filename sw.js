@@ -2,7 +2,7 @@
    - Página: sempre busca a versão mais nova na internet (rede primeiro); sem internet, usa a cópia salva.
    - Dados (Supabase) nunca passam pelo cache.
    - Cada publicação troca a VERSION, e o app se atualiza sozinho. */
-const VERSION='20261102195658';
+const VERSION='20261102200156';
 const CACHE='quiznatura-'+VERSION;
 const SHELL=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./favicon.ico','./apple-touch-icon.png'];
 
@@ -12,7 +12,7 @@ self.addEventListener('install',e=>{
 });
 self.addEventListener('activate',e=>{
   e.waitUntil((async()=>{
-    for(const k of await caches.keys())if(k!==CACHE)await caches.delete(k);
+    for(const k of await caches.keys())if(k!==CACHE&&!k.startsWith('tv-'))await caches.delete(k);
     await self.clients.claim();
   })());
 });
@@ -21,10 +21,17 @@ self.addEventListener('fetch',e=>{
   if(req.method!=='GET'||u.origin!==self.location.origin)return;
   if(u.pathname.endsWith('/version.json')||u.pathname.endsWith('/sw.js'))return;
   if(req.mode==='navigate'||u.pathname.endsWith('/')||u.pathname.endsWith('.html')){
-    e.respondWith(fetch(req,{cache:'no-store'}).then(r=>{
+    const rede=fetch(req,{cache:'no-store'}).then(r=>{
       if(r.ok){const c=r.clone();caches.open(CACHE).then(x=>x.put('./index.html',c))}
       return r;
-    }).catch(()=>caches.match('./index.html').then(r=>r||caches.match('./'))));
+    });
+    e.waitUntil(rede.catch(()=>{}));
+    e.respondWith((async()=>{
+      const salvo=await caches.match('./index.html');
+      if(!salvo)return rede.catch(()=>caches.match('./'));
+      /* internet boa: versão nova; internet ruim (mais de 2,5 s): cópia salva, sem esperar */
+      return Promise.race([rede.then(r=>r.ok?r:salvo),new Promise(ok=>setTimeout(()=>ok(salvo),2500))]).catch(()=>salvo);
+    })());
     return;
   }
   e.respondWith(caches.match(req).then(r=>r||fetch(req).then(res=>{
