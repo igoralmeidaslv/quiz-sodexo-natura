@@ -287,6 +287,17 @@ body.has-nav main{padding-bottom:110px}
 .prize{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-weight:700;font-size:14px}
 .prize .m{font-size:22px}
 .daylist .done .t{white-space:normal}
+.livedot{display:inline-block;width:9px;height:9px;border-radius:50%;background:#17B26A;box-shadow:0 0 0 0 rgba(23,178,106,.6);animation:pulse 1.6s infinite;flex:none}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(23,178,106,.55)}70%{box-shadow:0 0 0 8px rgba(23,178,106,0)}100%{box-shadow:0 0 0 0 rgba(23,178,106,0)}}
+.onl{display:flex;flex-wrap:wrap;gap:8px}
+.onp{display:flex;align-items:center;gap:10px;background:var(--ok-soft);border:1px solid color-mix(in srgb,var(--ok) 35%,transparent);border-radius:999px;padding:5px 12px 5px 5px}
+.onp b{display:block;font-size:14px;line-height:1.1}.onp small{display:block;font-size:12px;color:var(--muted)}
+.hbars{display:flex;align-items:flex-end;gap:3px;height:130px;padding-top:6px}
+.hb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px;min-width:0}
+.hb i{display:block;width:100%;min-height:2px;background:var(--brand);border-radius:4px 4px 0 0;opacity:.8}
+.hb i.pk{background:#EB6619;opacity:1}
+.hb small{font-size:10px;color:var(--muted);height:12px;line-height:12px}
+details summary{list-style:none}details summary::-webkit-details-marker{display:none}
 .i{width:1.15em;height:1.15em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.2em;flex:none;display:inline-block}
 .btn .i,.link .i{width:1.1em;height:1.1em}
 .med{display:inline-grid;place-items:center;min-width:2em;height:2em;padding:0 .2em;border-radius:999px;font-family:var(--display);font-weight:900;font-size:.78em;line-height:1;color:#fff;vertical-align:middle;box-shadow:inset 0 -2px 0 rgba(0,0,0,.15)}
@@ -613,7 +624,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261102202634';
+const APP_VERSION='20261102232844';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -629,7 +640,7 @@ const S={pub:null,adm:null,status:'loading',errMsg:'',me:null,view:'login',ctab:
   tab:'avaliar',dia:ultimoUtil(),grupo:'coz',mesAdmin:mesKey(),mesQuiz:mesKey(),mesPremio:mesKey(),rkModo:'ano',admModo:'ano',anoAdmin:String(new Date().getFullYear()),anoPremio:String(new Date().getFullYear()),
   play:null,check:new Set(),checkDia:null};
 try{S.me=JSON.parse(LS.get('qsn_me')||'null')}catch(e){}
-let adminPin=SS.get('qsn_gest');
+let adminPin=LS.get('qsn_gest')||SS.get('qsn_gest');if(adminPin)LS.set('qsn_gest',adminPin);
 if(S.me)S.view='home';
 if(adminPin)S.view='admin';
 
@@ -823,7 +834,7 @@ function cRanking(me){
   const mine=rk.find(x=>x.c.id===me.id);
   return `<div><h1 style="font-size:24px">Ranking · ${esc(GRUPOS[me.grupo].nome)}</h1></div>
     <div class="seg" style="grid-template-columns:repeat(2,1fr)"><button class="${ano?'':'on'}" data-act="rkModo" data-k="mes">${ic('calendar')} Este mês<small style="text-transform:capitalize">${esc(mesCurto(mesKey()))}</small></button><button class="${ano?'on':''}" data-act="rkModo" data-k="ano">${ic('trophy')} Ano ${anoKey()}<small>acumulado</small></button></div>
-    <p class="muted" style="margin:0;font-size:14px">${ano?'Os pontos acumulam de janeiro a dezembro e não zeram. No fim do ano, o top 3 do seu grupo ganha os prêmios do ano.':'Só os pontos deste mês. No mês que vem, essa visão começa do zero, mas os pontos continuam valendo no ranking do ano.'}</p>
+    <p class="muted" style="margin:0;font-size:14px">${ano?'Os pontos acumulam de janeiro a dezembro e não zeram. No fim do ano, o top 3 do seu grupo ganha os prêmios do ano.':'Aqui você vê só os pontos feitos neste mês. Todos eles também somam no ranking do ano, que é o que vale para os prêmios e não zera.'}</p>
     ${prizesHtml(p)?`<section><div class="sec-h"><h2>${ano?'Prêmios do fim do ano':'Prêmios do mês'}</h2></div>${prizesHtml(p)}</section>`:''}
     <section><div class="sec-h"><h2>Classificação</h2><button class="link" data-act="refresh" style="padding:0">Atualizar</button></div>
     <div class="panel" style="padding:6px">${rk.map(x=>rkRow(x,me.id)).join('')||'<p class="muted" style="padding:10px">Ninguém no grupo ainda.</p>'}</div></section>
@@ -846,8 +857,8 @@ function cHist(me){
 
 /* ---------- Telas: gestão ---------- */
 function vAdmin(){
-  const tabs=[['avaliar','Avaliar'],['limpeza','Limpeza'],['cardapio','Cardápio'],['ranking','Ranking'],['quiz','Quizzes'],['equipe','Equipe'],['premios','Prêmios'],['ajustes','Ajustes']];
-  const body=!S.adm?carregando('Abrindo a gestão…'):S.tab==='avaliar'?aAvaliar():S.tab==='limpeza'?aLimpeza():S.tab==='cardapio'?aCardapio():S.tab==='ranking'?aRanking():S.tab==='quiz'?aQuiz():S.tab==='equipe'?aEquipe():S.tab==='premios'?aPremios():aAjustes();
+  const tabs=[['avaliar','Avaliar'],['limpeza','Limpeza'],['cardapio','Cardápio'],['ranking','Ranking'],['quiz','Quizzes'],['acessos','Acessos'],['equipe','Equipe'],['premios','Prêmios'],['ajustes','Ajustes']];
+  const body=!S.adm?(S.status==='err'?`<div class="notice">Sem conexão com o servidor agora. Você continua logada. ${esc(S.errMsg)} <button class="link" data-act="reloadAdm">Tentar de novo</button></div>`:carregando('Abrindo a gestão…')):S.tab==='avaliar'?aAvaliar():S.tab==='limpeza'?aLimpeza():S.tab==='cardapio'?aCardapio():S.tab==='ranking'?aRanking():S.tab==='quiz'?aQuiz():S.tab==='acessos'?aAcessos():S.tab==='equipe'?aEquipe():S.tab==='premios'?aPremios():aAjustes();
   const quem=S.adm&&S.adm.eu&&S.adm.eu!=='Gestão'?'Gestão · '+String(S.adm.eu).split(' ')[0]:'Gestão · Natura';
   return topbar(esc(quem),`<button class="ghost" data-act="adminOut">Sair</button>`)+
    `<nav class="tabs"><div class="wrap wide">${tabs.map(([k,l])=>`<button class="tab ${S.tab===k?'on':''}" data-act="tab" data-k="${k}">${l}</button>`).join('')}</div></nav>
@@ -889,6 +900,11 @@ function aRanking(){
     <div class="grid3">${ORDEM_G.map(bloco).join('')}</div>`;
 }
 function aQuiz(){
+  const seg=`<div class="seg" style="grid-template-columns:repeat(2,1fr);max-width:460px"><button class="${S.qmodo==='lista'?'on':''}" data-act="qModo" data-k="lista">${ic('quiz')} Quizzes</button><button class="${S.qmodo==='analise'?'on':''}" data-act="qModo" data-k="analise">${ic('award')} Erros e acertos</button></div>`;
+  if(S.qmodo==='analise')return seg+aQuizAnalise();
+  return seg+aQuizLista();
+}
+function aQuizLista(){
   const d=S.adm,mes=S.mesQuiz,qs=d.quizzes.filter(q=>q.mes===mes).sort((a,b)=>String(a.criado).localeCompare(String(b.criado)));
   const nAt=d.equipe.filter(c=>c.ativo).length;
   return `<div class="toolbar"><div class="grp"><h2 style="font-size:22px">Quizzes de</h2>${mesSelect('selMesQz',mes)}</div><button class="btn sm" data-act="newQuiz">Novo quiz</button></div>
@@ -963,14 +979,17 @@ async function carregar(silencioso){
     S.status='ok';
     if(S.me){checarTarefasNovas();if(!carregar.push&&avisosLigados()){carregar.push=1;ligarAvisos(true)}}
   }catch(e){
-    if(S.me&&/PIN/.test(msg(e))){S.me=null;LS.set('qsn_me',null);S.view='login';S.pinErr=msg(e)}
+    if(S.me&&/PIN não encontrado/.test(msg(e))){S.me=null;LS.set('qsn_me',null);S.view='login';S.pinErr=msg(e)}
     else if(!silencioso){S.status='err';S.errMsg=msg(e)}
   }
   render();
 }
 async function carregarGestao(){
   try{S.adm=await call('dadosGestao',adminPin);S.status='ok'}
-  catch(e){adminPin=null;SS.set('qsn_gest',null);S.view='adminLogin';S.pinErr=msg(e)}
+  catch(e){
+    if(/PIN da gestão incorreto|Muitas tentativas/.test(msg(e))){adminPin=null;LS.set('qsn_gest',null);SS.set('qsn_gest',null);S.view='adminLogin';S.pinErr=msg(e)}
+    else{S.status='err';S.errMsg=msg(e);if(!S.adm)setTimeout(()=>{if(S.view==='admin'&&!S.adm)carregarGestao()},8000);else toast('Sem conexão agora. Tentando de novo…')}
+  }
   render();
 }
 async function acao(fn,...args){const r=await call(fn,adminPin,...args);await carregarGestao();return r}
@@ -1071,8 +1090,8 @@ async function pressKey(k){
   if(S.pin.length<L)return;
   const pin=S.pin;S.busy=true;render();
   try{
-    if(S.view==='login'){const r=await call('entrar',pin);S.me={id:r.id,nome:r.nome,pin};LS.set('qsn_me',JSON.stringify(S.me));S.view='home';S.ctab='hoje';S.pub=null;S.busy=false;S.pin='';render();await carregar();return}
-    else{await call('entrarGestao',pin);adminPin=pin;SS.set('qsn_gest',pin);S.view='admin';S.adm=null;S.busy=false;S.pin='';render();await carregarGestao();return}
+    if(S.view==='login'){const r=await call('entrar',pin);S.me={id:r.id,nome:r.nome,pin};LS.set('qsn_me',JSON.stringify(S.me));registrar('login');S.view='home';S.ctab='hoje';S.pub=null;S.busy=false;S.pin='';render();await carregar();return}
+    else{await call('entrarGestao',pin);adminPin=pin;LS.set('qsn_gest',pin);S.view='admin';S.adm=null;S.busy=false;S.pin='';render();await carregarGestao();return}
   }catch(e){S.pinErr=msg(e)}
   S.pin='';S.busy=false;render();
 }
@@ -1084,7 +1103,7 @@ const A={
   goAdmin:()=>{S.view='adminLogin';S.pin='';S.pinErr='';render();scrollTo(0,0)},
   goTeam:()=>{S.view=S.me?'home':'login';S.pin='';S.pinErr='';render();if(S.me)carregar()},
   logout:()=>{S.me=null;LS.set('qsn_me',null);S.view='login';S.pin='';S.play=null;S.pub=null;render();carregar(true)},
-  adminOut:()=>{adminPin=null;S.adm=null;SS.set('qsn_gest',null);S.view=S.me?'home':'login';render();carregar()},
+  adminOut:()=>{adminPin=null;S.adm=null;LS.set('qsn_gest',null);SS.set('qsn_gest',null);S.view=S.me?'home':'login';render();carregar()},
   ctab:d=>{S.ctab=d.k;render();scrollTo(0,0)},
   chk:d=>{if(S.check.has(d.k))S.check.delete(d.k);else S.check.add(d.k);render();salvarCheck()},
   startQuiz:d=>{S.play={qid:d.id,i:0,esc:[],res:null};render();scrollTo(0,0)},
@@ -1097,7 +1116,7 @@ const A={
     try{P.res=await call('responderQuiz',S.me.pin,P.qid,P.esc);S.busy=false;render();scrollTo(0,0);if(P.res.acertos/P.res.total>=.5)confete();carregar(true)}
     catch(e){S.busy=false;toast(msg(e));render()}
   },
-  tab:d=>{S.tab=d.k;render();if(d.k==='cardapio'&&!S.card)carregarCardapio()},
+  tab:d=>{S.tab=d.k;render();if(d.k==='cardapio'&&!S.card)carregarCardapio();if(d.k==='acessos')carregarAcessos();if(d.k==='quiz'&&S.qmodo==='analise')carregarQA()},
   rkModo:d=>{S.rkModo=d.k;render()},
   admModo:d=>{S.admModo=d.k;render()},
   savePremiosAno:async(d,b)=>{const p={mes:S.anoPremio,p1:$('#pa1').value.trim(),p2:$('#pa2').value.trim(),p3:$('#pa3').value.trim()};busyBtn(b,true,'Salvando…');try{await acao('salvarPremios',p);toast('Prêmios do ano salvos')}catch(e){toast(msg(e));busyBtn(b,false,'Salvar prêmios do ano')}},
@@ -1144,7 +1163,7 @@ const A={
   close:closeModal,
   ovClose:(d,b,e)=>{if(e.target===b)closeModal()},
   changeAdminPin:()=>{M={};openModal(`<h2>Trocar PIN da gestão</h2><div class="fld"><label for="a-pin">Novo PIN (6 números)</label><input id="a-pin" type="tel" inputmode="numeric" maxlength="6" class="num"></div><p class="ferr"></p><div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="saveAdminPin">Salvar</button></div>`)},
-  saveAdminPin:async(d,b)=>{const p=$('#a-pin').value.trim();if(!/^\d{6}$/.test(p))return ferr('Use exatamente 6 números.');busyBtn(b,true,'Salvando…');try{await call('trocarPinGestao',adminPin,p);adminPin=p;SS.set('qsn_gest',p);closeModal();toast('PIN da gestão atualizado')}catch(e){busyBtn(b,false,'Salvar');ferr(msg(e))}},
+  saveAdminPin:async(d,b)=>{const p=$('#a-pin').value.trim();if(!/^\d{6}$/.test(p))return ferr('Use exatamente 6 números.');busyBtn(b,true,'Salvando…');try{await call('trocarPinGestao',adminPin,p);if(S.adm&&S.adm.eu==='Gestão'){adminPin=p;LS.set('qsn_gest',p)}closeModal();toast('PIN da gestão atualizado')}catch(e){busyBtn(b,false,'Salvar');ferr(msg(e))}},
 };
 Object.assign(A,{
   gNovo:()=>gestorForm(null),
@@ -1473,7 +1492,7 @@ function aCardapio(){
       return `<section class="ccat"><h3>${ic(icn)}${esc(nome)}<span class="n">${l.length}</span></h3>
         <div class="citems">${l.map(it=>{const p=pratoDe(it.nome);return `<div class="citem"><span class="th">${p&&p.foto?`<img src="${esc(p.foto)}" alt="">`:ic(icn)}</span><span class="nm">${esc(it.nome)}</span><button data-act="cFoto" data-i="${it.i}" title="Foto do prato" aria-label="Foto de ${esc(it.nome)}">${ic('camera')}</button><button data-act="cRm" data-i="${it.i}" aria-label="Remover ${esc(it.nome)}">${ic('x')}</button></div>`}).join('')||'<span class="muted" style="font-size:13px">Nenhum item.</span>'}</div>
         <div class="cadd"><input type="text" id="ci-${k}" list="dl-${k}" placeholder="Adicionar em ${esc(nome.toLowerCase())}" autocomplete="off" data-cat="${k}"><button class="btn sm" data-act="cAdd" data-k="${k}" aria-label="Adicionar">${ic('plus')}</button></div><datalist id="dl-${k}">${opts(k)}</datalist></section>`}).join('')}</div>
-    <div class="toolbar"><div class="grp"><button class="btn sm alt" data-act="cPrevia">${ic('eye')} Ver prévia da TV</button><button class="btn sm alt" data-act="cCopiar">${ic('clipboard')} Copiar de outro dia</button>${itens.length?`<button class="btn sm alt" data-act="cLimpar">Limpar</button>`:''}</div></div>
+    <div class="toolbar"><div class="grp"><button class="btn sm alt" data-act="cPrevia">${ic('eye')} Ver prévia da TV</button><button class="btn sm" data-act="cRepetir">${ic('copy')} Repetir em outro turno</button><button class="btn sm alt" data-act="cCopiar">${ic('clipboard')} Copiar de outro dia</button>${itens.length?`<button class="btn sm alt" data-act="cLimpar">Limpar</button>`:''}</div></div>
     <p class="muted" style="font-size:13px;margin:0">Salva sozinho. Foto é opcional: toque no ícone da câmera ao lado do prato. A foto fica guardada no banco de pratos e aparece de novo toda vez que o prato voltar ao cardápio.</p>
 
     <section class="panel stack" style="gap:12px"><div class="sec-h" style="margin:0"><h2>${ic('tv')} TV vertical</h2></div>
@@ -1770,6 +1789,139 @@ document.addEventListener('change',async e=>{
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.cat){e.preventDefault();addItem(e.target.dataset.cat)}});
 window.addEventListener('beforeunload',e=>{if(Object.keys(CPEND).length){e.preventDefault();e.returnValue=''}});
 
+/* =====================================================================
+   Repetir cardápio · Análise do quiz · Acessos em tempo real
+   ===================================================================== */
+Object.assign(RPC,{registrarAcesso:['registrar_acesso',['p_pin','p_evento','p_tela']],dadosAcessos:['dados_acessos',['p_pin','p_dias']],quizAnalise:['quiz_analise',['p_pin']]});
+Object.assign(S,{qmodo:'lista',qa:null,qaErr:'',qaPer:'mes',ac:null,acErr:'',acDias:7});
+const TELAS={hoje:'Hoje',quiz:'Quiz',ranking:'Ranking',hist:'Histórico',tarefas:'Tarefas'};
+const hhmmDe=iso=>{const d=new Date(iso);return pad2(d.getHours())+':'+pad2(d.getMinutes())};
+function quando(iso){
+  if(!iso)return 'nunca';const d=new Date(iso),s=(Date.now()-d)/1000;
+  if(s<90)return 'agora';if(s<3600)return 'há '+Math.round(s/60)+' min';
+  if(isoDia(d)===isoDia())return 'hoje, '+hhmmDe(iso);
+  if(isoDia(d)===somaDia(isoDia(),-1))return 'ontem, '+hhmmDe(iso);
+  return pad2(d.getDate())+'/'+pad2(d.getMonth()+1)+', '+hhmmDe(iso);
+}
+
+/* ---------- Equipe: registra acessos (entrada, abertura e "online") ---------- */
+function registrar(ev){if(!S.me||DEMO)return;call('registrarAcesso',S.me.pin,ev,S.view==='home'?S.ctab:'').catch(()=>{})}
+setInterval(()=>{if(S.me&&S.view==='home'&&document.visibilityState==='visible')registrar('ping')},60000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&S.me&&S.view==='home')registrar('abriu')});
+
+/* ---------- Cardápio: repetir em outros turnos ---------- */
+function cRepetirModal(){
+  const c=cardDe(S.cdia,S.cref);if(!c||!c.itens.length){toast('Monte este cardápio antes de repetir.');return}
+  const outros=ORDEM_R.filter(k=>k!==S.cref);M={};
+  openModal(`<h2>Repetir em outro turno</h2><p class="muted" style="margin-top:0">Copia os ${c.itens.length} pratos d${S.cref==='almoco'?'o':'a'} ${esc(REF[S.cref].nome.toLowerCase())} de ${esc(diaLabel(S.cdia))} para:</p>
+    ${outros.map(k=>{const x=cardDe(S.cdia,k),tem=x&&x.itens.length;return `<label class="check" style="margin-bottom:12px"><input type="checkbox" class="rp" value="${k}" ${k==='janta'&&S.cref==='almoco'?'checked':''}> ${ic(REF[k].ic)} ${esc(REF[k].nome)} <span class="muted" style="font-weight:600;font-size:13px">${tem?`(substitui os ${x.itens.length} pratos que já estão lá)`:'(vazio)'}</span></label>`}).join('')}
+    <label class="check" style="margin:6px 0 14px"><input type="checkbox" id="rp-pronto" ${c.pronto?'checked':''}> Já marcar como <b>Pronto</b> (aparece na TV no horário)</label>
+    <p class="muted" style="font-size:13px;margin:0 0 10px">Depois você pode mudar algum prato no turno copiado, por exemplo deixar a ceia diferente.</p>
+    <p class="ferr"></p><div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="cRepetirOk">Repetir</button></div>`);
+}
+
+/* ---------- Quiz: análise de erros e acertos ---------- */
+async function carregarQA(){try{S.qa=await call('quizAnalise',adminPin);S.qaErr=''}catch(e){S.qaErr=msg(e)}if(S.view==='admin'&&S.tab==='quiz')render()}
+function analiseQuiz(){
+  const d=S.adm,em=equipeMap(d),per=S.qaPer==='ano'?S.mesQuiz.slice(0,4):S.mesQuiz;
+  const qs=d.quizzes.filter(q=>noPeriodo(per,q.mes));
+  const linhas=[];let tot=0,ac=0;const porG={};
+  qs.forEach(q=>{const rs=(S.qa||[]).filter(r=>r.quizId===q.id&&Array.isArray(r.escolhas));
+    q.perguntas.forEach((p,i)=>{
+      const resp=rs.filter(r=>r.escolhas[i]!=null);if(!resp.length)return;
+      const cont=[0,0,0,0];const errou=[];let ok=0;const g={};
+      resp.forEach(r=>{const e=r.escolhas[i];if(e>=0&&e<4)cont[e]++;const c=em[r.colabId],gk=c?c.grupo:'';(g[gk]||(g[gk]={n:0,ok:0})).n++;(porG[gk]||(porG[gk]={n:0,ok:0})).n++;
+        if(e===p.c){ok++;g[gk].ok++;porG[gk].ok++}else errou.push(c?c.nome:'—')});
+      tot+=resp.length;ac+=ok;
+      let maisErr=-1;cont.forEach((n,j)=>{if(j!==p.c&&n>0&&(maisErr<0||n>cont[maisErr]))maisErr=j});
+      linhas.push({q,i,p,n:resp.length,ok,pct:Math.round(ok/resp.length*100),cont,maisErr,errou,g});
+    })});
+  linhas.sort((a,b)=>a.pct-b.pct||b.n-a.n);
+  return {qs,linhas,tot,ac,porG,per};
+}
+function aQuizAnalise(){
+  if(!S.qa)return S.qaErr?`<div class="notice">Não foi possível carregar a análise. ${esc(S.qaErr)} <button class="link" data-act="qaReload">Tentar de novo</button></div>`:carregando('Calculando acertos e erros…');
+  const A_=analiseQuiz(),{linhas,tot,ac,porG}=A_,pctG=tot?Math.round(ac/tot*100):0;
+  const fracos=linhas.filter(l=>l.pct<70);
+  const barra=(p)=>`<div class="prog" style="height:10px"><i style="width:${p}%;background:${p>=70?'var(--ok)':p>=40?'#E0A21B':'var(--bad)'}"></i></div>`;
+  return `<div class="toolbar"><div class="grp"><h2 style="font-size:22px">Onde a equipe mais erra</h2>${S.qaPer==='ano'?anoSelect('selAnoQa',S.mesQuiz.slice(0,4)):mesSelect('selMesQz',S.mesQuiz)}</div>
+      <div class="grp"><div class="seg" style="grid-template-columns:repeat(2,1fr);min-width:220px"><button class="${S.qaPer==='mes'?'on':''}" data-act="qaPer" data-k="mes">Mês</button><button class="${S.qaPer==='ano'?'on':''}" data-act="qaPer" data-k="ano">Ano todo</button></div>
+      <button class="btn sm alt" data-act="qaReload">${ic('refresh')} Atualizar</button>${fracos.length?`<button class="btn sm" data-act="qaCopiar">${ic('copy')} Copiar resumo do treinamento</button>`:''}</div></div>
+    <div class="stats"><div class="stat"><b class="num">${pctG}%</b><span>de acerto geral</span></div><div class="stat"><b class="num">${tot}</b><span>respostas analisadas</span></div><div class="stat"><b class="num">${fracos.length}</b><span>perguntas com menos de 70%</span></div></div>
+    ${Object.keys(porG).length?`<section class="panel"><div class="sec-h"><h2>Acerto por grupo</h2></div><div class="stack" style="gap:10px">${ORDEM_G.filter(g=>porG[g]).map(g=>{const p=Math.round(porG[g].ok/porG[g].n*100);return `<div><div class="qprog" style="margin-bottom:4px"><b>${esc(GRUPOS[g].nome)}</b><span class="num muted">${p}%</span></div>${barra(p)}</div>`}).join('')}</div></section>`:''}
+    ${linhas.length?`<section><div class="sec-h"><h2>Perguntas, da mais errada para a mais certa</h2></div><div class="list">${linhas.map((l,ix)=>`<div class="panel stack" style="gap:8px">
+        <div class="qprog" style="margin:0"><span class="eyebrow">${esc(l.q.titulo)} · pergunta ${l.i+1}</span><span class="chip ${l.pct>=70?'ok':l.pct>=40?'gold':'bad'} num">${l.pct}% acertou</span></div>
+        <b style="font-size:16px">${esc(l.p.p)}</b>${barra(l.pct)}
+        <div style="font-size:14px;line-height:1.5"><span style="color:var(--ok);font-weight:700">${ic('check')} Certa: ${esc(l.p.ops[l.p.c])}</span>${l.maisErr>=0?`<br><span style="color:var(--bad);font-weight:700">${ic('x')} Erro mais comum: ${esc(l.p.ops[l.maisErr])} (${l.cont[l.maisErr]} pessoa${l.cont[l.maisErr]>1?'s':''})</span>`:''}</div>
+        <div class="muted num" style="font-size:13px">${l.ok} de ${l.n} acertaram${Object.keys(l.g).length>1?' · '+ORDEM_G.filter(g=>l.g[g]).map(g=>esc(GRUPOS[g].nome)+' '+Math.round(l.g[g].ok/l.g[g].n*100)+'%').join(' · '):''}</div>
+        ${l.errou.length?`<details><summary class="link" style="padding:0;cursor:pointer;font-size:14px">Quem errou (${l.errou.length})</summary><p style="margin:6px 0 0;font-size:14px">${l.errou.map(esc).join(', ')}</p></details>`:''}
+      </div>`).join('')}</div></section>`
+    :`<div class="empty">Ainda não há respostas de quiz ${S.qaPer==='ano'?'neste ano':'neste mês'}.</div>`}
+    <p class="muted" style="font-size:13px;margin:0">Use as perguntas no vermelho como tema do próximo treinamento. Depois do treinamento, repita perguntas parecidas num quiz novo para ver se melhorou.</p>`;
+}
+function resumoTreinamento(){
+  const {linhas,per}=analiseQuiz(),f=linhas.filter(l=>l.pct<70).slice(0,8);
+  return `*Pontos para treinamento* (${perLabel(per)})\n\n`+f.map((l,i)=>`${i+1}. ${l.p.p}\n   Acerto: ${l.pct}% (${l.ok} de ${l.n})\n   Resposta certa: ${l.p.ops[l.p.c]}${l.maisErr>=0?`\n   Erro mais comum: ${l.p.ops[l.maisErr]}`:''}${l.p.e?`\n   Explicação: ${l.p.e}`:''}`).join('\n\n');
+}
+
+/* ---------- Gestão: Acessos e engajamento (tempo real) ---------- */
+async function carregarAcessos(){try{S.ac=await call('dadosAcessos',adminPin,S.acDias);S.acErr=''}catch(e){S.acErr=msg(e)}if(S.view==='admin'&&S.tab==='acessos'&&!$('#modal').innerHTML)render()}
+setInterval(()=>{if(S.view==='admin'&&S.tab==='acessos'&&document.visibilityState==='visible')carregarAcessos()},15000);
+function aAcessos(){
+  if(!S.ac)return S.acErr?`<div class="notice">Não foi possível carregar os acessos. ${esc(S.acErr)} <button class="link" data-act="acReload">Tentar de novo</button></div>`:carregando('Carregando acessos…');
+  const d=S.adm,ac=S.ac,em=equipeMap(d),ativos=d.equipe.filter(c=>c.ativo);
+  const ini=somaDia(isoDia(),-(S.acDias-1)),noP=s=>s>=ini;
+  let uteis=0;for(let dd=ini;dd<=isoDia();dd=somaDia(dd,1))if(util(dd))uteis++;uteis=Math.max(1,uteis);
+  const pc={};ac.porColab.forEach(x=>pc[x.colabId]=x);
+  const qsP=d.quizzes.filter(q=>q.ativo&&q.mes>=ini.slice(0,7));
+  const linhas=ativos.map(c=>{const x=pc[c.id]||{n:0,dias:0,ultimo:null};
+    const nq=d.respostas.filter(r=>r.colabId===c.id&&qsP.some(q=>q.id===r.quizId)).length;
+    const nck=(d.checks||[]).filter(k=>k.colabId===c.id&&noP(k.data)).length;
+    const taxa=Math.min(1,x.dias/uteis);
+    const nivel=!x.n?(ac.ultimoGeral[c.id]?['Sem acesso no período','off']:['Nunca entrou','bad']):taxa>=.6?['Alto','ok']:taxa>=.3?['Médio','gold']:['Baixo','bad'];
+    return {c,...x,ultimo:x.ultimo||ac.ultimoGeral[c.id]||null,nq,nck,nivel}}).sort((a,b)=>b.n-a.n||String(a.c.nome).localeCompare(String(b.c.nome),'pt-BR'));
+  const totN=ac.porColab.reduce((s,x)=>s+x.n,0),pessoas=ac.porColab.length,eng=ativos.length?Math.round(pessoas/ativos.length*100):0;
+  const ph=Array.from({length:24},(_,h)=>{const x=ac.porHora.find(y=>y.h===h);return x?x.n:0}),mx=Math.max(1,...ph),pico=ph.indexOf(Math.max(...ph));
+  const dias=ac.porDia.slice(-14),mxd=Math.max(1,...dias.map(x=>x.pessoas));
+  const online=ac.online.filter(o=>em[o.colabId]);
+  return `<div class="toolbar"><div class="grp"><h2 style="font-size:22px">Acessos da equipe</h2><span class="chip ok"><span class="livedot"></span> Ao vivo</span></div>
+      <div class="seg" style="grid-template-columns:repeat(4,1fr);min-width:300px">${[[1,'Hoje'],[7,'7 dias'],[30,'30 dias'],[365,'Ano']].map(([n,l])=>`<button class="${S.acDias===n?'on':''}" data-act="acDias" data-k="${n}">${l}</button>`).join('')}</div></div>
+    <section class="panel"><div class="sec-h"><h2>${ic('user')} Online agora <span class="muted num" style="font-size:15px">(${online.length})</span></h2><span class="muted" style="font-size:13px">atualiza a cada 15 segundos</span></div>
+      ${online.length?`<div class="onl">${online.map(o=>{const c=em[o.colabId];return `<div class="onp">${avatar(c,34)}<span><b>${esc(String(c.nome).split(' ')[0])}</b><small>${esc(TELAS[o.tela]||'No app')} · ${quando(o.vistoEm)}</small></span><span class="livedot"></span></div>`}).join('')}</div>`:'<p class="muted" style="margin:0">Ninguém com o app aberto neste momento.</p>'}</section>
+    <div class="stats" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">
+      <div class="stat"><b class="num">${totN}</b><span>acessos no período</span></div>
+      <div class="stat"><b class="num">${pessoas}/${ativos.length}</b><span>pessoas entraram (${eng}%)</span></div>
+      <div class="stat"><b class="num">${pessoas?(totN/pessoas).toFixed(1).replace('.',','):0}</b><span>acessos por pessoa</span></div>
+      <div class="stat"><b class="num">${totN?pad2(pico)+'h':'—'}</b><span>horário de pico</span></div></div>
+    <div class="grid3">
+      <section class="panel"><div class="sec-h"><h2>Horários de acesso</h2></div>
+        <div class="hbars">${ph.map((n,h)=>`<div class="hb" title="${pad2(h)}h: ${n} acesso${n===1?'':'s'}"><i style="height:${Math.round(n/mx*100)}%" class="${h===pico&&n?'pk':''}"></i><small>${h%3===0?pad2(h):''}</small></div>`).join('')}</div></section>
+      <section class="panel"><div class="sec-h"><h2>Pessoas por dia</h2></div>
+        ${dias.length?`<div class="hbars">${dias.map(x=>`<div class="hb" title="${esc(diaLabel(x.d))}: ${x.pessoas} pessoa(s), ${x.n} acesso(s)"><i style="height:${Math.round(x.pessoas/mxd*100)}%"></i><small>${x.d.slice(8)}</small></div>`).join('')}</div>`:'<p class="muted" style="margin:0">Sem acessos no período.</p>'}</section>
+    </div>
+    <section><div class="sec-h"><h2>Engajamento por pessoa</h2></div>
+      <div class="tbl-wrap"><table><thead><tr><th>Nome</th><th class="r">Acessos</th><th class="r">Dias ativos</th><th>Último acesso</th><th class="r">Quizzes</th><th class="r">Checklist</th><th>Engajamento</th></tr></thead>
+      <tbody>${linhas.map(x=>`<tr><td><span class="who">${avatar(x.c,28)}<span>${esc(x.c.nome)}<br><small class="muted">${GRUPOS[x.c.grupo]?esc(GRUPOS[x.c.grupo].um):''}</small></span></span></td><td class="r num">${x.n}</td><td class="r num">${x.dias}</td><td>${esc(quando(x.ultimo))}</td><td class="r num">${x.nq}/${qsP.length}</td><td class="r num">${x.nck} dia${x.nck===1?'':'s'}</td><td><span class="chip ${x.nivel[1]}">${x.nivel[0]}</span></td></tr>`).join('')}</tbody></table></div></section>
+    <section class="panel"><div class="sec-h"><h2>Últimos acessos</h2></div>
+      ${ac.recentes.length?ac.recentes.filter(r=>em[r.colabId]).slice(0,20).map(r=>`<div class="done"><span class="t">${esc(em[r.colabId].nome)} <small class="muted">${r.evento==='login'?'entrou com o PIN':'abriu o app'}</small></span><span class="muted num" style="font-size:14px">${esc(quando(r.em))}</span></div>`).join(''):'<p class="muted" style="margin:0">Os acessos aparecem aqui a partir de agora.</p>'}</section>
+    <p class="muted" style="font-size:13px;margin:0">Um acesso conta quando a pessoa entra com o PIN ou abre o app (no máximo 1 a cada 10 minutos). “Online agora” mostra quem está com o app aberto. Engajamento: dias com acesso em relação aos dias úteis do período.</p>`;
+}
+
+Object.assign(A,{
+  cRepetir:()=>cRepetirModal(),
+  cRepetirOk:()=>{const alvos=[...document.querySelectorAll('.rp:checked')].map(x=>x.value);if(!alvos.length)return ferr('Marque pelo menos um turno.');
+    const src=cardDe(S.cdia,S.cref),pronto=$('#rp-pronto').checked,its=JSON.stringify(src.itens);closeModal();
+    alvos.forEach(k=>setCard(S.cdia,k,x=>{x.itens=JSON.parse(its);x.pronto=pronto}));
+    toast('Repetido em '+alvos.map(k=>REF[k].nome).join(' e ')+'.')},
+  qModo:d=>{S.qmodo=d.k;render();if(d.k==='analise'&&!S.qa)carregarQA()},
+  qaReload:()=>{S.qa=null;S.qaErr='';render();carregarQA()},
+  qaPer:d=>{S.qaPer=d.k;render()},
+  qaCopiar:async()=>{const t=resumoTreinamento();try{await navigator.clipboard.writeText(t);toast('Resumo copiado. Cole no WhatsApp ou num documento.')}catch(e){openModal(`<h2>Resumo do treinamento</h2><textarea style="min-height:300px">${esc(t)}</textarea><div class="acts" style="margin-top:12px"><button class="btn" data-act="close">Fechar</button></div>`)}},
+  acDias:d=>{S.acDias=+d.k;S.ac=null;render();carregarAcessos()},
+  acReload:()=>{S.ac=null;S.acErr='';render();carregarAcessos()},
+});
+document.addEventListener('change',e=>{if(e.target.id==='selAnoQa'){S.mesQuiz=e.target.value+S.mesQuiz.slice(4);render()}});
+
 /* Dados de exemplo (modo demonstração) para os módulos novos */
 (()=>{const db={card:[],pratos:[],midias:[],tarefas:[],push:[],v:'1'};const bump=()=>db.v=String(Date.now());
   const h=isoDia(),chk=p=>{if(String(p)!=='123456')throw new Error('PIN da gestão incorreto.')};
@@ -1797,11 +1949,22 @@ window.addEventListener('beforeunload',e=>{if(Object.keys(CPEND).length){e.preve
   });
 })();
 
+/* demo: acessos e análise */
+Object.assign(MOCK,{
+  registrarAcesso:()=>({ok:true}),
+  quizAnalise:()=>[{quizId:'q1',colabId:'e1',mes:mesKey(),escolhas:[2,2,1],acertos:3,total:3},{quizId:'q1',colabId:'e2',mes:mesKey(),escolhas:[1,2,0],acertos:1,total:3},{quizId:'q1',colabId:'e3',mes:mesKey(),escolhas:[2,1,0],acertos:1,total:3},{quizId:'q1',colabId:'e5',mes:mesKey(),escolhas:[3,2,0],acertos:1,total:3},{quizId:'q1',colabId:'e6',mes:mesKey(),escolhas:[2,0,1],acertos:2,total:3}],
+  dadosAcessos:(p,dias)=>{const ag=Date.now(),r=[];['e0','e1','e2','e3','e5','e6','e1','e2','e0','e1'].forEach((c,i)=>r.push({colabId:c,em:new Date(ag-i*3.7e6).toISOString(),evento:i%3?'abriu':'login',tela:'hoje'}));
+    return {agora:'',online:[{colabId:'e1',vistoEm:new Date(ag-40e3).toISOString(),tela:'quiz'},{colabId:'e5',vistoEm:new Date(ag-90e3).toISOString(),tela:'tarefas'}],
+      porColab:[{colabId:'e0',n:6,dias:4,ultimo:r[0].em},{colabId:'e1',n:9,dias:5,ultimo:r[1].em},{colabId:'e2',n:3,dias:2,ultimo:r[2].em},{colabId:'e5',n:1,dias:1,ultimo:r[4].em}],
+      ultimoGeral:{e6:r[5].em},porHora:[{h:6,n:3},{h:7,n:8},{h:11,n:5},{h:12,n:12},{h:13,n:4},{h:18,n:6},{h:19,n:2}],
+      porDia:[0,1,2,3,4,5,6].map(i=>({d:somaDia(isoDia(),-6+i),n:3+i,pessoas:2+(i%4)})),recentes:r}},
+});
 /* ---------- Início ---------- */
 let TV_MODE=false;try{TV_MODE=new URLSearchParams(location.search).has('tv')}catch(e){}
 if(TV_MODE){S.view='tv';iniciarTv();tvPintar(true)}
 else{
 if(S.me&&location.hash==='#tarefas')S.ctab='tarefas';
+if(S.me&&S.view==='home')registrar('abriu');
 render();
 if(S.view==='admin')carregarGestao();
 carregar();
