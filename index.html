@@ -387,7 +387,7 @@ const MOCK=(()=>{
     entrar:p=>{const c=byPin(p);return{id:c.id,nome:c.nome}},
     dadosColab:p=>{const c=byPin(p);return{...base(false),meusChecks:db.checks.filter(x=>x.colabId===c.id)}},
     salvarChecklist:(p,data,itens)=>{const c=byPin(p);db.checks=db.checks.filter(x=>!(x.colabId===c.id&&x.data===data));db.checks.push({colabId:c.id,data,itens});return true},
-    responderQuiz:(p,qid,es)=>{const c=byPin(p);const q=db.quizzes.find(x=>x.id===qid);if(!q||!q.ativo)throw new Error('Este quiz não está mais disponível.');if(db.respostas.some(r=>r.id===c.id+'_'+q.id))throw new Error('Você já respondeu este quiz.');let a=0;q.perguntas.forEach((x,i)=>{if(es[i]===x.c)a++});db.respostas.push({id:c.id+'_'+q.id,colabId:c.id,quizId:q.id,mes:q.mes,acertos:a,total:q.perguntas.length,em:new Date().toISOString()});return{acertos:a,total:q.perguntas.length,corretas:q.perguntas.map(x=>x.c)}},
+    responderQuiz:(p,qid,es)=>{const c=byPin(p);const q=db.quizzes.find(x=>x.id===qid);if(!q||!q.ativo)throw new Error('Este quiz não está mais disponível.');if(db.respostas.some(r=>r.id===c.id+'_'+q.id))throw new Error('Você já respondeu este quiz.');let a=0;q.perguntas.forEach((x,i)=>{if(es[i]===x.c)a++});db.respostas.push({id:c.id+'_'+q.id,colabId:c.id,quizId:q.id,mes:q.mes,acertos:a,total:q.perguntas.length,em:new Date().toISOString()});return{acertos:a,total:q.perguntas.length,corretas:q.perguntas.map(x=>x.c),explicacoes:q.perguntas.map(x=>x.e||'')}},
     entrarGestao:p=>{chk(p);return true},
     dadosGestao:p=>{chk(p);return{...base(true),checks:db.checks,planilhaUrl:''}},
     salvarColab:(p,x)=>{chk(p);if(db.equipe.some(c=>c.pin===x.pin&&c.id!==x.id))throw new Error('Esse PIN já é de outra pessoa. Toque em Gerar outro.');const o=db.equipe.find(c=>c.id===x.id);if(o)Object.assign(o,x);else db.equipe.push({...x,id:'e'+Date.now()});return true},
@@ -569,7 +569,7 @@ function vPlay(){
     return topbar('',`<button class="ghost" data-act="exitQuiz">Fechar</button>`)+`<main class="wrap stack">
       <div class="verdict ${boa?'ok':'bad'}" role="status" style="font-size:20px">${boa?'Mandou bem!':'Valeu a participação!'} Você acertou ${r.acertos} de ${r.total}.</div>
       <div class="panel"><b>+${QUIZ_PART} pontos garantidos</b> por participar. Se você ficar entre os 3 que mais acertaram no seu grupo, ganha o bônus (+5, +3 ou +1). Acompanhe na aba Ranking.</div>
-      <section><div class="sec-h"><h2>Correção</h2></div><div class="panel" style="padding-block:4px">${q.perguntas.map((x,i)=>{const ok=P.esc[i]===r.corretas[i];return `<div class="corr"><span class="ic" style="color:var(--${ok?'ok':'bad'})">${ok?'✓':'✗'}</span><span><b>${esc(x.p)}</b><br>${ok?'':`<span class="miss">Sua resposta: ${esc(x.ops[P.esc[i]]||'—')}</span><br>`}<span style="color:var(--ok);font-weight:700">Certa: ${esc(x.ops[r.corretas[i]])}</span></span></div>`}).join('')}</div></section>
+      <section><div class="sec-h"><h2>Correção</h2></div><div class="panel" style="padding-block:4px">${q.perguntas.map((x,i)=>{const ok=P.esc[i]===r.corretas[i];return `<div class="corr"><span class="ic" style="color:var(--${ok?'ok':'bad'})">${ok?'✓':'✗'}</span><span><b>${esc(x.p)}</b><br>${ok?'':`<span class="miss">Sua resposta: ${esc(x.ops[P.esc[i]]||'—')}</span><br>`}<span style="color:var(--ok);font-weight:700">Certa: ${esc(x.ops[r.corretas[i]])}</span>${r.explicacoes&&r.explicacoes[i]?`<br><small class="muted" style="display:block;margin-top:4px;line-height:1.45">💡 ${esc(r.explicacoes[i])}</small>`:''}</span></div>`}).join('')}</div></section>
       <button class="btn block" data-act="exitQuiz">Voltar</button></main>`;
   }
   const x=q.perguntas[P.i],n=q.perguntas.length,ult=P.i===n-1,sel=P.esc[P.i];
@@ -651,7 +651,7 @@ function aQuiz(){
   const d=S.adm,mes=S.mesQuiz,qs=d.quizzes.filter(q=>q.mes===mes).sort((a,b)=>String(a.criado).localeCompare(String(b.criado)));
   const nAt=d.equipe.filter(c=>c.ativo).length;
   return `<div class="toolbar"><div class="grp"><h2 style="font-size:22px">Quizzes de</h2>${mesSelect('selMesQz',mes)}</div><button class="btn sm" data-act="newQuiz">Novo quiz</button></div>
-   <p class="muted" style="margin:0">Participar vale ${QUIZ_PART} pts. Em cada grupo, os 3 que mais acertarem ganham +5, +3 e +1 (empate: quem terminou primeiro).</p>
+   <p class="muted" style="margin:0">Um quiz a cada 15 dias. Participar vale ${QUIZ_PART} pts. Em cada grupo, os 3 que mais acertarem ganham +5, +3 e +1 (empate: quem terminou primeiro).</p>
    ${qs.length?`<div class="cards">${qs.map(q=>{const rs=d.respostas.filter(r=>r.quizId===q.id);
      return `<div class="card"><div class="row">${q.ativo?'<span class="chip ok">Liberado</span>':'<span class="chip off">Pausado</span>'}<span class="chip gold num">${q.perguntas.length} pergunta${q.perguntas.length>1?'s':''}</span></div>
      <div class="qq">${esc(q.titulo)}</div>
@@ -775,7 +775,7 @@ function colabForm(id){
 }
 function quizForm(id){
   const q=id?S.adm.quizzes.find(x=>x.id===id):null;
-  M={id,perg:q?JSON.parse(JSON.stringify(q.perguntas)):[{p:'',ops:['','','',''],c:-1}]};
+  M={id,perg:q?JSON.parse(JSON.stringify(q.perguntas)):[{p:'',ops:['','','',''],c:-1,e:''}]};
   const nr=q?S.adm.respostas.filter(r=>r.quizId===id).length:0;
   openModal(`<h2>${q?'Editar quiz':'Novo quiz'}</h2>
    ${nr?`<div class="notice" style="margin-bottom:14px">${nr} pessoa${nr>1?'s já responderam':' já respondeu'}. Mudar as respostas certas não recalcula quem já respondeu.</div>`:''}
@@ -787,12 +787,13 @@ function quizForm(id){
    <div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="saveQuiz">Salvar quiz</button></div>`);
   renderPergs();
 }
-function lerPergs(){M.perg=M.perg.map((x,i)=>({p:($('#qp'+i)||{}).value||'',ops:[0,1,2,3].map(j=>($('#qo'+i+'_'+j)||{}).value||''),c:(()=>{const s=document.querySelector(`input[name=qc${i}]:checked`);return s?+s.value:-1})()}))}
+function lerPergs(){M.perg=M.perg.map((x,i)=>({p:($('#qp'+i)||{}).value||'',e:($('#qe'+i)||{}).value||'',ops:[0,1,2,3].map(j=>($('#qo'+i+'_'+j)||{}).value||''),c:(()=>{const s=document.querySelector(`input[name=qc${i}]:checked`);return s?+s.value:-1})()}))}
 function renderPergs(){
   $('#q-list').innerHTML=M.perg.map((x,i)=>`<div class="qblock"><div class="qh"><span>Pergunta ${i+1}</span>${M.perg.length>1?`<button class="link" style="padding:0" data-act="rmPerg" data-i="${i}">Remover</button>`:''}</div>
     <div class="fld"><textarea id="qp${i}" placeholder="Escreva a pergunta" aria-label="Pergunta ${i+1}">${esc(x.p)}</textarea></div>
     <span class="hint muted" style="font-size:13px">Marque a bolinha da alternativa certa.</span>
-    ${[0,1,2,3].map(j=>`<div class="optrow" style="margin-top:6px"><input type="radio" name="qc${i}" value="${j}" ${x.c===j?'checked':''} aria-label="Alternativa ${LETRAS[j]} é a certa"><input id="qo${i}_${j}" type="text" placeholder="Alternativa ${LETRAS[j]}" value="${esc(x.ops[j]||'')}"></div>`).join('')}</div>`).join('');
+    ${[0,1,2,3].map(j=>`<div class="optrow" style="margin-top:6px"><input type="radio" name="qc${i}" value="${j}" ${x.c===j?'checked':''} aria-label="Alternativa ${LETRAS[j]} é a certa"><input id="qo${i}_${j}" type="text" placeholder="Alternativa ${LETRAS[j]}" value="${esc(x.ops[j]||'')}"></div>`).join('')}
+    <div class="fld" style="margin:10px 0 0"><textarea id="qe${i}" style="min-height:60px" placeholder="Explicação (opcional): aparece na correção" aria-label="Explicação da pergunta ${i+1}">${esc(x.e||'')}</textarea></div></div>`).join('');
 }
 
 /* ---------- Ações ---------- */
@@ -855,7 +856,7 @@ const A={
   delColab:d=>{const c=S.adm.equipe.find(x=>x.id===d.id);confirmModal('Remover '+c.nome+'?','A pessoa sai da equipe e dos rankings. Para só pausar, use Editar e desmarque "Ativo".','Remover',async()=>{await acao('removerColab',d.id);toast('Colaborador removido')})},
   newQuiz:()=>quizForm(null),
   editQuiz:d=>quizForm(d.id),
-  addPerg:()=>{lerPergs();M.perg.push({p:'',ops:['','','',''],c:-1});renderPergs();const t=$('#qp'+(M.perg.length-1));t&&t.focus()},
+  addPerg:()=>{lerPergs();M.perg.push({p:'',ops:['','','',''],c:-1,e:''});renderPergs();const t=$('#qp'+(M.perg.length-1));t&&t.focus()},
   rmPerg:d=>{lerPergs();M.perg.splice(+d.i,1);renderPergs()},
   saveQuiz:async(d,b)=>{
     lerPergs();
