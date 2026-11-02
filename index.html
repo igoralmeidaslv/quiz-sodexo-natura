@@ -659,14 +659,25 @@ function aQuiz(){
      <div class="acts"><button class="btn sm alt" data-act="editQuiz" data-id="${esc(q.id)}">Editar</button><button class="btn sm alt" data-act="toggleQuiz" data-id="${esc(q.id)}">${q.ativo?'Pausar':'Liberar'}</button><button class="btn sm alt" data-act="delQuiz" data-id="${esc(q.id)}">Excluir</button></div></div>`}).join('')}</div>`
    :`<div class="empty">Nenhum quiz em ${esc(mesLabel(mes))}. Toque em “Novo quiz”.</div>`}`;
 }
+const SITE=location.origin+location.pathname.replace(/index\.html$/,'');
+function waNum(t){let d=String(t||'').replace(/\D/g,'');if(!d)return '';if(d.length<=11)d='55'+d;return d}
+function waLink(tel,txt){return 'https://wa.me/'+waNum(tel)+'?text='+encodeURIComponent(txt)}
+function telFmt(t){const d=String(t||'').replace(/\D/g,'').replace(/^55(?=\d{10,11}$)/,'');return d.length===11?`(${d.slice(0,2)}) ${d.slice(2,7)}-${d.slice(7)}`:d.length===10?`(${d.slice(0,2)}) ${d.slice(2,6)}-${d.slice(6)}`:d}
+function msgPin(c){return `Oi, ${String(c.nome).split(' ')[0]}! 😊\n\nSeu PIN do Quiz da Unidade Natura é: *${c.pin}*\n\n🔗 Link: ${SITE}\n\nGuarde o seu PIN e não passe para ninguém, ele é só seu. Qualquer dúvida, me chama! 🏆`}
+function msgGrupo(){
+  const q=S.adm?S.adm.quizzes.filter(x=>x.ativo&&x.mes===mesKey()):[];
+  return `Bom dia, equipe! 🌟\n\nA partir de agora temos o nosso *Quiz da Unidade Natura*! 🏆\n\n📲 *Como entrar:*\n1. Abra o link: ${SITE}\n2. Digite o seu PIN de 4 números (vou mandar no seu privado)\n3. Dica: salve o link na tela inicial do celular para abrir como aplicativo\n\n✅ *Como funciona:*\n• Todo dia (segunda a sexta) a gestão avalia as boas práticas de cada um: EPI, apresentação pessoal, organização, processos e mais\n• No portal você tem um *checklist do dia* para se organizar\n• A cada 15 dias tem um *quiz*: quem participa ganha 3 pontos, e os 3 que mais acertarem no seu grupo ganham bônus\n\n🥇🥈🥉 *Premiação mensal* para o top 3 de cada ranking:\n• Cozinheiros\n• Oficiais de cozinha\n• Oficiais de limpeza\n\nO ranking zera todo mês, então todo mês é uma nova chance!${q.length?`\n\n🧠 *Quiz liberado:* ${q[q.length-1].titulo}. Bora participar! 💪`:''}\n\n⚠️ O PIN é pessoal. Não passe para ninguém.`;
+}
 function aEquipe(){
   const d=S.adm;
   const semG=d.equipe.filter(c=>!GRUPOS[c.grupo]);
   const card=c=>`<div class="card"><div class="row">${avatar(c,48)}<div style="min-width:0;flex:1"><b style="display:block">${esc(c.nome)}</b><span class="muted" style="font-size:13px">${GRUPOS[c.grupo]?esc(GRUPOS[c.grupo].um):'Sem grupo'}${c.extra?' · +2 incentivo':''}</span></div></div>
      <div class="row" style="justify-content:space-between"><span>PIN <span class="pinv num">${esc(c.pin)}</span></span>${c.ativo?'':'<span class="chip off">Inativo</span>'}</div>
-     <div class="acts"><button class="btn sm alt" data-act="editColab" data-id="${esc(c.id)}">Editar</button><button class="btn sm alt" data-act="delColab" data-id="${esc(c.id)}">Remover</button></div></div>`;
+     ${c.telefone?`<span class="muted num" style="font-size:13px">📱 ${esc(telFmt(c.telefone))}</span>`:''}
+     <div class="acts"><a class="btn sm" href="${esc(waLink(c.telefone,msgPin(c)))}" target="_blank" rel="noopener">📲 Enviar PIN</a><button class="btn sm alt" data-act="editColab" data-id="${esc(c.id)}">Editar</button><button class="btn sm alt" data-act="delColab" data-id="${esc(c.id)}">Remover</button></div></div>`;
   const ord=l=>[...l].sort((a,b)=>String(a.nome).localeCompare(String(b.nome),'pt-BR'));
-  return `<div class="toolbar"><h2 style="font-size:22px">Equipe <span class="muted num" style="font-size:16px">(${d.equipe.length})</span></h2><button class="btn sm" data-act="newColab">Adicionar colaborador</button></div>
+  return `<div class="toolbar"><h2 style="font-size:22px">Equipe <span class="muted num" style="font-size:16px">(${d.equipe.length})</span></h2><div class="grp"><a class="btn sm alt" href="${esc(waLink('',msgGrupo()))}" target="_blank" rel="noopener">📣 Mensagem para o grupo</a><button class="btn sm" data-act="newColab">Adicionar colaborador</button></div></div>
+   <p class="muted" style="margin:0;font-size:14px">📲 <b>Enviar PIN</b> abre o WhatsApp com a mensagem pronta. Com o WhatsApp da pessoa cadastrado (Editar), abre direto na conversa dela.</p>
    ${semG.length?`<div class="notice">${semG.length} pessoa${semG.length>1?'s estão':' está'} sem grupo e não aparece${semG.length>1?'m':''} em nenhum ranking. Toque em Editar e escolha o grupo.</div><div class="cards">${ord(semG).map(card).join('')}</div>`:''}
    ${ORDEM_G.map(g=>{const l=ord(d.equipe.filter(c=>c.grupo===g));return `<section><div class="sec-h"><h2>${esc(GRUPOS[g].nome)}</h2><span class="muted num">${l.length}</span></div>${l.length?`<div class="cards">${l.map(card).join('')}</div>`:'<div class="empty">Ninguém neste grupo.</div>'}</section>`}).join('')}`;
 }
@@ -767,6 +778,7 @@ function colabForm(id){
    <div class="fld"><label for="f-grupo">Grupo (define o ranking)</label><select id="f-grupo" style="width:100%">${ORDEM_G.map(k=>`<option value="${k}" ${k===g?'selected':''}>${esc(GRUPOS[k].nome)}</option>`).join('')}</select></div>
    <label class="check" id="f-extra-w" style="margin-bottom:14px" ${g==='coz'?'':'hidden'}><input id="f-extra" type="checkbox" ${c&&c.extra?'checked':''}> Avaliar também “Incentivar o time” (+2)</label>
    <div class="fld"><label for="f-pin">PIN de 4 números</label><div style="display:flex;gap:8px"><input id="f-pin" type="tel" inputmode="numeric" maxlength="4" value="${esc(c?c.pin:freePin())}" class="num"><button class="btn sm alt" data-act="genPin" style="min-height:44px">Gerar outro</button></div><span class="hint">Entregue o PIN só para a pessoa.</span></div>
+   <div class="fld"><label for="f-tel">WhatsApp com DDD (opcional)</label><input id="f-tel" type="tel" inputmode="tel" placeholder="Ex.: 91 98888-7777" value="${esc(c?telFmt(c.telefone):'')}"><span class="hint">Com o número, o botão “Enviar PIN” abre direto na conversa da pessoa.</span></div>
    <label class="check" style="margin-bottom:14px"><input id="f-ativo" type="checkbox" ${!c||c.ativo?'checked':''}> Ativo (aparece no ranking e pode entrar)</label>
    <p class="ferr"></p>
    <div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="saveColab">Salvar</button></div>`);
@@ -846,7 +858,7 @@ const A={
   genPin:()=>{$('#f-pin').value=freePin()},
   rmFoto:()=>{M.foto='';$('#fprev').innerHTML=avatar({nome:$('#f-nome').value||'?'},72)},
   saveColab:async(d,b)=>{
-    const data={id:M.id||'',nome:$('#f-nome').value.trim(),grupo:$('#f-grupo').value,extra:$('#f-grupo').value==='coz'&&$('#f-extra').checked,pin:$('#f-pin').value.trim(),ativo:$('#f-ativo').checked,foto:M.foto||''};
+    const data={id:M.id||'',nome:$('#f-nome').value.trim(),grupo:$('#f-grupo').value,extra:$('#f-grupo').value==='coz'&&$('#f-extra').checked,pin:$('#f-pin').value.trim(),telefone:$('#f-tel').value.trim(),ativo:$('#f-ativo').checked,foto:M.foto||''};
     if(!data.nome)return ferr('Informe o nome.');
     if(!/^\d{4}$/.test(data.pin))return ferr('O PIN precisa ter exatamente 4 números.');
     busyBtn(b,true,'Salvando…');
