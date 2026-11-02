@@ -408,7 +408,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261102190245';
+const APP_VERSION='20261102191732';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -421,7 +421,7 @@ function instalarHtml(){
 
 /* ---------- Estado ---------- */
 const S={pub:null,adm:null,status:'loading',errMsg:'',me:null,view:'login',ctab:'hoje',pin:'',pinErr:'',busy:false,
-  tab:'avaliar',dia:ultimoUtil(),grupo:'coz',mesAdmin:mesKey(),mesQuiz:mesKey(),mesPremio:mesKey(),
+  tab:'avaliar',dia:ultimoUtil(),grupo:'coz',mesAdmin:mesKey(),mesQuiz:mesKey(),mesPremio:mesKey(),rkModo:'ano',admModo:'ano',anoAdmin:String(new Date().getFullYear()),anoPremio:String(new Date().getFullYear()),
   play:null,check:new Set(),checkDia:null};
 try{S.me=JSON.parse(LS.get('qsn_me')||'null')}catch(e){}
 let adminPin=SS.get('qsn_gest');
@@ -439,11 +439,16 @@ function quizPontos(d){
   }));
   return out;
 }
+/* Período: 'AAAA' (ano acumulado) ou 'AAAA-MM' (mês) */
+const anoKey=()=>String(new Date().getFullYear());
+const noPeriodo=(p,mes)=>String(p).length===4?String(mes).slice(0,4)===p:mes===p;
+const perLabel=p=>String(p).length===4?'ano de '+p:mesLabel(p);
+function anos(d){return [...new Set(meses(d).map(m=>m.slice(0,4)))].sort().reverse()}
 function placar(d,mes){
   const t={},qp=quizPontos(d);
   const get=id=>t[id]||(t[id]={aval:0,quiz:0,dias:0,nq:0});
-  d.avaliacoes.forEach(a=>{if(a.mes===mes){const o=get(a.colabId);o.aval+=Number(a.pontos)||0;o.dias++}});
-  d.respostas.forEach(r=>{if(r.mes===mes&&qp[r.id]){const o=get(r.colabId);o.quiz+=qp[r.id].pts;o.nq++}});
+  d.avaliacoes.forEach(a=>{if(noPeriodo(mes,a.mes)){const o=get(a.colabId);o.aval+=Number(a.pontos)||0;o.dias++}});
+  d.respostas.forEach(r=>{if(noPeriodo(mes,r.mes)&&qp[r.id]){const o=get(r.colabId);o.quiz+=qp[r.id].pts;o.nq++}});
   Object.values(t).forEach(o=>o.total=o.aval+o.quiz);
   return t;
 }
@@ -456,7 +461,7 @@ function ranking(d,mes,g){
   return list;
 }
 function premioDe(d,mes){return (d&&d.premios.find(p=>p.mes===mes))||{p1:'',p2:'',p3:''}}
-function meses(d){const s=new Set([mesKey()]);if(d){d.avaliacoes.forEach(a=>a.mes&&s.add(a.mes));d.respostas.forEach(r=>r.mes&&s.add(r.mes));d.quizzes.forEach(q=>q.mes&&s.add(q.mes));d.premios.forEach(p=>p.mes&&s.add(p.mes))}return[...s].sort().reverse()}
+function meses(d){const s=new Set([mesKey()]);if(d){d.avaliacoes.forEach(a=>a.mes&&s.add(a.mes));d.respostas.forEach(r=>r.mes&&s.add(r.mes));d.quizzes.forEach(q=>q.mes&&s.add(q.mes));d.premios.forEach(p=>p.mes&&p.mes.length===7&&s.add(p.mes))}return[...s].sort().reverse()}
 function avalDe(d,colabId,dia){return d.avaliacoes.find(a=>a.colabId===colabId&&a.data===dia)}
 function eu(){return S.pub&&S.me?S.pub.equipe.find(c=>c.id===S.me.id):null}
 function quizzesAbertos(){return S.pub?S.pub.quizzes.filter(q=>q.ativo&&q.mes===mesKey()):[]}
@@ -540,12 +545,13 @@ function vHome(){
   return topbar(GRUPOS[me.grupo]?GRUPOS[me.grupo].nome:'Unidade Natura',sair)+`<main class="wrap stack">${body}</main>`+footer()+bnav();
 }
 function scoreCard(me){
-  const mes=mesKey(),rk=ranking(S.pub,mes,me.grupo),mine=rk.find(x=>x.c.id===me.id)||{total:0,aval:0,quiz:0,pos:'-'};
+  const ano=anoKey(),rk=ranking(S.pub,ano,me.grupo),mine=rk.find(x=>x.c.id===me.id)||{total:0,aval:0,quiz:0,pos:'-'};
+  const rm=ranking(S.pub,mesKey(),me.grupo),mm=rm.find(x=>x.c.id===me.id)||{total:0,pos:'-'};
   return `<section class="score">
-    <div class="lbl">Seus pontos em ${esc(mesLabel(mes))}</div>
+    <div class="lbl">Seus pontos acumulados em ${ano}</div>
     <div class="pts num">${mine.total}<span>pts</span></div>
-    <div class="pos"><b class="num">${MED[mine.pos]||''} ${mine.pos}º</b><small>de ${rk.length}</small></div>
-    <div class="meta num">Avaliações ${mine.aval} pts · Quiz ${mine.quiz} pts</div>
+    <div class="pos"><b class="num">${MED[mine.pos]||''} ${mine.pos}º</b><small>no ano</small></div>
+    <div class="meta num">Este mês: ${mm.total} pts (${mm.pos}º) · Avaliações ${mine.aval} · Quiz ${mine.quiz}</div>
   </section>`;
 }
 function cHoje(me){
@@ -605,10 +611,12 @@ function vPlay(){
   </main>`;
 }
 function cRanking(me){
-  const mes=mesKey(),rk=ranking(S.pub,mes,me.grupo),p=premioDe(S.pub,mes);
+  const ano=S.rkModo==='ano',per=ano?anoKey():mesKey(),rk=ranking(S.pub,per,me.grupo),p=premioDe(S.pub,per);
   const mine=rk.find(x=>x.c.id===me.id);
-  return `<div><h1 style="font-size:24px">Ranking · ${esc(GRUPOS[me.grupo].nome)}</h1><p class="muted" style="margin:4px 0 0;text-transform:none">${esc(mesLabel(mes))}. Zera todo mês. Soma as avaliações (segunda a sexta) e os quizzes.</p></div>
-    ${prizesHtml(p)?`<section><div class="sec-h"><h2>Prêmios do mês</h2></div>${prizesHtml(p)}</section>`:''}
+  return `<div><h1 style="font-size:24px">Ranking · ${esc(GRUPOS[me.grupo].nome)}</h1></div>
+    <div class="seg" style="grid-template-columns:repeat(2,1fr)"><button class="${ano?'':'on'}" data-act="rkModo" data-k="mes">📅 Este mês<small style="text-transform:capitalize">${esc(mesCurto(mesKey()))}</small></button><button class="${ano?'on':''}" data-act="rkModo" data-k="ano">🏆 Ano ${anoKey()}<small>acumulado</small></button></div>
+    <p class="muted" style="margin:0;font-size:14px">${ano?'Os pontos acumulam de janeiro a dezembro e não zeram. No fim do ano, o top 3 do seu grupo ganha os prêmios do ano.':'Só os pontos deste mês. No mês que vem, essa visão começa do zero, mas os pontos continuam valendo no ranking do ano.'}</p>
+    ${prizesHtml(p)?`<section><div class="sec-h"><h2>${ano?'Prêmios do fim do ano':'Prêmios do mês'}</h2></div>${prizesHtml(p)}</section>`:''}
     <section><div class="sec-h"><h2>Classificação</h2><button class="link" data-act="refresh" style="padding:0">Atualizar</button></div>
     <div class="panel" style="padding:6px">${rk.map(x=>rkRow(x,me.id)).join('')||'<p class="muted" style="padding:10px">Ninguém no grupo ainda.</p>'}</div></section>
     ${mine&&mine.pos>3&&rk.length>=3?`<p class="muted" style="margin:0">Faltam <b class="num">${Math.max(0,rk[2].total-mine.total+1)} pts</b> para você entrar no top 3. Bora! 💪</p>`:''}`;
@@ -620,6 +628,8 @@ function cHist(me){
   return `<div><h1 style="font-size:24px">Histórico</h1></div>
     <section><div class="sec-h"><h2>Este mês, dia a dia</h2></div>
     ${dias.length?`<div class="panel daylist" style="padding-block:4px">${dias.map(a=>`<div class="done"><span class="t" style="text-transform:capitalize">${esc(diaLabel(a.data))}</span><span class="chip ${a.pontos>=maxDia(me)?'ok':'gold'} num">${a.pontos}/${maxDia(me)}</span></div>`).join('')}</div>`:'<div class="empty">Nenhuma avaliação neste mês ainda.</div>'}</section>
+    ${anos(S.pub).filter(a=>a<anoKey()).map(a=>{const rk=ranking(S.pub,a,me.grupo),mine=rk.find(x=>x.c.id===me.id),p=premioDe(S.pub,a);
+      return `<section><div class="sec-h"><h2>Ano de ${a}</h2>${mine?`<span class="chip gold num">Você: ${mine.pos}º · ${mine.total} pts</span>`:''}</div><div class="panel" style="padding-block:4px">${rk.slice(0,3).filter(x=>x.total>0).map(x=>`<div class="done"><span>${MED[x.pos]||x.pos+'º'}</span><span class="t">${esc(x.c.nome)}${p['p'+x.pos]?` <small class="muted">· ${esc(p['p'+x.pos])}</small>`:''}</span><span class="num muted">${x.total} pts</span></div>`).join('')||'<p class="muted" style="margin:8px 0">Sem pontuação.</p>'}</div></section>`}).join('')}
     <section><div class="sec-h"><h2>Meses anteriores</h2></div>
     ${passados.length?`<div class="list">${passados.map(m=>{const rk=ranking(S.pub,m,me.grupo),mine=rk.find(x=>x.c.id===me.id),p=premioDe(S.pub,m);
       return `<div class="panel"><div class="sec-h" style="margin-bottom:6px"><h2 style="text-transform:capitalize;font-size:17px">${esc(mesLabel(m))}</h2>${mine?`<span class="chip gold num">Você: ${mine.pos}º · ${mine.total} pts</span>`:''}</div>
@@ -655,16 +665,18 @@ function pcard(c,dia){
     <div class="crits">${its.map(i=>`<button class="crit ${set.has(i[0])?'on':''}" data-act="crit" data-id="${esc(c.id)}" data-k="${i[0]}" aria-pressed="${set.has(i[0])}">${set.has(i[0])?'✓ ':''}${esc(i[1])} <span class="v">${i[2]}</span></button>`).join('')}</div>
     <div class="acts"><button class="btn sm alt" data-act="allOn" data-id="${esc(c.id)}">Tudo certo</button><button class="btn sm alt" data-act="allOff" data-id="${esc(c.id)}">Nada cumprido</button>${a?`<button class="link" style="padding:4px" data-act="clearAval" data-id="${esc(c.id)}">Desfazer</button>`:''}${st}</div></div>`;
 }
+function anoSelect(id,val,extra){const l=[...new Set([...anos(S.adm),...(extra||[])])].sort().reverse();return `<select id="${id}" aria-label="Ano">${l.map(a=>`<option value="${a}" ${a===val?'selected':''}>${a}</option>`).join('')}</select>`}
 function aRanking(){
-  const d=S.adm,mes=S.mesAdmin,p=premioDe(d,mes);
-  const nAval=d.avaliacoes.filter(a=>a.mes===mes).length,nQ=d.quizzes.filter(q=>q.mes===mes).length;
+  const d=S.adm,ano=S.admModo==='ano',mes=ano?S.anoAdmin:S.mesAdmin,p=premioDe(d,mes);
+  const nAval=d.avaliacoes.filter(a=>noPeriodo(mes,a.mes)).length,nQ=d.quizzes.filter(q=>noPeriodo(mes,q.mes)).length;
   const bloco=g=>{const rk=ranking(d,mes,g),top=rk.filter(x=>x.total>0).slice(0,3);
     const pd=(x,cls)=>x?`<div class="pd ${cls}"><span class="medal-e">${MED[x.pos]||x.pos+'º'}</span>${avatar(x.c,cls==='p1'?64:52)}<span class="nm">${esc(x.c.nome)}</span><span class="pt num">${x.total}</span>${p['p'+x.pos]?`<span class="prz">${esc(p['p'+x.pos])}</span>`:''}</div>`:'<div></div>';
     return `<section class="stack" style="gap:12px"><h2 style="font-size:20px">${esc(GRUPOS[g].nome)}</h2>
       ${top.length?`<div class="podium">${pd(top[1],'p2')}${pd(top[0],'p1')}${pd(top[2],'p3')}</div>`:'<div class="empty">Sem pontos ainda.</div>'}
       <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Nome</th><th class="r">Aval.</th><th class="r">Quiz</th><th class="r">Total</th></tr></thead><tbody>${rk.map(x=>`<tr><td class="num">${x.pos}º</td><td><span class="who">${avatar(x.c,28)}${esc(x.c.nome)}</span></td><td class="r num">${x.aval}</td><td class="r num">${x.quiz}</td><td class="r num"><b>${x.total}</b></td></tr>`).join('')}</tbody></table></div></section>`};
-  return `<div class="toolbar"><div class="grp"><h2 style="font-size:22px">Ranking de</h2>${mesSelect('selMesRk',mes)}</div><div class="grp"><button class="btn sm alt" data-act="reloadAdm">Atualizar</button>${d.planilhaUrl?`<a class="btn sm alt" href="${esc(d.planilhaUrl)}" target="_blank" rel="noopener">Abrir planilha</a>`:''}</div></div>
-    <div class="stats"><div class="stat"><b class="num">${nAval}</b><span>avaliações no mês</span></div><div class="stat"><b class="num">${nQ}</b><span>quizzes no mês</span></div><div class="stat"><b class="num">${[p.p1,p.p2,p.p3].filter(Boolean).length}/3</b><span>prêmios cadastrados</span></div></div>
+  return `<div class="seg" style="grid-template-columns:repeat(2,1fr);max-width:420px"><button class="${ano?'':'on'}" data-act="admModo" data-k="mes">📅 Do mês</button><button class="${ano?'on':''}" data-act="admModo" data-k="ano">🏆 Do ano (acumulado)</button></div>
+    <div class="toolbar"><div class="grp"><h2 style="font-size:22px">Ranking ${ano?'de':'de'}</h2>${ano?anoSelect('selAnoRk',mes):mesSelect('selMesRk',mes)}</div><div class="grp"><button class="btn sm alt" data-act="reloadAdm">Atualizar</button>${d.planilhaUrl?`<a class="btn sm alt" href="${esc(d.planilhaUrl)}" target="_blank" rel="noopener">Abrir planilha</a>`:''}</div></div>
+    <div class="stats"><div class="stat"><b class="num">${nAval}</b><span>avaliações no ${ano?'ano':'mês'}</span></div><div class="stat"><b class="num">${nQ}</b><span>quizzes no ${ano?'ano':'mês'}</span></div><div class="stat"><b class="num">${[p.p1,p.p2,p.p3].filter(Boolean).length}/3</b><span>prêmios ${ano?'do ano':'do mês'}</span></div></div>
     <div class="grid3">${ORDEM_G.map(bloco).join('')}</div>`;
 }
 function aQuiz(){
@@ -686,7 +698,7 @@ function telFmt(t){const d=String(t||'').replace(/\D/g,'').replace(/^55(?=\d{10,
 function msgPin(c){return `Oi, ${String(c.nome).split(' ')[0]}! 😊\n\nSeu PIN do Quiz da Unidade Natura é: *${c.pin}*\n\n🔗 Link: ${SITE}\n\nGuarde o seu PIN e não passe para ninguém, ele é só seu. Qualquer dúvida, me chama! 🏆`}
 function msgGrupo(){
   const q=S.adm?S.adm.quizzes.filter(x=>x.ativo&&x.mes===mesKey()):[];
-  return `Bom dia, equipe! 🌟\n\nA partir de agora temos o nosso *Quiz da Unidade Natura*! 🏆\n\n📲 *Como entrar:*\n1. Abra o link: ${SITE}\n2. Digite o seu PIN de 4 números (vou mandar no seu privado)\n3. Dica: salve o link na tela inicial do celular para abrir como aplicativo\n\n✅ *Como funciona:*\n• Todo dia (segunda a sexta) a gestão avalia as boas práticas de cada um: EPI, apresentação pessoal, organização, processos e mais\n• No portal você tem um *checklist do dia* para se organizar\n• A cada 15 dias tem um *quiz*: quem participa ganha 3 pontos, e os 3 que mais acertarem no seu grupo ganham bônus\n\n🥇🥈🥉 *Premiação mensal* para o top 3 de cada ranking:\n• Cozinheiros\n• Oficiais de cozinha\n• Oficiais de limpeza\n\nO ranking zera todo mês, então todo mês é uma nova chance!${q.length?`\n\n🧠 *Quiz liberado:* ${q[q.length-1].titulo}. Bora participar! 💪`:''}\n\n⚠️ O PIN é pessoal. Não passe para ninguém.`;
+  return `Bom dia, equipe! 🌟\n\nA partir de agora temos o nosso *Quiz da Unidade Natura*! 🏆\n\n📲 *Como entrar:*\n1. Abra o link: ${SITE}\n2. Digite o seu PIN de 4 números (vou mandar no seu privado)\n3. Dica: salve o link na tela inicial do celular para abrir como aplicativo\n\n✅ *Como funciona:*\n• Todo dia (segunda a sexta) a gestão avalia as boas práticas de cada um: EPI, apresentação pessoal, organização, processos e mais\n• No portal você tem um *checklist do dia* para se organizar\n• A cada 15 dias tem um *quiz*: quem participa ganha 3 pontos, e os 3 que mais acertarem no seu grupo ganham bônus\n\n🏆 *Os pontos acumulam o ano todo!* No fim do ano, o top 3 de cada ranking ganha prêmios especiais:\n• Cozinheiros\n• Oficiais de cozinha\n• Oficiais de limpeza\n\nNo portal você acompanha o ranking do mês e o do ano. Cada dia conta! 💪${q.length?`\n\n🧠 *Quiz liberado:* ${q[q.length-1].titulo}. Bora participar! 💪`:''}\n\n⚠️ O PIN é pessoal. Não passe para ninguém.`;
 }
 function aEquipe(){
   const d=S.adm;
@@ -703,18 +715,25 @@ function aEquipe(){
 }
 function aPremios(){
   const mes=S.mesPremio,p=premioDe(S.adm,mes),prox=(()=>{const d=new Date();d.setDate(1);d.setMonth(d.getMonth()+1);return mesKey(d)})();
-  return `<div class="toolbar"><div class="grp"><h2 style="font-size:22px">Prêmios de</h2>${mesSelect('selMesPr',mes,[prox])}</div></div>
-   <div class="panel stack" style="gap:4px;max-width:620px">
-    <p class="muted" style="margin:0 0 10px">Os 3 prêmios valem para o top 3 de <b>cada</b> ranking: Cozinheiros, Oficiais de cozinha e Oficiais de limpeza. Aparecem para a equipe na aba Ranking e no histórico.</p>
-    ${[1,2,3].map(i=>`<div class="fld"><label for="pr${i}">${MED[i]} ${i}º lugar</label><input id="pr${i}" type="text" value="${esc(p['p'+i])}" placeholder="${['Ex.: Vale-compras R$ 100','Ex.: Kit cuidados pessoais','Ex.: Folga de 2 horas'][i-1]}"></div>`).join('')}
-    <div><button class="btn" data-act="savePremios">Salvar prêmios</button></div>
+  const ano=S.anoPremio,pa=premioDe(S.adm,ano),proxAno=String(+anoKey()+1);
+  const campos=(pre,pp,ex)=>[1,2,3].map(i=>`<div class="fld"><label for="${pre}${i}">${MED[i]} ${i}º lugar</label><input id="${pre}${i}" type="text" value="${esc(pp['p'+i])}" placeholder="${ex[i-1]}"></div>`).join('');
+  return `<p class="muted" style="margin:0">Os prêmios valem para o top 3 de <b>cada</b> ranking: Cozinheiros, Oficiais de cozinha e Oficiais de limpeza. A equipe vê na aba Ranking.</p>
+   <div class="grid3">
+   <section class="panel stack" style="gap:4px"><div class="toolbar"><div class="grp"><h2 style="font-size:20px">🏆 Prêmios do ano</h2>${anoSelect('selAnoPr',ano,[anoKey(),proxAno])}</div></div>
+    <p class="muted" style="margin:0 0 8px;font-size:14px">Os principais. Vão para o top 3 do ranking acumulado do ano, entregues no fim do ano.</p>
+    ${campos('pa',pa,['Ex.: Vale-compras R$ 500','Ex.: Vale-compras R$ 300','Ex.: Vale-compras R$ 150'])}
+    <div><button class="btn" data-act="savePremiosAno">Salvar prêmios do ano</button></div></section>
+   <section class="panel stack" style="gap:4px"><div class="toolbar"><div class="grp"><h2 style="font-size:20px">📅 Prêmios do mês</h2>${mesSelect('selMesPr',mes,[prox])}</div></div>
+    <p class="muted" style="margin:0 0 8px;font-size:14px">Opcional. Para quem fica no top 3 do mês. Deixe em branco se não houver.</p>
+    ${campos('pr',p,['Ex.: Folga de 2 horas','Ex.: Kit cuidados pessoais','Ex.: Chocolate'])}
+    <div><button class="btn" data-act="savePremios">Salvar prêmios do mês</button></div></section>
    </div>`;
 }
 function aAjustes(){
   return `<h2 style="font-size:22px">Ajustes</h2>
    <div class="cards">
     <div class="card"><b>PIN da gestão</b><p class="muted" style="margin:0;font-size:14px">6 números. Troque se mais alguém souber.</p><div class="acts"><button class="btn sm" data-act="changeAdminPin">Trocar PIN da gestão</button></div></div>
-    <div class="card"><b>Rotina sugerida</b><ol style="color:inherit;font-size:14px;line-height:1.6;margin:0;padding-left:20px"><li>Todo dia útil, aba Avaliar: marque o que cada um cumpriu.</li><li>Uma vez por semana, crie um quiz.</li><li>No começo do mês, cadastre os prêmios.</li><li>No fim do mês, veja o top 3 de cada ranking.</li></ol></div>
+    <div class="card"><b>Rotina sugerida</b><ol style="color:inherit;font-size:14px;line-height:1.6;margin:0;padding-left:20px"><li>Todo dia útil, aba Avaliar: marque o que cada um cumpriu.</li><li>A cada 15 dias, crie um quiz.</li><li>No começo do ano, cadastre os prêmios do ano.</li><li>Em dezembro, veja o top 3 do ano de cada ranking.</li></ol></div>
     <div class="card"><b>Dados</b><p class="muted" style="margin:0;font-size:14px">Tudo fica guardado no Supabase, um banco de dados gratuito. Os PINs ficam protegidos: a equipe nunca vê o PIN dos colegas.</p>${S.adm&&S.adm.planilhaUrl?`<div class="acts"><a class="btn sm alt" href="${esc(S.adm.planilhaUrl)}" target="_blank" rel="noopener">Abrir planilha</a></div>`:''}</div>
    </div>`;
 }
@@ -865,6 +884,9 @@ const A={
     catch(e){S.busy=false;toast(msg(e));render()}
   },
   tab:d=>{S.tab=d.k;render()},
+  rkModo:d=>{S.rkModo=d.k;render()},
+  admModo:d=>{S.admModo=d.k;render()},
+  savePremiosAno:async(d,b)=>{const p={mes:S.anoPremio,p1:$('#pa1').value.trim(),p2:$('#pa2').value.trim(),p3:$('#pa3').value.trim()};busyBtn(b,true,'Salvando…');try{await acao('salvarPremios',p);toast('Prêmios do ano salvos')}catch(e){toast(msg(e));busyBtn(b,false,'Salvar prêmios do ano')}},
   dia:d=>{S.dia=passoUtil(S.dia,+d.k);render()},
   diaHoje:()=>{S.dia=ultimoUtil();render()},
   grupo:d=>{S.grupo=d.k;render()},
@@ -943,6 +965,8 @@ document.addEventListener('change',e=>{
   if(e.target.id==='selMesRk'){S.mesAdmin=e.target.value;render()}
   if(e.target.id==='selMesQz'){S.mesQuiz=e.target.value;render()}
   if(e.target.id==='selMesPr'){S.mesPremio=e.target.value;render()}
+  if(e.target.id==='selAnoPr'){S.anoPremio=e.target.value;render()}
+  if(e.target.id==='selAnoRk'){S.anoAdmin=e.target.value;render()}
 });
 document.addEventListener('keydown',e=>{
   if($('#modal').innerHTML){if(e.key==='Escape')closeModal();return}
