@@ -624,7 +624,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261102232844';
+const APP_VERSION='20261103134238';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -1492,7 +1492,7 @@ function aCardapio(){
       return `<section class="ccat"><h3>${ic(icn)}${esc(nome)}<span class="n">${l.length}</span></h3>
         <div class="citems">${l.map(it=>{const p=pratoDe(it.nome);return `<div class="citem"><span class="th">${p&&p.foto?`<img src="${esc(p.foto)}" alt="">`:ic(icn)}</span><span class="nm">${esc(it.nome)}</span><button data-act="cFoto" data-i="${it.i}" title="Foto do prato" aria-label="Foto de ${esc(it.nome)}">${ic('camera')}</button><button data-act="cRm" data-i="${it.i}" aria-label="Remover ${esc(it.nome)}">${ic('x')}</button></div>`}).join('')||'<span class="muted" style="font-size:13px">Nenhum item.</span>'}</div>
         <div class="cadd"><input type="text" id="ci-${k}" list="dl-${k}" placeholder="Adicionar em ${esc(nome.toLowerCase())}" autocomplete="off" data-cat="${k}"><button class="btn sm" data-act="cAdd" data-k="${k}" aria-label="Adicionar">${ic('plus')}</button></div><datalist id="dl-${k}">${opts(k)}</datalist></section>`}).join('')}</div>
-    <div class="toolbar"><div class="grp"><button class="btn sm alt" data-act="cPrevia">${ic('eye')} Ver prévia da TV</button><button class="btn sm" data-act="cRepetir">${ic('copy')} Repetir em outro turno</button><button class="btn sm alt" data-act="cCopiar">${ic('clipboard')} Copiar de outro dia</button>${itens.length?`<button class="btn sm alt" data-act="cLimpar">Limpar</button>`:''}</div></div>
+    <div class="toolbar"><div class="grp"><button class="btn sm alt" data-act="cPrevia">${ic('eye')} Ver prévia da TV</button><button class="btn sm" data-act="cRepetir">${ic('copy')} Repetir em outro turno</button><button class="btn sm alt" data-act="cImagem">${ic('download')} Baixar imagem do cardápio</button><button class="btn sm alt" data-act="cCopiar">${ic('clipboard')} Copiar de outro dia</button>${itens.length?`<button class="btn sm alt" data-act="cLimpar">Limpar</button>`:''}</div></div>
     <p class="muted" style="font-size:13px;margin:0">Salva sozinho. Foto é opcional: toque no ícone da câmera ao lado do prato. A foto fica guardada no banco de pratos e aparece de novo toda vez que o prato voltar ao cardápio.</p>
 
     <section class="panel stack" style="gap:12px"><div class="sec-h" style="margin:0"><h2>${ic('tv')} TV vertical</h2></div>
@@ -1672,6 +1672,108 @@ async function baixarEscala(dia,b){
   }catch(e){toast('Não foi possível gerar a imagem.')}
   busyBtn(b,false,'Baixar imagem da escala');
 }
+
+/* ---------- Imagem do cardápio (retrato, para baixar e mandar no WhatsApp) ---------- */
+function icSvg(n,cor,w){const p=ICO[n]||ICO.info;return 'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="${w||64}" height="${w||64}" fill="none" stroke="${cor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p.map(d=>d[0]==='<'?d:`<path d="${d}"/>`).join('')}</svg>`)}
+async function imagemCardapio(dia,ref,fmt){
+  const c0=cardDe(dia,ref),itens=(c0?c0.itens:[]).filter(i=>i&&String(i.nome).trim()),r=REF[ref];
+  try{await document.fonts.load('900 40px Nunito');await document.fonts.load('700 30px "Nunito Sans"');await document.fonts.ready}catch(e){}
+  const W=1080,M=48,CW=W-M*2,F="'Nunito Sans',sans-serif",D="Nunito,sans-serif";
+  const cats=CATS.filter(c=>itens.some(i=>i.cat===c[0]));
+  const fotoDe=n=>{const p=pratoDe(n);return p&&p.foto?p.foto:''};
+  const imgs={};await Promise.all(itens.map(async i=>{const f=fotoDe(i.nome);if(f&&!imgs[f])imgs[f]=await carregarImg(f)}));
+  const ics={};await Promise.all([...cats.map(c=>c[2]),r.ic].map(async n=>{ics[n+'w']=await carregarImg(icSvg(n,'#ffffff'));ics[n+'g']=await carregarImg(icSvg(n,'#9AA2CC'))}));
+  const [sx,nt]=await Promise.all([carregarImg(LOGO),carregarImg('data:image/svg+xml;charset=utf-8,'+encodeURIComponent(NATURA_SVG.replace('width="148" height="32"','width="740" height="160"')))]);
+  const med=document.createElement('canvas').getContext('2d');
+  /* 1ª passada: mede cada bloco */
+  const COLS=4,CEL=(CW-48)/COLS,FOT=176,blocos=[];
+  cats.forEach(c=>{const l=itens.filter(i=>i.cat===c[0]),comFoto=l.some(i=>fotoDe(i.nome));let h=96;
+    if(comFoto){med.font=`800 27px ${F}`;const caps=l.map(i=>quebrar(med,i.nome,CEL-16).slice(0,3));const linhas=Math.ceil(l.length/COLS);
+      let alt=0;for(let k=0;k<linhas;k++){const mx=Math.max(...caps.slice(k*COLS,k*COLS+COLS).map(x=>x.length));alt+=FOT+22+mx*34+26}
+      h+=alt;blocos.push({c,l,comFoto,caps,h:h+10})}
+    else{med.font=`800 32px ${D}`;let xx=0,rows=1;const pos=[];l.forEach(i=>{const w=Math.min(CW-48,med.measureText(i.nome).width+52);if(xx&&xx+w>CW-48){rows++;xx=0}pos.push({i,x:xx,row:rows-1,w});xx+=w+14});
+      h+=rows*72+18;blocos.push({c,l,comFoto,pos,rows,h})}});
+  const topo=520,rod=180,soma=blocos.reduce((s,b)=>s+b.h+24,0);
+  const H=fmt==='story'?Math.max(1920,topo+soma+rod):Math.max(1350,topo+soma+rod);
+  const cv=document.createElement('canvas');cv.width=W;cv.height=H;const x=cv.getContext('2d');
+  x.fillStyle='#F5F6FB';x.fillRect(0,0,W,H);
+  x.globalAlpha=.08;x.fillStyle='#EB6619';x.beginPath();x.arc(W+60,-40,440,0,7);x.fill();x.fillStyle='#283897';x.beginPath();x.arc(-140,H+80,480,0,7);x.fill();x.globalAlpha=1;
+  /* cabeçalho */
+  x.fillStyle='#fff';x.fillRect(0,0,W,170);x.fillStyle='#283897';x.fillRect(0,166,W,6);
+  if(sx){const h=74,w=sx.width*h/sx.height;x.drawImage(sx,W/2-w-40,48,w,h)}
+  x.fillStyle='#C9CEE6';x.fillRect(W/2-2,44,4,82);
+  if(nt){const h=66,w=nt.width*h/nt.height;x.drawImage(nt,W/2+40,52,w,h)}
+  x.textAlign='center';x.font=`900 84px ${D}`;
+  const t1='Cardápio ',t2='do dia',w1=x.measureText(t1).width,w2=x.measureText(t2).width;x.textAlign='left';
+  x.fillStyle='#283897';x.fillText(t1,W/2-(w1+w2)/2,282);x.fillStyle='#EB6619';x.fillText(t2,W/2-(w1+w2)/2+w1,282);
+  /* faixa da refeição */
+  x.font=`900 40px ${D}`;const rt=r.nome+'  ·  '+r.txt+(r.seguinte?' da madrugada':''),rw=x.measureText(rt).width+120;
+  rr(x,W/2-rw/2,316,rw,72,36);x.fillStyle='#283897';x.fill();
+  if(ics[r.ic+'w'])x.drawImage(ics[r.ic+'w'],W/2-rw/2+30,332,40,40);
+  x.fillStyle='#fff';x.fillText(rt,W/2-rw/2+86,366);
+  x.textAlign='center';x.fillStyle='#5B6285';x.font=`700 34px ${F}`;const dl=diaLongo(r.seguinte?somaDia(dia,1):dia);x.fillText(dl.charAt(0).toUpperCase()+dl.slice(1)+(r.seguinte?' · madrugada':''),W/2,440);
+  estrela(x,W/2,486,13,'#DA2020');x.textAlign='left';
+  /* blocos */
+  let y=topo;
+  blocos.forEach(b=>{
+    x.save();x.shadowColor='rgba(40,56,151,.10)';x.shadowBlur=24;x.shadowOffsetY=6;rr(x,M,y,CW,b.h,30);x.fillStyle='#fff';x.fill();x.restore();
+    const cor=b.c[0]==='light'?'#2B8A57':'#283897';x.font=`900 30px ${D}`;const lw=x.measureText(b.c[1].toUpperCase()).width+96;
+    rr(x,M+20,y+20,lw,56,28);x.fillStyle=cor;x.fill();
+    x.fillStyle='#fff';x.beginPath();x.arc(M+48,y+48,20,0,7);x.fill();
+    const ii=ics[b.c[2]+'w'];if(ii){const t=document.createElement('canvas');t.width=t.height=64;const tx=t.getContext('2d');tx.drawImage(ii,0,0,64,64);tx.globalCompositeOperation='source-in';tx.fillStyle=cor;tx.fillRect(0,0,64,64);x.drawImage(t,M+34,y+34,28,28)}
+    x.fillStyle='#fff';x.fillText(b.c[1].toUpperCase(),M+78,y+59);
+    let yy=y+96;
+    if(b.comFoto){
+      for(let k=0;k*COLS<b.l.length;k++){const fila=b.l.slice(k*COLS,k*COLS+COLS),caps=b.caps.slice(k*COLS,k*COLS+COLS);
+        const off=M+24+(COLS-fila.length)*CEL/2;let mx=1;
+        fila.forEach((it,j)=>{const cx=off+j*CEL+CEL/2,cy=yy+FOT/2,f=fotoDe(it.nome),im=f&&imgs[f];
+          x.fillStyle='#F7D9C9';x.beginPath();x.arc(cx,cy,FOT/2+6,0,7);x.fill();x.fillStyle='#fff';x.beginPath();x.arc(cx,cy,FOT/2,0,7);x.fill();
+          x.save();x.beginPath();x.arc(cx,cy,FOT/2-6,0,7);x.clip();
+          if(im){const s=Math.min(im.width,im.height);x.drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,cx-FOT/2+6,cy-FOT/2+6,FOT-12,FOT-12)}
+          else{x.fillStyle='#F1F3FA';x.fillRect(cx-FOT/2,cy-FOT/2,FOT,FOT);const g=ics[b.c[2]+'g'];if(g)x.drawImage(g,cx-36,cy-36,72,72)}
+          x.restore();
+          const cl=caps[j];mx=Math.max(mx,cl.length);x.font=`800 27px ${F}`;x.textAlign='center';
+          const bw=Math.min(CEL-8,Math.max(...cl.map(l=>x.measureText(l).width))+30),bh=cl.length*34+14;
+          rr(x,cx-bw/2,yy+FOT+14,bw,bh,18);x.fillStyle='#FDEEE6';x.fill();x.fillStyle='#2A295C';
+          cl.forEach((l,n)=>x.fillText(l,cx,yy+FOT+46+n*34));x.textAlign='left'});
+        yy+=FOT+22+mx*34+26}
+    }else{
+      x.font=`800 32px ${D}`;const larg=[];b.pos.forEach(p=>{(larg[p.row]=larg[p.row]||0);larg[p.row]=p.x+p.w});
+      b.pos.forEach(p=>{const ox=M+24+(CW-48-larg[p.row])/2,px=ox+p.x,py=yy+p.row*72;
+        rr(x,px,py,p.w,58,29);x.fillStyle='#F1F3FA';x.fill();x.strokeStyle='#E1E5F4';x.lineWidth=3;x.stroke();
+        x.fillStyle='#2A295C';x.textAlign='center';x.fillText(p.i.nome,px+p.w/2,py+40,p.w-30);x.textAlign='left'});
+    }
+    y+=b.h+24});
+  if(!blocos.length){x.textAlign='center';x.fillStyle='#5B6285';x.font=`700 36px ${F}`;x.fillText('Cardápio sem itens',W/2,topo+80);x.textAlign='left'}
+  /* rodapé */
+  x.fillStyle='#2A295C';x.fillRect(0,H-rod+40,W,rod-40);
+  x.textAlign='center';x.fillStyle='#fff';x.font=`900 46px ${D}`;x.fillText('Bom apetite!',W/2,H-rod+112);
+  x.fillStyle='#A9AED3';x.font=`600 24px ${F}`;x.fillText('Sodexo | Natura',W/2,H-rod+152);
+  return cv;
+}
+async function salvarImagem(cv,nome,titulo,b,rotulo){
+  try{const blob=await new Promise(r=>cv.toBlob(r,'image/png'));const f=new File([blob],nome,{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[f]})&&/android|iphone|ipad/i.test(navigator.userAgent)){try{await navigator.share({files:[f],title:titulo})}catch(e){}}
+    else{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=nome;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2000)}
+    openModal(`<h2>${esc(titulo)}</h2><img src="${cv.toDataURL('image/png')}" alt="${esc(titulo)}" style="width:100%;border-radius:12px;border:1px solid var(--line)"><p class="muted" style="font-size:13px">Se não baixou sozinha, segure a imagem e toque em “Salvar imagem”.</p><div class="acts"><button class="btn" data-act="close">Fechar</button></div>`);
+  }catch(e){toast('Não foi possível gerar a imagem.')}
+}
+function cImagemModal(){
+  M={};const tem=k=>{const x=cardDe(S.cdia,k);return x&&x.itens.length};
+  if(!ORDEM_R.some(tem)){toast('Monte o cardápio antes de baixar a imagem.');return}
+  openModal(`<h2>Baixar imagem do cardápio</h2><p class="muted" style="margin-top:0">${esc(diaLabel(S.cdia))}. Imagem em pé, pronta para o WhatsApp ou para imprimir.</p>
+    <div class="fld"><span class="lb">Refeição</span>${ORDEM_R.map(k=>`<label class="check" style="margin-bottom:8px;${tem(k)?'':'opacity:.5'}"><input type="radio" name="ci-ref" value="${k}" ${k===S.cref&&tem(k)||(!tem(S.cref)&&k===ORDEM_R.find(tem))?'checked':''} ${tem(k)?'':'disabled'}> ${ic(REF[k].ic)} ${esc(REF[k].nome)} <span class="muted" style="font-size:13px;font-weight:600">${tem(k)?tem(k)+' itens':'vazio'}</span></label>`).join('')}</div>
+    <div class="fld"><span class="lb">Formato</span>
+      <label class="check" style="margin-bottom:8px"><input type="radio" name="ci-fmt" value="story" checked> Tela de celular / status (em pé, 1080 × 1920 ou mais, se tiver muitos pratos)</label>
+      <label class="check"><input type="radio" name="ci-fmt" value="post"> Tamanho do conteúdo (mais compacto)</label></div>
+    <p class="ferr"></p><div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="cImagemOk">${ic('download')} Baixar imagem</button></div>`);
+}
+Object.assign(A,{
+  cImagem:()=>cImagemModal(),
+  cImagemOk:async(d,b)=>{const r=(document.querySelector('input[name=ci-ref]:checked')||{}).value,f=(document.querySelector('input[name=ci-fmt]:checked')||{}).value||'story';
+    if(!r)return ferr('Escolha a refeição.');busyBtn(b,true,'Gerando…');
+    try{const cv=await imagemCardapio(S.cdia,r,f);closeModal();await salvarImagem(cv,'cardapio-'+r+'-'+S.cdia+'.png','Cardápio · '+REF[r].nome)}catch(e){busyBtn(b,false,'Baixar imagem');ferr('Não foi possível gerar a imagem.')}},
+});
 
 /* ================= Equipe (limpeza): aba Tarefas ================= */
 const TPEND={};
