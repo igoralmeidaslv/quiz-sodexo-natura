@@ -447,7 +447,41 @@ body.tvmode.nocur{cursor:none}
 .sbh .h{font-weight:800;font-size:3.6em;font-variant-numeric:tabular-nums;opacity:.95}
 .tvs.media{background:#000}
 .tvs.media .bg{position:absolute;inset:-5%;background-size:cover;background-position:center;filter:blur(3em) brightness(.55)}
-.tvs.media img.fg{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.tvs.media img.fg,.tvs.media video.fg{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.tvs.media.vid{background:#0f1440}
+/* Animação de boas-vindas (feita em código: quase nada para baixar) */
+.tvs.anim{background:#2B3797;color:#fff;--e:cubic-bezier(.65,0,.35,1)}
+.tvs.anim .orb{position:absolute;border-radius:50%;pointer-events:none}
+.tvs.anim .oa{width:100em;height:100em;left:-38em;top:-24em;background:radial-gradient(circle,rgba(255,255,255,.09) 0,rgba(255,255,255,0) 62%);animation:bvOA 12s ease-in-out var(--o) infinite}
+.tvs.anim .ob{width:110em;height:110em;right:-48em;bottom:-33em;background:radial-gradient(circle,rgba(237,28,36,.16) 0,rgba(237,28,36,0) 60%);animation:bvOB 12s ease-in-out var(--o) infinite}
+.tvs.anim .band{position:absolute;width:57em;height:2em;border-radius:1em;background:#ED1C24}
+.tvs.anim .bl{left:-5.5em;top:10%;animation:bvBL 12s var(--e) var(--o) infinite both}
+.tvs.anim .br{right:-5.5em;bottom:11%;animation:bvBR 12s var(--e) var(--o) infinite both}
+.tvs.anim .bvw{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:13em;animation:bvBreath 6s ease-in-out infinite}
+.tvs.anim .bvc{width:86em;height:26em;border-radius:3.4em;background:#fff;display:flex;align-items:center;justify-content:center;gap:4.8em;box-shadow:0 3.7em 8.3em rgba(0,0,0,.28);animation:bvCard 12s var(--e) var(--o) infinite both}
+.tvs.anim .bvc .sx{height:12em;width:auto}
+.tvs.anim .bvc .dv{width:.3em;height:13em;background:#d6d6e2;border-radius:.2em}
+.tvs.anim .bvc .nt{height:5.8em;width:auto}
+.tvs.anim .tx{display:flex;flex-direction:column;align-items:center;text-align:center;font-family:'Nunito',system-ui,sans-serif;font-weight:900;line-height:1.05}
+.tvs.anim .l{animation:bvLine 12s var(--e) infinite both}
+.tvs.anim .l1{font-size:10.6em;letter-spacing:.09em;animation-delay:calc(var(--o) + .9s)}
+.tvs.anim .l2{font-size:11.6em;letter-spacing:.02em;animation-delay:calc(var(--o) + 1.2s)}
+.tvs.anim .l3{font-size:10.6em;letter-spacing:.05em;animation-delay:calc(var(--o) + 1.5s)}
+.tvs.anim .bar{width:31em;height:1.5em;border-radius:.75em;background:#ED1C24;margin-top:6em;animation:bvBar 12s var(--e) var(--o) infinite both}
+@keyframes bvCard{0%,2%{opacity:0;transform:translateY(3.7em) scale(.94)}12%,86%{opacity:1;transform:none}95%,100%{opacity:0;transform:translateY(-2.2em) scale(.98)}}
+@keyframes bvLine{0%{opacity:0;transform:translateY(.6em);filter:blur(.07em)}10%,80%{opacity:1;transform:none;filter:none}90%,100%{opacity:0;transform:translateY(-.35em);filter:blur(.05em)}}
+@keyframes bvBar{0%,20%{transform:scaleX(0)}30%,80%{transform:scaleX(1)}88%,100%{transform:scaleX(0)}}
+@keyframes bvBL{0%,1%{transform:translateX(-110%)}13%,87%{transform:none}99%,100%{transform:translateX(-110%)}}
+@keyframes bvBR{0%,4%{transform:translateX(110%)}16%,84%{transform:none}96%,100%{transform:translateX(110%)}}
+@keyframes bvBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.015)}}
+@keyframes bvOA{0%,100%{transform:translate(0,0)}50%{transform:translate(5.5em,8.3em)}}
+@keyframes bvOB{0%,100%{transform:translate(0,0)}50%{transform:translate(-7.4em,-5.5em)}}
+.mthumb video{width:100%;height:100%;object-fit:cover;display:block;background:#0f1440}
+.mthumb .mtag{position:absolute;left:6px;bottom:6px;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;background:rgba(0,0,0,.65);color:#fff;font-size:12px;font-weight:700}
+.mthumb .mtag .i{width:14px;height:14px}
+.mthumb .manim{width:100%;height:100%;background:#2B3797;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;font-family:'Nunito',sans-serif;font-weight:900;font-size:13px;line-height:1.1}
+.mthumb .manim img{width:70%;height:auto}
+.mthumb.add.btnlike{font:inherit;font-weight:700;font-size:14px;color:var(--muted)}
 .tvs.media .strip{position:absolute;left:0;right:0;bottom:0;display:flex;align-items:center;gap:2.4em;padding:2.4em 4em;background:linear-gradient(to top,rgba(20,27,77,.92),rgba(20,27,77,0));color:#fff}
 .tvs.media .strip img{height:4.6em;width:auto}
 .tvs.media .strip .nt{height:4.4em;width:auto}
@@ -571,7 +605,7 @@ const store=t=>({get(k){try{return window[t].getItem(k)}catch(e){return null}},s
 const LS=store('localStorage'),SS=store('sessionStorage');
 const LETRAS='ABCD';
 /* ---------- Ícones (traço, padrão único em todo o sistema) ---------- */
-const ICO={
+const ICO={film:['<rect x="2" y="6" width="14" height="12" rx="2"/>','M16 13l5.2 3.5a.5.5 0 0 0 .8-.4V7.9a.5.5 0 0 0-.8-.4L16 10.5'],
   check:['M20 6 9 17l-5-5'],circle:['<circle cx="12" cy="12" r="8"/>'],x:['M18 6 6 18','M6 6l12 12'],plus:['M12 5v14','M5 12h14'],
   chevR:['m9 18 6-6-6-6'],chevL:['m15 18-6-6 6-6'],
   listCheck:['m3 17 2 2 4-4','m3 7 2 2 4-4','M13 6h8','M13 12h8','M13 18h8'],
@@ -712,7 +746,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261104131906';
+const APP_VERSION='20261104173728';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -1415,8 +1449,53 @@ function tvStandbyHtml(b,emPreparo){
     <div class="sbhor">${ORDEM_R.map(k=>`<div class="sbh ${(atual&&atual.ref===k)||(!atual&&k===prox)?'on':''}"><span class="e">${ic(REF[k].ic)}</span><span class="n">${esc(REF[k].nome)}</span><span class="h">${esc(REF[k].txt)}${REF[k].seguinte?' da madrugada':''}</span></div>`).join('')}</div>
   </div>`;
 }
-function tvMidiaHtml(src,b){
+/* Mídias do stand-by: imagem (data:image), animação pronta (anim:boasvindas) e vídeo (video:<segundos>:<link>) */
+function midiaInfo(s){
+  s=String(s||'');
+  if(s.startsWith('anim:'))return {tipo:'anim',nome:s.slice(5),d:12,src:s};
+  const v=s.match(/^video:(\d+):(.+)$/);
+  if(v)return {tipo:'video',d:Math.min(60,Math.max(6,+v[1]||12)),url:v[2],src:s};
+  return {tipo:'img',d:12,src:s};
+}
+/* Vídeos: a TV baixa cada um UMA vez, guarda no aparelho e só mostra depois de pronto (sem travar com internet fraca) */
+const TVV={prontos:{},falhou:{},rodando:false};
+async function tvVideosPreparar(){
+  if(TVV.rodando)return;TVV.rodando=true;
+  try{
+    const urls=((TV.dados||{}).midias||[]).map(midiaInfo).filter(m=>m.tipo==='video').map(m=>m.url);
+    let c=null;try{c=await caches.open('tv-videos')}catch(e){}
+    if(c){try{for(const r of await c.keys())if(!urls.includes(r.url))await c.delete(r)}catch(e){}}
+    for(const u of Object.keys(TVV.prontos))if(!urls.includes(u)){try{URL.revokeObjectURL(TVV.prontos[u])}catch(e){}delete TVV.prontos[u]}
+    for(const u of urls){
+      if(TVV.prontos[u])continue;
+      try{
+        let r=c?await c.match(u):null;
+        if(!r){
+          if(TVV.falhou[u]&&Date.now()-TVV.falhou[u]<3*60000)continue;
+          const res=await fetch(u);
+          if(!res.ok)throw new Error('baixar');
+          const blob=await res.blob();
+          if(c){try{await c.put(u,new Response(blob,{headers:{'Content-Type':blob.type||'video/mp4'}}))}catch(e){}}
+          TVV.prontos[u]=URL.createObjectURL(blob);
+        }else TVV.prontos[u]=URL.createObjectURL(await r.blob());
+        delete TVV.falhou[u];
+      }catch(e){TVV.falhou[u]=Date.now()}
+    }
+  }finally{TVV.rodando=false}
+}
+function tvAnimHtml(nome,dec){
+  return `<div class="tvs anim tvfade" style="--o:-${Math.max(0,dec).toFixed(2)}s">
+    <span class="orb oa"></span><span class="orb ob"></span><span class="band bl"></span><span class="band br"></span>
+    <div class="bvw"><div class="bvc"><img class="sx" src="${LOGO}" alt="Sodexo"><span class="dv"></span>${naturaImg()}</div>
+    <div class="tx"><span class="l l1">SEJAM</span><span class="l l2">BEM-VINDOS</span><span class="l l3">(AS)</span><span class="bar"></span></div></div></div>`;
+}
+function tvMidiaHtml(m,b,dec){
+  if(m.tipo==='anim')return tvAnimHtml(m.nome,dec);
   const prox=REF[proximaRefeicao(b)];
+  const faixa=`<div class="strip">`;
+  if(m.tipo==='video')return `<div class="tvs media vid tvfade"><video class="fg" src="${TVV.prontos[m.url]}" muted autoplay loop playsinline preload="auto"></video>
+    ${faixa}<img src="${LOGO_W}" alt="Sodexo">${naturaImg('#FFFFFF')}<span class="t"><span class="hora">${pad2(b.h)}:${pad2(b.m)}</span> · ${esc(prox.nome)} às ${hhmm(prox.ini)}</span></div></div>`;
+  const src=m.src;
   return `<div class="tvs media tvfade"><div class="bg" style="background-image:url('${src}')"></div><img class="fg" src="${src}" alt="">
     <div class="strip"><img src="${LOGO_W}" alt="Sodexo">${naturaImg('#FFFFFF')}<span class="t"><span class="hora">${pad2(b.h)}:${pad2(b.m)}</span> · ${esc(prox.nome)} às ${hhmm(prox.ini)}</span></div></div>`;
 }
@@ -1433,9 +1512,12 @@ function tvTela(){
   /* Antes de receber os dados (internet lenta), mostra o stand-by direto, sem tela de carregando */
   const preparo=TV.dados&&atual&&TV.forcar!=='standby'?atual.ref:null;
   const ms=D.midias||[],prox=proximaRefeicao(b);
-  /* Stand-by: alterna logos/horários e as mídias enviadas (12 s cada) */
-  const fase=Math.floor(Date.now()/12000)%(ms.length+1);
-  if(ms.length&&fase>0)return {k:'midia:'+fase+prox+TV.v,html:tvMidiaHtml(ms[fase-1],b)};
+  /* Stand-by: alterna logos/horários (12 s) e as mídias (imagem e animação 12 s; vídeo = a duração dele).
+     Vídeo só entra no rodízio depois de salvo na TV. */
+  const itens=[{tipo:'logos',d:12}].concat(ms.map(midiaInfo).filter(m=>m.tipo!=='video'||TVV.prontos[m.url]));
+  const total=itens.reduce((a,m)=>a+m.d,0);
+  let t=(Date.now()/1000)%total,i=0;while(i<itens.length-1&&t>=itens[i].d){t-=itens[i].d;i++}
+  if(i>0){const m=itens[i];return {k:'midia:'+i+':'+m.src.length+':'+m.src.slice(-32)+prox+TV.v,html:tvMidiaHtml(m,b,t)}}
   return {k:'sb:'+prox+(preparo||'')+(atual?atual.ref:'')+TV.v,html:tvStandbyHtml(b,preparo)};
 }
 /* Giro da tela: TV de pé com navegador "deitado" (ex.: 1920x1080) */
@@ -1479,9 +1561,10 @@ function tvPintar(forcar){
   TV.ultimaTela=t.k;
   /* troca suave: monta a tela nova por cima e só depois remove a antiga */
   const nova=document.createElement('div');nova.innerHTML=t.html;const el=nova.firstElementChild;
-  const velha=tv.firstElementChild;tv.appendChild(el);tvAjustar();
-  if(velha)setTimeout(()=>{if(velha.parentNode)velha.remove();tvAjustar()},650);
+  const velhas=[...tv.children];tv.appendChild(el);tvAjustar();
+  if(velhas.length)setTimeout(()=>{velhas.forEach(v=>{if(v.parentNode)v.remove()});tvAjustar()},650);
   el.querySelectorAll('img').forEach(im=>{if(!im.complete)im.addEventListener('load',tvAjustar,{once:true})});
+  el.querySelectorAll('video').forEach(v=>{v.muted=true;v.defaultMuted=true;const p=v.play();if(p&&p.catch)p.catch(()=>{})});
 }
 /* Internet ruim: tempo limite curto e cópia salva no aparelho */
 function comPrazo(p,ms){return Promise.race([p,new Promise((_,rej)=>setTimeout(()=>rej(new Error('tempo')),ms))])}
@@ -1496,7 +1579,7 @@ async function tvCacheLer(){
 let tvBaixando=false;
 async function tvBaixar(){
   if(tvBaixando)return;tvBaixando=true;
-  try{const d=await comPrazo(call('tvDados'),25000);acertarRelogio(d.agora);TV.dados=d;TV.v=d.v;tvPintar(true);tvCacheSalvar(d)}
+  try{const d=await comPrazo(call('tvDados'),25000);acertarRelogio(d.agora);TV.dados=d;TV.v=d.v;tvPintar(true);tvCacheSalvar(d);tvVideosPreparar()}
   catch(e){setTimeout(tvBaixar,15000)}
   tvBaixando=false;
 }
@@ -1512,7 +1595,8 @@ function iniciarTv(){
   document.title='Cardápio · TV';
   try{const g=new URLSearchParams(location.search).get('girar');if(g){TV.giro={direita:'90',esquerda:'-90',nao:'0',auto:'auto'}[g]||g;LS.set('tv_giro',TV.giro)}}catch(e){}
   render();tvPintar(true);           /* abre na hora, já na vertical, com o stand-by */
-  tvCacheLer().then(d=>{if(d&&!TV.dados){TV.dados=d;TV.v=d.v;tvPintar(true)}}).finally(tvBaixar);
+  tvCacheLer().then(d=>{if(d&&!TV.dados){TV.dados=d;TV.v=d.v;tvPintar(true);tvVideosPreparar()}}).finally(tvBaixar);
+  setInterval(tvVideosPreparar,2*60000);/* tenta de novo vídeos que não baixaram */
   tvAcordada();
   setInterval(tvChecar,8000);          /* tempo real: confere mudanças a cada 8 segundos */
   setInterval(()=>tvPintar(false),2000);/* troca de tela no horário certo */
@@ -1575,14 +1659,54 @@ function aCardapio(){
       <div class="urlbox"><code>${esc(TV_URL)}</code><button class="btn sm" data-act="cCopiarLink">${ic('copy')} Copiar link</button></div>
       <p class="muted" style="margin:0;font-size:14px">Abra esse link no navegador da TV e toque em <b>Tela cheia</b>. Ela troca sozinha: <b>Almoço 10h às 13h</b>, <b>Janta 17h30 às 20h30</b> e <b>Ceia 00h às 2h30</b>, quando o cardápio estiver <b>Pronto</b>. Fora desses horários fica no stand-by com os logos.</p>
       <div><div class="sec-h"><h2 style="font-size:17px">Mídias do stand-by <span class="muted num" style="font-size:14px">(${S.card.midias.length}/10)</span></h2></div>
-      <p class="muted" style="margin:0 0 10px;font-size:14px">Opcional. Imagens em pé (retrato, 1080 × 1920). Elas se alternam com a tela dos logos a cada 12 segundos. Sem mídias, ficam só os logos e os horários.</p>
-      <div class="mgrid">${S.card.midias.map(m=>`<div class="mthumb"><img src="${esc(m.foto)}" alt=""><button data-act="mRm" data-id="${esc(m.id)}" aria-label="Remover mídia">${ic('x')}</button></div>`).join('')}${S.card.midias.length<10?`<label class="mthumb add" for="m-up">${ic('image')}<br>Adicionar imagem</label>`:''}</div><input id="m-up" type="file" accept="image/*" hidden></div>
+      <p class="muted" style="margin:0 0 10px;font-size:14px">Opcional. Tudo em pé (retrato, 1080 × 1920). Imagens e a animação ficam 12 segundos; vídeos ficam o tempo deles (até 60 s, máx. 20 MB). A TV baixa cada vídeo uma vez e guarda no aparelho. Sem mídias, ficam só os logos e os horários.</p>
+      <div class="mgrid">${S.card.midias.map(midiaThumb).join('')}${S.card.midias.length<10?`<label class="mthumb add" for="m-up">${ic('image')}<br>Adicionar imagem</label><label class="mthumb add" for="v-up">${ic('film')}<br>Adicionar vídeo</label>${S.card.midias.some(m=>m.foto==='anim:boasvindas')?'':`<button type="button" class="mthumb add btnlike" data-act="mAnim">${ic('sparkles')}<br>Animação de boas-vindas</button>`}`:''}</div><input id="m-up" type="file" accept="image/*" hidden><input id="v-up" type="file" accept="video/mp4,video/webm" hidden></div>
     </section>
 
     <section class="panel stack" style="gap:10px"><div class="sec-h" style="margin:0"><h2>${ic('utensils')} Banco de pratos <span class="muted num" style="font-size:14px">(${S.card.pratos.length})</span></h2><button class="btn sm alt" data-act="pNovo">${ic('plus')} Prato</button></div>
       <p class="muted" style="margin:0;font-size:14px">Pratos com foto e categoria. Aparecem como sugestão ao digitar.</p>
       ${S.card.pratos.length?`<div class="plist">${S.card.pratos.map(p=>`<div class="citem"><span class="th">${p.foto?`<img src="${esc(p.foto)}" alt="">`:ic((CATN[p.categoria]||['','','utensils'])[2])}</span><span class="nm">${esc(p.nome)}<br><small class="muted" style="font-weight:600">${esc((CATN[p.categoria]||['','Sem categoria'])[1])}</small></span><button data-act="pEdit" data-id="${esc(p.id)}" aria-label="Editar ${esc(p.nome)}">${ic('pencil')}</button></div>`).join('')}</div>`:'<div class="empty">Os pratos que você adicionar no cardápio aparecem aqui.</div>'}
     </section>`;
+}
+function midiaThumb(m){
+  const x=midiaInfo(m.foto);
+  const corpo=x.tipo==='video'?`<video src="${esc(x.url)}#t=0.5" muted playsinline preload="metadata"></video><span class="mtag">${ic('film')} Vídeo · ${x.d}s</span>`
+    :x.tipo==='anim'?`<div class="manim"><img src="${LOGO_W}" alt=""><span>SEJAM<br>BEM-VINDOS<br>(AS)</span></div><span class="mtag">${ic('sparkles')} Animação</span>`
+    :`<img src="${esc(m.foto)}" alt="">`;
+  return `<div class="mthumb">${corpo}<button data-act="mRm" data-id="${esc(m.id)}" aria-label="Remover mídia">${ic('x')}</button></div>`;
+}
+/* Envio de vídeo: confere tamanho e duração, pede um link de envio (com o PIN) e manda direto para o armazenamento */
+function lerVideo(f){return new Promise(res=>{const v=document.createElement('video');v.preload='metadata';v.muted=true;const u=URL.createObjectURL(f);
+  const fim=r=>{try{URL.revokeObjectURL(u)}catch(e){}res(r)};
+  v.onloadedmetadata=()=>fim({d:v.duration,w:v.videoWidth,h:v.videoHeight});v.onerror=()=>fim(null);setTimeout(()=>fim(null),15000);v.src=u})}
+function enviarArquivo(url,f,aoProgresso){return new Promise((res,rej)=>{const x=new XMLHttpRequest();x.open('PUT',url);
+  x.setRequestHeader('apikey',SUPA_KEY);x.setRequestHeader('Content-Type',f.type);x.setRequestHeader('x-upsert','false');
+  x.upload.onprogress=e=>{if(e.lengthComputable)aoProgresso(Math.round(e.loaded/e.total*100))};
+  x.onload=()=>x.status>=200&&x.status<300?res():rej(new Error('falha no envio ('+x.status+'). Tente de novo.'));
+  x.onerror=()=>rej(new Error('a internet caiu durante o envio. Tente de novo.'));x.send(f)})}
+async function funcaoMidia(body){
+  let r;try{r=await fetch(SUPA_URL.replace(/\/$/,'')+'/functions/v1/subir-midia',{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPA_KEY},body:JSON.stringify({pin:adminPin,...body})})}
+  catch(e){throw new Error('sem conexão com a internet.')}
+  const j=await r.json().catch(()=>null);if(!j)throw new Error('o servidor não respondeu.');if(j.erro)throw new Error(j.erro);return j;
+}
+async function enviarVideo(f){
+  if(!/^video\/(mp4|webm)$/.test(f.type))throw new Error('use um vídeo MP4 ou WebM.');
+  if(f.size>20*1024*1024)throw new Error(`o vídeo tem ${(f.size/1048576).toFixed(1).replace('.',',')} MB. O máximo é 20 MB.`);
+  const info=await lerVideo(f);
+  if(!info||!isFinite(info.d)||!info.d)throw new Error('não consegui ler este vídeo. Exporte em MP4 (H.264).');
+  if(info.d>60.5)throw new Error('o vídeo tem mais de 60 segundos. Corte para até 60.');
+  const seg=Math.max(1,Math.round(info.d));
+  let link;
+  if(DEMO){link=URL.createObjectURL(f)}
+  else{
+    toast('Preparando envio…');
+    const r=await funcaoMidia({acao:'link',tipo:f.type,tamanho:f.size});
+    await enviarArquivo(SUPA_URL.replace(/\/$/,'')+'/storage/v1/object/upload/sign/tv-midias/'+r.path+'?token='+encodeURIComponent(r.token),f,p=>toast('Enviando vídeo… '+p+'% (não feche esta tela)'));
+    link=r.publico;
+  }
+  await call('salvarMidia',adminPin,'video:'+seg+':'+link);
+  await carregarCardapio();
+  toast(info.w>info.h?'Vídeo adicionado. Ele está deitado: na TV aparece com faixas em cima e embaixo.':'Vídeo adicionado ao stand-by');
 }
 function pratoForm(nome,cat,id){
   const p=id?S.card.pratos.find(x=>x.id===id):pratoDe(nome);
@@ -1937,7 +2061,12 @@ Object.assign(A,{
       await call('salvarPrato',adminPin,p);closeModal();await carregarCardapio();toast('Prato salvo')}
     catch(e){busyBtn(b,false,'Salvar');ferr(msg(e))}},
   pDel:()=>{const id=M.pid,nm=M.nomeOrig;confirmModal('Excluir '+nm+' do banco?','A foto sai. Se o prato estiver em algum cardápio, ele continua lá, só que sem foto.','Excluir',async()=>{await call('removerPrato',adminPin,id);await carregarCardapio();toast('Prato excluído')})},
-  mRm:d=>confirmModal('Remover esta mídia?','Ela sai do stand-by da TV.','Remover',async()=>{await call('removerMidia',adminPin,d.id);await carregarCardapio();toast('Mídia removida')}),
+  mRm:d=>confirmModal('Remover esta mídia?','Ela sai do stand-by da TV.','Remover',async()=>{
+    const m=(S.card.midias||[]).find(x=>x.id===d.id),x=m&&midiaInfo(m.foto);
+    await call('removerMidia',adminPin,d.id);
+    if(x&&x.tipo==='video'&&!DEMO){const k=x.url.split('/tv-midias/')[1];if(k)funcaoMidia({acao:'apagar',path:k}).catch(()=>{})}
+    await carregarCardapio();toast('Mídia removida')}),
+  mAnim:async(d,b)=>{try{await call('salvarMidia',adminPin,'anim:boasvindas');await carregarCardapio();toast('Animação de boas-vindas adicionada ao stand-by')}catch(e){toast('Não foi possível adicionar: '+msg(e))}},
   lDia:d=>{S.ldia=somaDia(S.ldia,+d.k);render()},
   lHoje:()=>{S.ldia=isoDia();render()},
   lNova:d=>tarefaForm(null,d.id),
@@ -1961,6 +2090,8 @@ Object.assign(A,{
   tAvisos:()=>ligarAvisos(false),
 });
 document.addEventListener('change',async e=>{
+  if(e.target.id==='v-up'){const f=e.target.files[0];e.target.value='';if(!f)return;
+    try{await enviarVideo(f)}catch(err){toast('Não foi possível enviar: '+msg(err))}}
   if(e.target.id==='m-up'){const f=e.target.files[0];if(!f)return;toast('Enviando imagem…');
     try{const u=await resizeFoto(f,1080,1920,false,1100000);await call('salvarMidia',adminPin,u);await carregarCardapio();toast('Mídia adicionada ao stand-by')}catch(err){toast('Não foi possível enviar: '+msg(err))}}
 });
