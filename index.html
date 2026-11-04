@@ -712,7 +712,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261104131235';
+const APP_VERSION='20261104131906';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -1266,7 +1266,8 @@ function aplicarAtualizacao(){
   const ocupado=Object.keys(PEND).length||S.busy||S.play||$('#modal').innerHTML;
   if(ocupado){esperandoAtt=true;setTimeout(aplicarAtualizacao,3000);return}
   toast('Nova versão! Atualizando o app…');
-  setTimeout(()=>location.reload(),700);
+  const limpar=('caches' in window)?caches.keys().then(ks=>Promise.all(ks.filter(k=>!k.startsWith('tv-')).map(k=>caches.delete(k)))).catch(()=>{}):Promise.resolve();
+  Promise.race([limpar,new Promise(ok=>setTimeout(ok,1500))]).then(()=>setTimeout(()=>location.reload(),300));
 }
 async function checarVersao(){
   if(esperandoAtt||DEMO)return;
