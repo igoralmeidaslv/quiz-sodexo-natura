@@ -684,7 +684,7 @@ const MOCK=(()=>{
       {p:'Qual a temperatura mínima para manter alimentos quentes no balcão térmico?',ops:['40 °C','50 °C','60 °C','75 °C'],c:2},
       {p:'Na lavagem das mãos, por quanto tempo esfregamos com sabão, no mínimo?',ops:['5 segundos','10 segundos','20 segundos','Não importa'],c:2},
       {p:'Onde guardar os produtos de limpeza?',ops:['Junto dos alimentos secos','Em área separada dos alimentos','Na câmara fria','Embaixo da pia da cozinha'],c:1}]}],
-    respostas:[],avaliacoes:[],checks:[],premios:[{mes:m,p1:'Vale-compras R$ 100',p2:'Kit cuidados pessoais',p3:'Folga de 2 horas'}]};
+    respostas:[],avaliacoes:[],checks:[],premios:['coz','ofc','lim'].map(g=>({mes:m,grupo:g,p1:'Vale-compras R$ 100',p2:'Kit cuidados pessoais',p3:'Folga de 2 horas'}))};
   let d=deIso(isoDia());d.setDate(1);const hoje=isoDia();
   while(isoDia(d)<hoje){const s=isoDia(d);if(util(s))db.equipe.forEach(c=>{const its=itensDe(c).filter(()=>Math.random()>.18).map(i=>i[0]);db.avaliacoes.push({id:c.id+'_'+s,colabId:c.id,data:s,mes:m,itens:its,pontos:ptsItens(c,its)})});d.setDate(d.getDate()+1)}
   [['e1',3],['e2',2],['e3',3],['e5',1],['e6',2]].forEach(([c,a],i)=>db.respostas.push({id:c+'_q1',colabId:c,quizId:'q1',mes:m,acertos:a,total:3,em:new Date(Date.now()-9e6+i*6e5).toISOString()}));
@@ -705,14 +705,14 @@ const MOCK=(()=>{
     alternarQuiz:(p,id)=>{chk(p);const q=db.quizzes.find(x=>x.id===id);q.ativo=!q.ativo;return{ativo:q.ativo}},
     removerQuiz:(p,id)=>{chk(p);db.respostas=db.respostas.filter(r=>r.quizId!==id);db.quizzes=db.quizzes.filter(q=>q.id!==id);return true},
     salvarAvaliacoes:(p,l)=>{chk(p);l.forEach(a=>{const id=a.colabId+'_'+a.data;db.avaliacoes=db.avaliacoes.filter(x=>x.id!==id);if(a.itens!==null)db.avaliacoes.push({id,colabId:a.colabId,data:a.data,mes:a.data.slice(0,7),itens:a.itens,pontos:a.pontos})});return true},
-    salvarPremios:(p,x)=>{chk(p);db.premios=db.premios.filter(y=>y.mes!==x.mes);db.premios.push(x);return true},
+    salvarPremios:(p,x)=>{chk(p);db.premios=db.premios.filter(y=>!(y.mes===x.mes&&y.grupo===x.grupo));db.premios.push(x);return true},
     trocarPinGestao:(p,n)=>{chk(p);db.pin=n;return true},
     salvarLembreteQuiz:(p,n)=>{chk(p);db.lembreteDias=n;return{ok:true}},
   };
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261104025841';
+const APP_VERSION='20261104131235';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -725,7 +725,7 @@ function instalarHtml(){
 
 /* ---------- Estado ---------- */
 const S={pub:null,adm:null,status:'loading',errMsg:'',me:null,view:'login',ctab:'hoje',pin:'',pinErr:'',busy:false,
-  tab:'avaliar',dia:ultimoUtil(),grupo:'coz',mesAdmin:mesKey(),mesQuiz:mesKey(),mesPremio:mesKey(),rkModo:'ano',admModo:'ano',anoAdmin:String(new Date().getFullYear()),anoPremio:String(new Date().getFullYear()),
+  tab:'avaliar',dia:ultimoUtil(),grupo:'coz',mesAdmin:mesKey(),mesQuiz:mesKey(),mesPremio:mesKey(),grpPremio:'coz',rkModo:'ano',admModo:'ano',anoAdmin:String(new Date().getFullYear()),anoPremio:String(new Date().getFullYear()),
   play:null,check:new Set(),checkDia:null};
 try{S.me=JSON.parse(LS.get('qsn_me')||'null')}catch(e){}
 let adminPin=LS.get('qsn_gest')||SS.get('qsn_gest');if(adminPin)LS.set('qsn_gest',adminPin);
@@ -764,7 +764,7 @@ function ranking(d,mes,g){
   let pos=0,prev=null;list.forEach((x,i)=>{if(prev===null||x.total!==prev){pos=i+1;prev=x.total}x.pos=pos});
   return list;
 }
-function premioDe(d,mes){return (d&&d.premios.find(p=>p.mes===mes))||{p1:'',p2:'',p3:''}}
+function premioDe(d,mes,g){return (d&&(d.premios.find(p=>p.mes===mes&&p.grupo===g)||d.premios.find(p=>p.mes===mes&&!p.grupo)))||{p1:'',p2:'',p3:''}}
 function meses(d){const s=new Set([mesKey()]);if(d){d.avaliacoes.forEach(a=>a.mes&&s.add(a.mes));d.respostas.forEach(r=>r.mes&&s.add(r.mes));d.quizzes.forEach(q=>q.mes&&s.add(q.mes));d.premios.forEach(p=>p.mes&&p.mes.length===7&&s.add(p.mes))}return[...s].sort().reverse()}
 function avalDe(d,colabId,dia){return d.avaliacoes.find(a=>a.colabId===colabId&&a.data===dia)}
 function eu(){return S.pub&&S.me?S.pub.equipe.find(c=>c.id===S.me.id):null}
@@ -909,11 +909,11 @@ function vPlay(){
   </main>`;
 }
 function cRanking(me){
-  const ano=S.rkModo==='ano',per=ano?anoKey():mesKey(),rk=ranking(S.pub,per,me.grupo),p=premioDe(S.pub,per);
+  const ano=S.rkModo==='ano',per=ano?anoKey():mesKey(),rk=ranking(S.pub,per,me.grupo),p=premioDe(S.pub,per,me.grupo);
   const mine=rk.find(x=>x.c.id===me.id);
   return `<div><h1 style="font-size:24px">Ranking · ${esc(GRUPOS[me.grupo].nome)}</h1></div>
     <div class="seg" style="grid-template-columns:repeat(2,1fr)"><button class="${ano?'':'on'}" data-act="rkModo" data-k="mes">${ic('calendar')} Este mês<small style="text-transform:capitalize">${esc(mesCurto(mesKey()))}</small></button><button class="${ano?'on':''}" data-act="rkModo" data-k="ano">${ic('trophy')} Ano ${anoKey()}<small>acumulado</small></button></div>
-    <p class="muted" style="margin:0;font-size:14px">${ano?'Os pontos acumulam de janeiro a dezembro e não zeram. No fim do ano, o top 3 do seu grupo ganha os prêmios do ano.':'Aqui você vê só os pontos feitos neste mês. Todos eles também somam no ranking do ano, que é o que vale para os prêmios e não zera.'}</p>
+    <p class="muted" style="margin:0;font-size:14px">${ano?'Os pontos acumulam de janeiro a dezembro e não zeram. No fim do ano, o top 3 do seu grupo ganha os prêmios do ano da sua categoria.':'Aqui você vê só os pontos feitos neste mês. Todos eles também somam no ranking do ano, que é o que vale para os prêmios e não zera.'}</p>
     ${prizesHtml(p)?`<section><div class="sec-h"><h2>${ano?'Prêmios do fim do ano':'Prêmios do mês'}</h2></div>${prizesHtml(p)}</section>`:''}
     <section><div class="sec-h"><h2>Classificação</h2><button class="link" data-act="refresh" style="padding:0">Atualizar</button></div>
     <div class="panel" style="padding:6px">${rk.map(x=>rkRow(x,me.id)).join('')||'<p class="muted" style="padding:10px">Ninguém no grupo ainda.</p>'}</div></section>
@@ -926,10 +926,10 @@ function cHist(me){
   return `<div><h1 style="font-size:24px">Histórico</h1></div>
     <section><div class="sec-h"><h2>Este mês, dia a dia</h2></div>
     ${dias.length?`<div class="panel daylist" style="padding-block:4px">${dias.map(a=>`<div class="done"><span class="t" style="text-transform:capitalize">${esc(diaLabel(a.data))}</span><span class="chip ${a.pontos>=maxDia(me)?'ok':'gold'} num">${a.pontos}/${maxDia(me)}</span></div>`).join('')}</div>`:'<div class="empty">Nenhuma avaliação neste mês ainda.</div>'}</section>
-    ${anos(S.pub).filter(a=>a<anoKey()).map(a=>{const rk=ranking(S.pub,a,me.grupo),mine=rk.find(x=>x.c.id===me.id),p=premioDe(S.pub,a);
+    ${anos(S.pub).filter(a=>a<anoKey()).map(a=>{const rk=ranking(S.pub,a,me.grupo),mine=rk.find(x=>x.c.id===me.id),p=premioDe(S.pub,a,me.grupo);
       return `<section><div class="sec-h"><h2>Ano de ${a}</h2>${mine?`<span class="chip gold num">Você: ${mine.pos}º · ${mine.total} pts</span>`:''}</div><div class="panel" style="padding-block:4px">${rk.slice(0,3).filter(x=>x.total>0).map(x=>`<div class="done"><span>${MED[x.pos]||x.pos+'º'}</span><span class="t">${esc(x.c.nome)}${p['p'+x.pos]?` <small class="muted">· ${esc(p['p'+x.pos])}</small>`:''}</span><span class="num muted">${x.total} pts</span></div>`).join('')||'<p class="muted" style="margin:8px 0">Sem pontuação.</p>'}</div></section>`}).join('')}
     <section><div class="sec-h"><h2>Meses anteriores</h2></div>
-    ${passados.length?`<div class="list">${passados.map(m=>{const rk=ranking(S.pub,m,me.grupo),mine=rk.find(x=>x.c.id===me.id),p=premioDe(S.pub,m);
+    ${passados.length?`<div class="list">${passados.map(m=>{const rk=ranking(S.pub,m,me.grupo),mine=rk.find(x=>x.c.id===me.id),p=premioDe(S.pub,m,me.grupo);
       return `<div class="panel"><div class="sec-h" style="margin-bottom:6px"><h2 style="text-transform:capitalize;font-size:17px">${esc(mesLabel(m))}</h2>${mine?`<span class="chip gold num">Você: ${mine.pos}º · ${mine.total} pts</span>`:''}</div>
       ${rk.slice(0,3).filter(x=>x.total>0).map(x=>`<div class="done"><span>${MED[x.pos]||x.pos+'º'}</span><span class="t">${esc(x.c.nome)}${p['p'+x.pos]?` <small class="muted">· ${esc(p['p'+x.pos])}</small>`:''}</span><span class="num muted">${x.total} pts</span></div>`).join('')||'<p class="muted" style="margin:0">Sem pontuação.</p>'}</div>`}).join('')}</div>`:'<div class="empty">O histórico aparece aqui a partir do próximo mês.</div>'}</section>`;
 }
@@ -966,16 +966,17 @@ function pcard(c,dia){
 }
 function anoSelect(id,val,extra){const l=[...new Set([...anos(S.adm),...(extra||[])])].sort().reverse();return `<select id="${id}" aria-label="Ano">${l.map(a=>`<option value="${a}" ${a===val?'selected':''}>${a}</option>`).join('')}</select>`}
 function aRanking(){
-  const d=S.adm,ano=S.admModo==='ano',mes=ano?S.anoAdmin:S.mesAdmin,p=premioDe(d,mes);
+  const d=S.adm,ano=S.admModo==='ano',mes=ano?S.anoAdmin:S.mesAdmin;
+  const nPr=ORDEM_G.reduce((s,g)=>{const q=premioDe(d,mes,g);return s+[q.p1,q.p2,q.p3].filter(Boolean).length},0);
   const nAval=d.avaliacoes.filter(a=>noPeriodo(mes,a.mes)).length,nQ=d.quizzes.filter(q=>noPeriodo(mes,q.mes)).length;
-  const bloco=g=>{const rk=ranking(d,mes,g),top=rk.filter(x=>x.total>0).slice(0,3);
+  const bloco=g=>{const p=premioDe(d,mes,g),rk=ranking(d,mes,g),top=rk.filter(x=>x.total>0).slice(0,3);
     const pd=(x,cls)=>x?`<div class="pd ${cls}"><span class="medal-e">${MED[x.pos]||x.pos+'º'}</span>${avatar(x.c,cls==='p1'?64:52)}<span class="nm">${esc(x.c.nome)}</span><span class="pt num">${x.total}</span>${p['p'+x.pos]?`<span class="prz">${esc(p['p'+x.pos])}</span>`:''}</div>`:'<div></div>';
     return `<section class="stack" style="gap:12px"><h2 style="font-size:20px">${esc(GRUPOS[g].nome)}</h2>
       ${top.length?`<div class="podium">${pd(top[1],'p2')}${pd(top[0],'p1')}${pd(top[2],'p3')}</div>`:'<div class="empty">Sem pontos ainda.</div>'}
       <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Nome</th><th class="r">Aval.</th><th class="r">Quiz</th><th class="r">Total</th></tr></thead><tbody>${rk.map(x=>`<tr><td class="num">${x.pos}º</td><td><span class="who">${avatar(x.c,28)}${esc(x.c.nome)}</span></td><td class="r num">${x.aval}</td><td class="r num">${x.quiz}</td><td class="r num"><b>${x.total}</b></td></tr>`).join('')}</tbody></table></div></section>`};
   return `<div class="seg" style="grid-template-columns:repeat(2,1fr);max-width:420px"><button class="${ano?'':'on'}" data-act="admModo" data-k="mes">${ic('calendar')} Do mês</button><button class="${ano?'on':''}" data-act="admModo" data-k="ano">${ic('trophy')} Do ano (acumulado)</button></div>
     <div class="toolbar"><div class="grp"><h2 style="font-size:22px">Ranking ${ano?'de':'de'}</h2>${ano?anoSelect('selAnoRk',mes):mesSelect('selMesRk',mes)}</div><div class="grp"><button class="btn sm alt" data-act="reloadAdm">Atualizar</button>${d.planilhaUrl?`<a class="btn sm alt" href="${esc(d.planilhaUrl)}" target="_blank" rel="noopener">Abrir planilha</a>`:''}</div></div>
-    <div class="stats"><div class="stat"><b class="num">${nAval}</b><span>avaliações no ${ano?'ano':'mês'}</span></div><div class="stat"><b class="num">${nQ}</b><span>quizzes no ${ano?'ano':'mês'}</span></div><div class="stat"><b class="num">${[p.p1,p.p2,p.p3].filter(Boolean).length}/3</b><span>prêmios ${ano?'do ano':'do mês'}</span></div></div>
+    <div class="stats"><div class="stat"><b class="num">${nAval}</b><span>avaliações no ${ano?'ano':'mês'}</span></div><div class="stat"><b class="num">${nQ}</b><span>quizzes no ${ano?'ano':'mês'}</span></div><div class="stat"><b class="num">${nPr}/9</b><span>prêmios ${ano?'do ano':'do mês'}</span></div></div>
     <div class="grid3">${ORDEM_G.map(bloco).join('')}</div>`;
 }
 function aQuiz(){
@@ -1006,19 +1007,22 @@ function aEquipe(){
    ${ORDEM_G.map(g=>{const l=ord(d.equipe.filter(c=>c.grupo===g));return `<section><div class="sec-h"><h2>${esc(GRUPOS[g].nome)}</h2><span class="muted num">${l.length}</span></div>${l.length?`<div class="cards">${l.map(card).join('')}</div>`:'<div class="empty">Ninguém neste grupo.</div>'}</section>`}).join('')}`;
 }
 function aPremios(){
-  const mes=S.mesPremio,p=premioDe(S.adm,mes),prox=(()=>{const d=new Date();d.setDate(1);d.setMonth(d.getMonth()+1);return mesKey(d)})();
-  const ano=S.anoPremio,pa=premioDe(S.adm,ano),proxAno=String(+anoKey()+1);
+  const g=S.grpPremio,gn=GRUPOS[g].nome,mes=S.mesPremio,p=premioDe(S.adm,mes,g),prox=(()=>{const d=new Date();d.setDate(1);d.setMonth(d.getMonth()+1);return mesKey(d)})();
+  const ano=S.anoPremio,pa=premioDe(S.adm,ano,g),proxAno=String(+anoKey()+1);
   const campos=(pre,pp,ex)=>[1,2,3].map(i=>`<div class="fld"><label for="${pre}${i}">${MED[i]} lugar</label><input id="${pre}${i}" type="text" value="${esc(pp['p'+i])}" placeholder="${ex[i-1]}"></div>`).join('');
-  return `<p class="muted" style="margin:0">Os prêmios valem para o top 3 de <b>cada</b> ranking: Cozinheiros, Oficiais de cozinha e Oficiais de limpeza. A equipe vê na aba Ranking.</p>
+  const cfg=(k,a,m)=>{const q=premioDe(S.adm,a,k),n=[q.p1,q.p2,q.p3].filter(Boolean).length;return `<button class="${k===g?'on':''}" data-act="grpPremio" data-k="${k}">${esc(GRUPOS[k].nome)}<small class="num">${n?n+'/3 do ano':'sem prêmios do ano'}</small></button>`};
+  return `<p class="muted" style="margin:0">Cada categoria tem os <b>seus próprios prêmios</b>. Escolha a categoria abaixo, preencha o 1º, 2º e 3º lugar e salve. Cada colaborador vê só os prêmios da categoria dele, na aba Ranking.</p>
+   <div class="seg" style="grid-template-columns:repeat(3,1fr)">${ORDEM_G.map(k=>cfg(k,ano,mes)).join('')}</div>
+   <h2 style="font-size:22px">Prêmios · ${esc(gn)}</h2>
    <div class="grid3">
    <section class="panel stack" style="gap:4px"><div class="toolbar"><div class="grp"><h2 style="font-size:20px">${ic('trophy')} Prêmios do ano</h2>${anoSelect('selAnoPr',ano,[anoKey(),proxAno])}</div></div>
-    <p class="muted" style="margin:0 0 8px;font-size:14px">Os principais. Vão para o top 3 do ranking acumulado do ano, entregues no fim do ano.</p>
+    <p class="muted" style="margin:0 0 8px;font-size:14px">Os principais. Vão para o top 3 do ranking acumulado do ano de ${esc(gn)}, entregues no fim do ano.</p>
     ${campos('pa',pa,['Ex.: Vale-compras R$ 500','Ex.: Vale-compras R$ 300','Ex.: Vale-compras R$ 150'])}
-    <div><button class="btn" data-act="savePremiosAno">Salvar prêmios do ano</button></div></section>
+    <div><button class="btn" data-act="savePremiosAno">Salvar prêmios do ano · ${esc(gn)}</button></div></section>
    <section class="panel stack" style="gap:4px"><div class="toolbar"><div class="grp"><h2 style="font-size:20px">${ic('calendar')} Prêmios do mês</h2>${mesSelect('selMesPr',mes,[prox])}</div></div>
-    <p class="muted" style="margin:0 0 8px;font-size:14px">Opcional. Para quem fica no top 3 do mês. Deixe em branco se não houver.</p>
+    <p class="muted" style="margin:0 0 8px;font-size:14px">Opcional. Para o top 3 do mês de ${esc(gn)}. Deixe em branco se não houver.</p>
     ${campos('pr',p,['Ex.: Folga de 2 horas','Ex.: Kit cuidados pessoais','Ex.: Chocolate'])}
-    <div><button class="btn" data-act="savePremios">Salvar prêmios do mês</button></div></section>
+    <div><button class="btn" data-act="savePremios">Salvar prêmios do mês · ${esc(gn)}</button></div></section>
    </div>`;
 }
 function aAjustes(){
@@ -1189,7 +1193,7 @@ const A={
   tab:d=>{S.tab=d.k;render();if(d.k==='cardapio'&&!S.card)carregarCardapio();if(d.k==='acessos')carregarAcessos();if(d.k==='quiz'&&S.qmodo==='analise')carregarQA()},
   rkModo:d=>{S.rkModo=d.k;render()},
   admModo:d=>{S.admModo=d.k;render()},
-  savePremiosAno:async(d,b)=>{const p={mes:S.anoPremio,p1:$('#pa1').value.trim(),p2:$('#pa2').value.trim(),p3:$('#pa3').value.trim()};busyBtn(b,true,'Salvando…');try{await acao('salvarPremios',p);toast('Prêmios do ano salvos')}catch(e){toast(msg(e));busyBtn(b,false,'Salvar prêmios do ano')}},
+  savePremiosAno:async(d,b)=>{const p={mes:S.anoPremio,grupo:S.grpPremio,p1:$('#pa1').value.trim(),p2:$('#pa2').value.trim(),p3:$('#pa3').value.trim()};busyBtn(b,true,'Salvando…');try{await acao('salvarPremios',p);toast('Prêmios do ano salvos: '+GRUPOS[S.grpPremio].nome)}catch(e){toast(msg(e));busyBtn(b,false,'Salvar prêmios do ano')}},
   dia:d=>{S.dia=passoUtil(S.dia,+d.k);render()},
   diaHoje:()=>{S.dia=ultimoUtil();render()},
   grupo:d=>{S.grupo=d.k;render()},
@@ -1228,7 +1232,8 @@ const A={
   },
   toggleQuiz:async d=>{try{const a=await acao('alternarQuiz',d.id);toast(a&&a.ativo?'Quiz liberado':'Quiz pausado')}catch(e){toast(msg(e))}},
   delQuiz:d=>{const n=S.adm.respostas.filter(r=>r.quizId===d.id).length;confirmModal('Excluir este quiz?',n?`Os pontos de ${n} resposta${n>1?'s':''} a este quiz também saem do ranking.`:'Ninguém respondeu ainda.','Excluir',async()=>{await acao('removerQuiz',d.id);toast('Quiz excluído')})},
-  savePremios:async(d,b)=>{const p={mes:S.mesPremio,p1:$('#pr1').value.trim(),p2:$('#pr2').value.trim(),p3:$('#pr3').value.trim()};busyBtn(b,true,'Salvando…');try{await acao('salvarPremios',p);toast('Prêmios salvos')}catch(e){toast(msg(e));busyBtn(b,false,'Salvar prêmios')}},
+  grpPremio:d=>{S.grpPremio=d.k;render()},
+  savePremios:async(d,b)=>{const p={mes:S.mesPremio,grupo:S.grpPremio,p1:$('#pr1').value.trim(),p2:$('#pr2').value.trim(),p3:$('#pr3').value.trim()};busyBtn(b,true,'Salvando…');try{await acao('salvarPremios',p);toast('Prêmios do mês salvos: '+GRUPOS[S.grpPremio].nome)}catch(e){toast(msg(e));busyBtn(b,false,'Salvar prêmios')}},
   doConfirm:async(d,b)=>{if(!M.confirm)return;busyBtn(b,true);try{await M.confirm();closeModal()}catch(e){busyBtn(b,false);ferr(msg(e))}},
   close:closeModal,
   ovClose:(d,b,e)=>{if(e.target===b)closeModal()},
