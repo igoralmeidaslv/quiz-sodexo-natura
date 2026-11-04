@@ -457,6 +457,93 @@ body.tvmode.nocur{cursor:none}
 .tvfade{animation:tvf .6s ease}
 @keyframes tvf{from{opacity:0}to{opacity:1}}
 @media (max-width:420px){.seg button{font-size:12px}.crit{font-size:13px;padding:7px 10px}}
+
+/* Quiz quinzenal: contagem, calendário, como funciona, notificações */
+.qhero{background:var(--brand);color:var(--brand-ink);border-radius:20px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden}
+.qhero::after{content:"";position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.08)}
+.qhero.urg{background:linear-gradient(135deg,#B3261E,#DA2020)}
+.qhero.ok{background:linear-gradient(135deg,#127048,#17845A)}
+.qhero.off{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
+.qhero .pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.16);border-radius:999px;padding:4px 12px;font-size:13px;font-weight:800}
+.qhero.off .pill{background:var(--sunk);color:var(--muted)}
+.qhero .pill .i,.qh-p .i{width:16px;height:16px}
+.qh-l{font-family:var(--display);font-weight:800;font-size:15px;opacity:.9;margin-top:4px}
+.qh-p{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;opacity:.92}
+.qh-b{background:#fff;color:var(--brand);margin-top:6px;font-size:17px}
+.qhero.urg .qh-b{color:#B3261E}
+.cd{display:flex;align-items:flex-start;gap:4px}
+.cdu{flex:1;display:flex;flex-direction:column;align-items:center;background:rgba(255,255,255,.14);border-radius:14px;padding:8px 2px 6px;min-width:0}
+.qhero.off .cdu{background:var(--sunk)}
+.cdu b{font-family:var(--display);font-weight:900;font-size:34px;line-height:1}
+.cdu small{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;opacity:.85;margin-top:3px}
+.cdsep{font-style:normal;font-family:var(--display);font-weight:900;font-size:26px;opacity:.5;padding-top:8px}
+@media (max-width:360px){.cdu b{font-size:28px}.cdsep{font-size:20px}}
+.cta.soft{border-style:dashed;background:var(--surface);color:var(--ink)}
+.cta .num[data-cd]{font-weight:900}
+.cqcal{padding:14px}
+.cqrow{padding:8px 10px;border-radius:12px;margin-top:6px}
+.cqrow.cur{background:var(--accent-soft)}
+.cqh{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-bottom:6px}
+.cqh b{font-family:var(--display);font-size:15px}
+.cqdays{display:grid;gap:2px}
+.dc{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:42px;border-radius:7px;background:var(--surface);border:1px solid var(--line);font-size:11px;padding-bottom:3px;min-width:0}
+.dc b{font-weight:800}
+.dc.pass{opacity:.45}
+.dc.hoje{background:var(--brand);color:var(--brand-ink);border-color:var(--brand);opacity:1}
+.mk{position:absolute;top:4px;left:50%;transform:translateX(-50%);display:grid;place-items:center;font-style:normal}
+.mk .i{width:13px;height:13px}
+.mk.ab{color:var(--ok)}.mk.lb{color:var(--accent-ink)}.mk.fe{color:var(--bad)}
+.dc.hoje .mk{color:var(--brand-ink)}
+.cqleg{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:12px;font-size:12px;font-weight:700;color:var(--muted)}
+.cqleg span{display:inline-flex;align-items:center;gap:5px}
+.cqleg .mk{position:static;transform:none}
+.cqleg .dc.sw{width:13px;height:13px;border-radius:4px;padding:0}
+.how summary{list-style:none;display:flex;justify-content:space-between;align-items:center;font-family:var(--display);font-weight:800;font-size:17px;cursor:pointer}
+.how summary::-webkit-details-marker{display:none}
+.how summary span{display:inline-flex;align-items:center;gap:8px}
+.how .chv{transition:transform .2s}
+.how[open] .chv{transform:rotate(90deg)}
+.steps{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:0}
+.steps li{display:flex;gap:12px;position:relative;padding-bottom:14px}
+.steps li:not(:last-child)::before{content:"";position:absolute;left:21px;top:44px;bottom:2px;width:2px;background:var(--line)}
+.steps .si{position:relative;flex:none;width:44px;height:44px;border-radius:14px;background:var(--accent-soft);color:var(--accent-ink);display:grid;place-items:center}
+.steps .si .i{width:22px;height:22px}
+.steps .si i{position:absolute;right:-5px;top:-5px;width:20px;height:20px;border-radius:50%;background:var(--brand);color:var(--brand-ink);font-style:normal;font-size:11px;font-weight:900;display:grid;place-items:center}
+.steps p{margin:2px 0 0;font-size:14px;color:var(--muted);line-height:1.45}
+.steps b{color:var(--ink)}
+.avbox{background:var(--surface);border:1.5px solid var(--brand);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.avbox.bloq{border-color:var(--bad)}
+.avh{display:flex;gap:12px;align-items:center}
+.avh small{display:block;color:var(--muted);font-size:14px}
+.avi{flex:none;width:44px;height:44px;border-radius:50%;background:var(--accent-soft);color:var(--accent-ink);display:grid;place-items:center}
+.avbox.bloq .avi{background:var(--bad-soft);color:var(--bad)}
+.avi .i{width:22px;height:22px}
+.avtxt{margin:0;font-size:14px;color:var(--muted)}
+.avsteps{margin:0;padding-left:20px;font-size:14px;display:flex;flex-direction:column;gap:4px}
+.avon{display:flex;gap:10px;align-items:flex-start;background:var(--ok-soft);color:var(--ok);border-radius:14px;padding:12px 14px;font-size:14px}
+.avon .i{flex:none;width:20px;height:20px;margin-top:2px}
+.nprev{display:flex;gap:10px;align-items:flex-start;background:var(--sunk);border-radius:16px;padding:10px 12px;font-size:13px;line-height:1.35;box-shadow:0 6px 16px rgba(20,30,90,.12)}
+.nprev img{width:34px;height:34px;border-radius:9px;flex:none}
+.nprev > div{flex:1;min-width:0;display:flex;flex-direction:column}
+.nph{display:flex;justify-content:space-between;color:var(--muted);font-size:12px}
+.nph b{color:var(--muted);font-weight:700}
+.avmodal{text-align:left}
+.avbig{display:grid;place-items:center;width:64px;height:64px;border-radius:20px;background:var(--brand);color:var(--brand-ink);margin-bottom:12px}
+.avbig .i{width:32px;height:32px}
+.avlist{list-style:none;padding:0;margin:14px 0 0;display:flex;flex-direction:column;gap:8px;font-size:15px}
+.avlist li{display:flex;gap:10px;align-items:center}
+.avlist .i{flex:none;width:20px;height:20px;color:var(--brand)}
+.lemb{display:flex;flex-direction:column;gap:12px}
+.lemb-h{display:flex;gap:12px;align-items:center}
+.lemb-h small{display:block;font-size:14px}
+.lemb-l{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.lemb-l li{display:flex;gap:8px;align-items:center}
+.lemb-l .i{flex:none;width:18px;height:18px;color:var(--brand)}
+.lemb-s{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:14px;color:var(--muted)}
+.lemb-s b{color:var(--ink)}
+.pendl summary{cursor:pointer;font-weight:700;color:var(--brand);font-size:14px}
+.pendn{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.pendn .i{width:14px;height:14px}
 </style>
 
 <div id="app"></div>
@@ -593,7 +680,7 @@ const MOCK=(()=>{
   const m=mesKey();
   const nomes=[['Ana (exemplo)','coz','1111',true],['Bia (exemplo)','coz','1112',false],['Caio (exemplo)','coz','1113',false],['Davi (exemplo)','ofc','2221',false],['Eva (exemplo)','ofc','2222',false],['Fábio (exemplo)','lim','3331',false],['Gil (exemplo)','lim','3332',false]];
   const db={pin:'123456',equipe:nomes.map(([nome,grupo,pin,extra],i)=>({id:'e'+i,nome,grupo,pin,extra,ativo:true,foto:'',criado:''})),
-    quizzes:[{id:'q1',titulo:'Boas práticas: semana 1',mes:m,ativo:true,criado:'1',perguntas:[
+    quizzes:[{id:'q1',titulo:'Boas práticas: semana 1',mes:m,quinzena:new Date().getDate()<=15?1:2,ativo:true,criado:'1',perguntas:[
       {p:'Qual a temperatura mínima para manter alimentos quentes no balcão térmico?',ops:['40 °C','50 °C','60 °C','75 °C'],c:2},
       {p:'Na lavagem das mãos, por quanto tempo esfregamos com sabão, no mínimo?',ops:['5 segundos','10 segundos','20 segundos','Não importa'],c:2},
       {p:'Onde guardar os produtos de limpeza?',ops:['Junto dos alimentos secos','Em área separada dos alimentos','Na câmara fria','Embaixo da pia da cozinha'],c:1}]}],
@@ -603,7 +690,7 @@ const MOCK=(()=>{
   [['e1',3],['e2',2],['e3',3],['e5',1],['e6',2]].forEach(([c,a],i)=>db.respostas.push({id:c+'_q1',colabId:c,quizId:'q1',mes:m,acertos:a,total:3,em:new Date(Date.now()-9e6+i*6e5).toISOString()}));
   const chk=p=>{if(String(p)!==db.pin)throw new Error('PIN da gestão incorreto.')};
   const byPin=p=>{const c=db.equipe.find(x=>x.pin===String(p)&&x.ativo);if(!c)throw new Error('PIN não encontrado ou inativo. Confira com a gestão.');return c};
-  const base=s=>({equipe:s?db.equipe:db.equipe.map(({pin,...c})=>c),quizzes:s?db.quizzes:db.quizzes.map(q=>({...q,perguntas:q.perguntas.map(x=>({p:x.p,ops:x.ops}))})),respostas:db.respostas,avaliacoes:db.avaliacoes,premios:db.premios,temGestao:true});
+  const base=s=>({equipe:s?db.equipe:db.equipe.map(({pin,...c})=>c),quizzes:s?db.quizzes:db.quizzes.map(q=>({...q,perguntas:q.perguntas.map(x=>({p:x.p,ops:x.ops}))})),respostas:db.respostas,avaliacoes:db.avaliacoes,premios:db.premios,temGestao:true,lembreteDias:db.lembreteDias||2});
   return{
     dadosPublicos:()=>base(false),
     entrar:p=>{const c=byPin(p);return{id:c.id,nome:c.nome}},
@@ -620,11 +707,12 @@ const MOCK=(()=>{
     salvarAvaliacoes:(p,l)=>{chk(p);l.forEach(a=>{const id=a.colabId+'_'+a.data;db.avaliacoes=db.avaliacoes.filter(x=>x.id!==id);if(a.itens!==null)db.avaliacoes.push({id,colabId:a.colabId,data:a.data,mes:a.data.slice(0,7),itens:a.itens,pontos:a.pontos})});return true},
     salvarPremios:(p,x)=>{chk(p);db.premios=db.premios.filter(y=>y.mes!==x.mes);db.premios.push(x);return true},
     trocarPinGestao:(p,n)=>{chk(p);db.pin=n;return true},
+    salvarLembreteQuiz:(p,n)=>{chk(p);db.lembreteDias=n;return{ok:true}},
   };
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261103134238';
+const APP_VERSION='20261104025841';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -680,7 +768,6 @@ function premioDe(d,mes){return (d&&d.premios.find(p=>p.mes===mes))||{p1:'',p2:'
 function meses(d){const s=new Set([mesKey()]);if(d){d.avaliacoes.forEach(a=>a.mes&&s.add(a.mes));d.respostas.forEach(r=>r.mes&&s.add(r.mes));d.quizzes.forEach(q=>q.mes&&s.add(q.mes));d.premios.forEach(p=>p.mes&&p.mes.length===7&&s.add(p.mes))}return[...s].sort().reverse()}
 function avalDe(d,colabId,dia){return d.avaliacoes.find(a=>a.colabId===colabId&&a.data===dia)}
 function eu(){return S.pub&&S.me?S.pub.equipe.find(c=>c.id===S.me.id):null}
-function quizzesAbertos(){return S.pub?S.pub.quizzes.filter(q=>q.ativo&&q.mes===mesKey()):[]}
 function minhaResp(qid){return S.pub&&S.me?S.pub.respostas.find(r=>r.colabId===S.me.id&&r.quizId===qid):null}
 const MED={1:'<span class="med m1">1º</span>',2:'<span class="med m2">2º</span>',3:'<span class="med m3">3º</span>'};
 
@@ -786,7 +873,8 @@ function cHoje(me){
   return `<div style="display:flex;align-items:center;gap:12px">${avatar(me,52)}<div style="flex:1;min-width:0"><div class="eyebrow">Olá,</div><h1 style="font-size:24px">${esc(String(me.nome).split(' ')[0])}</h1></div><span class="gchip">${esc(GRUPOS[me.grupo].um)}</span></div>
     ${scoreCard(me)}
     ${me.grupo==='lim'&&minhasTarefas(hoje).length?(()=>{let a=0,b=0;minhasTarefas(hoje).forEach(t=>{const[x,y]=progTarefa(t);a+=x;b+=y});return `<button class="cta" data-act="ctab" data-k="tarefas"><span class="ic">${ic('sparkles')}</span><span style="flex:1">${a>=b?'Tarefas de hoje concluídas!':`Você tem ${minhasTarefas(hoje).length} tarefa${minhasTarefas(hoje).length>1?'s':''} hoje`}<br><small style="font-weight:600">${a} de ${b} itens feitos · toque para abrir o checklist</small></span><span>›</span></button>`})():''}
-    ${pend.length?`<button class="cta" data-act="ctab" data-k="quiz"><span class="ic">${ic('quiz')}</span><span style="flex:1">Tem ${pend.length>1?pend.length+' quizzes':'quiz'} para responder!<br><small style="font-weight:600">Vale ${QUIZ_PART} pts + bônus para o top 3 do seu grupo</small></span><span>›</span></button>`:''}
+    ${hojeQuizCard()}
+    ${avisoCard(true)}
     <section>
       <div class="sec-h"><h2>Checklist de hoje</h2><span class="muted num" style="font-size:14px">${feitos}/${its.length}</span></div>
       ${util(hoje)?`<div class="prog" style="margin-bottom:12px"><i style="width:${its.length?Math.round(feitos/its.length*100):0}%"></i></div>
@@ -795,15 +883,6 @@ function cHoje(me){
       :`<div class="empty">Hoje é fim de semana. O checklist volta na segunda. Bom descanso!</div>`}
     </section>
     ${ultHtml}`;
-}
-function cQuiz(me){
-  const qs=quizzesAbertos(),qp=quizPontos(S.pub);
-  const pend=qs.filter(q=>!minhaResp(q.id)),feitos=qs.filter(q=>minhaResp(q.id));
-  return `<div><h1 style="font-size:24px">Quiz</h1><p class="muted" style="margin:4px 0 0">Participar vale ${QUIZ_PART} pts. Os 3 que mais acertarem no seu grupo ganham +5, +3 e +1. Empate: vale quem terminou primeiro.</p></div>
-    <section><div class="sec-h"><h2>Para responder</h2><span class="chip gold num">${pend.length}</span></div>
-    ${pend.length?`<div class="list">${pend.map(q=>`<button class="qitem" data-act="startQuiz" data-id="${esc(q.id)}"><span class="t">${esc(q.titulo)}<br><small class="muted" style="font-weight:600">${q.perguntas.length} pergunta${q.perguntas.length>1?'s':''}</small></span><span class="chip gold">Começar ›</span></button>`).join('')}</div>`
-    :`<div class="empty">${qs.length?'Você respondeu todos os quizzes do mês.':'Nenhum quiz liberado agora. Volte em breve.'}</div>`}</section>
-    ${feitos.length?`<section><div class="sec-h"><h2>Já respondidos</h2></div><div class="panel" style="padding-block:6px">${feitos.map(q=>{const r=minhaResp(q.id),p=qp[r.id]||{pts:QUIZ_PART,pos:'-'};return `<div class="done"><span class="t">${esc(q.titulo)}<br><small class="muted num">${r.acertos}/${r.total} acertos · ${p.pos}º no grupo</small></span><span class="chip ok num">+${p.pts}</span></div>`}).join('')}</div></section>`:''}`;
 }
 function vPlay(){
   const P=S.play,q=S.pub.quizzes.find(x=>x.id===P.qid);
@@ -904,18 +983,6 @@ function aQuiz(){
   if(S.qmodo==='analise')return seg+aQuizAnalise();
   return seg+aQuizLista();
 }
-function aQuizLista(){
-  const d=S.adm,mes=S.mesQuiz,qs=d.quizzes.filter(q=>q.mes===mes).sort((a,b)=>String(a.criado).localeCompare(String(b.criado)));
-  const nAt=d.equipe.filter(c=>c.ativo).length;
-  return `<div class="toolbar"><div class="grp"><h2 style="font-size:22px">Quizzes de</h2>${mesSelect('selMesQz',mes)}</div><button class="btn sm" data-act="newQuiz">Novo quiz</button></div>
-   <p class="muted" style="margin:0">Um quiz a cada 15 dias. Participar vale ${QUIZ_PART} pts. Em cada grupo, os 3 que mais acertarem ganham +5, +3 e +1 (empate: quem terminou primeiro).</p>
-   ${qs.length?`<div class="cards">${qs.map(q=>{const rs=d.respostas.filter(r=>r.quizId===q.id);
-     return `<div class="card"><div class="row">${q.ativo?'<span class="chip ok">Liberado</span>':'<span class="chip off">Pausado</span>'}<span class="chip gold num">${q.perguntas.length} pergunta${q.perguntas.length>1?'s':''}</span></div>
-     <div class="qq">${esc(q.titulo)}</div>
-     <div class="muted num" style="font-size:14px">${rs.length}/${nAt} responderam</div>
-     <div class="acts"><button class="btn sm alt" data-act="editQuiz" data-id="${esc(q.id)}">Editar</button><button class="btn sm alt" data-act="toggleQuiz" data-id="${esc(q.id)}">${q.ativo?'Pausar':'Liberar'}</button><button class="btn sm alt" data-act="delQuiz" data-id="${esc(q.id)}">Excluir</button></div></div>`}).join('')}</div>`
-   :`<div class="empty">Nenhum quiz em ${esc(mesLabel(mes))}. Toque em “Novo quiz”.</div>`}`;
-}
 const SITE=location.origin+location.pathname.replace(/index\.html$/,'');
 function waNum(t){let d=String(t||'').replace(/\D/g,'');if(!d)return '';if(d.length<=11)d='55'+d;return d}
 function waLink(tel,txt){return 'https://wa.me/'+waNum(tel)+'?text='+encodeURIComponent(txt)}
@@ -976,16 +1043,17 @@ function render(){
 async function carregar(silencioso){
   try{
     if(S.me){S.pub=await call('dadosColab',S.me.pin)}else{S.pub=await call('dadosPublicos')}
-    S.status='ok';
+    S.status='ok';syncRelogio(S.pub);
     if(S.me){checarTarefasNovas();if(!carregar.push&&avisosLigados()){carregar.push=1;ligarAvisos(true)}}
   }catch(e){
     if(S.me&&/PIN não encontrado/.test(msg(e))){S.me=null;LS.set('qsn_me',null);S.view='login';S.pinErr=msg(e)}
     else if(!silencioso){S.status='err';S.errMsg=msg(e)}
   }
   render();
+  if(S.me&&S.status==='ok')setTimeout(pedirAvisosModal,1500);
 }
 async function carregarGestao(){
-  try{S.adm=await call('dadosGestao',adminPin);S.status='ok'}
+  try{S.adm=await call('dadosGestao',adminPin);S.status='ok';syncRelogio(S.adm)}
   catch(e){
     if(/PIN da gestão incorreto|Muitas tentativas/.test(msg(e))){adminPin=null;LS.set('qsn_gest',null);SS.set('qsn_gest',null);S.view='adminLogin';S.pinErr=msg(e)}
     else{S.status='err';S.errMsg=msg(e);if(!S.adm)setTimeout(()=>{if(S.view==='admin'&&!S.adm)carregarGestao()},8000);else toast('Sem conexão agora. Tentando de novo…')}
@@ -1064,7 +1132,9 @@ function quizForm(id){
   openModal(`<h2>${q?'Editar quiz':'Novo quiz'}</h2>
    ${nr?`<div class="notice" style="margin-bottom:14px">${nr} pessoa${nr>1?'s já responderam':' já respondeu'}. Mudar as respostas certas não recalcula quem já respondeu.</div>`:''}
    <div class="fld"><label for="q-tit">Nome do quiz</label><input id="q-tit" type="text" value="${esc(q?q.titulo:'')}" placeholder="Ex.: Boas práticas · semana 1"></div>
-   <div class="two"><div class="fld"><label for="q-mes">Mês</label><input id="q-mes" type="month" value="${esc(q?q.mes:S.mesQuiz)}"></div><label class="check" style="align-self:end;margin-bottom:22px"><input id="q-ativo" type="checkbox" ${!q||q.ativo?'checked':''}> Liberado</label></div>
+   <div class="two"><div class="fld"><label for="q-mes">Mês</label><input id="q-mes" type="month" value="${esc(q?q.mes:S.mesQuiz)}"></div><div class="fld"><label for="q-qz">Quinzena</label><select id="q-qz">${(()=>{const qn=q?(q.quinzena||1):(()=>{const c=cicloAgora();if(S.mesQuiz!==c.mes)return 1;const tem=S.adm.quizzes.some(x=>x.mes===c.mes&&(x.quinzena||1)===c.q);return tem&&c.q===1?2:c.q})();return `<option value="1" ${qn===1?'selected':''}>1ª · dia 1 a 15</option><option value="2" ${qn===2?'selected':''}>2ª · dia 16 ao fim do mês</option>`})()}</select></div></div>
+   <p class="muted" style="font-size:13px;margin:-6px 0 12px">Abre sozinho à meia-noite do 1º dia da quinzena e encerra às 23h49 do último dia.</p>
+   <label class="check" style="margin-bottom:16px"><input id="q-ativo" type="checkbox" ${!q||q.ativo?'checked':''}> Liberado (desmarque para pausar)</label>
    <div id="q-list"></div>
    <button class="btn sm alt" data-act="addPerg" style="margin-bottom:14px">+ Adicionar pergunta</button>
    <p class="ferr"></p>
@@ -1147,7 +1217,7 @@ const A={
   rmPerg:d=>{lerPergs();M.perg.splice(+d.i,1);renderPergs()},
   saveQuiz:async(d,b)=>{
     lerPergs();
-    const data={id:M.id||'',titulo:$('#q-tit').value.trim(),mes:$('#q-mes').value,ativo:$('#q-ativo').checked,perguntas:M.perg.filter(x=>x.p.trim())};
+    const data={id:M.id||'',titulo:$('#q-tit').value.trim(),mes:$('#q-mes').value,quinzena:+$('#q-qz').value,ativo:$('#q-ativo').checked,perguntas:M.perg.filter(x=>x.p.trim())};
     if(!data.titulo)return ferr('Dê um nome ao quiz.');
     if(!data.perguntas.length)return ferr('Escreva pelo menos 1 pergunta.');
     for(let i=0;i<data.perguntas.length;i++){const x=data.perguntas[i];if(x.ops.filter(o=>o.trim()).length<2)return ferr(`Pergunta ${i+1}: preencha pelo menos 2 alternativas.`);if(x.c<0||!x.ops[x.c].trim())return ferr(`Pergunta ${i+1}: marque a bolinha da alternativa certa.`)}
@@ -1789,7 +1859,7 @@ async function ligarAvisos(silencioso){
     let sub=await reg.pushManager.getSubscription();
     if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u8(VAPID_PUB)});
     await call('salvarPush',S.me.pin,sub.toJSON());LS.set('qsn_push','1');
-    if(!silencioso){toast('Avisos ligados! Você vai receber as tarefas no celular.');render()}
+    if(!silencioso){toast('Notificações ativadas! Você vai receber os avisos do quiz no celular.');render()}
     return true;
   }catch(e){if(!silencioso)toast('Não foi possível ligar os avisos: '+msg(e));return false}
 }
@@ -2062,10 +2132,222 @@ Object.assign(MOCK,{
       porDia:[0,1,2,3,4,5,6].map(i=>({d:somaDia(isoDia(),-6+i),n:3+i,pessoas:2+(i%4)})),recentes:r}},
 });
 /* ---------- Início ---------- */
+
+/* =====================================================================
+   QUIZ QUINZENAL: janela (dia 1 a 15 · dia 16 ao fim do mês, até 23h49),
+   contagem regressiva, como funciona e pedido de notificações
+   ===================================================================== */
+let QSKEW=0;
+const agoraMs=()=>Date.now()+QSKEW;
+function syncRelogio(d){try{if(d&&d.agora){const s=Date.parse(d.agora);if(s&&Math.abs(s-Date.now())>30000)QSKEW=s-Date.now();else QSKEW=0}}catch(e){}}
+const BEL=3*3600e3; /* Belém: UTC-3, sem horário de verão */
+function belParts(ms){const d=new Date(ms-BEL);return {y:d.getUTCFullYear(),m:d.getUTCMonth()+1,d:d.getUTCDate(),w:d.getUTCDay(),h:d.getUTCHours(),mi:d.getUTCMinutes()}}
+function belMs(y,m,d,h,mi){return Date.UTC(y,m-1,d,h||0,mi||0)+BEL}
+function fimMes(y,m){return new Date(Date.UTC(y,m,0)).getUTCDate()}
+function janela(mes,q){const[y,m]=String(mes).split('-').map(Number);const f=fimMes(y,m);
+  return +q===2?{mes,q:2,ini:16,fim:f,abre:belMs(y,m,16),fecha:belMs(y,m,f,23,50)}:{mes,q:1,ini:1,fim:15,abre:belMs(y,m,1),fecha:belMs(y,m,15,23,50)}}
+function cicloAgora(){const p=belParts(agoraMs());return janela(p.y+'-'+pad2(p.m),p.d<=15?1:2)}
+function cicloSeguinte(c){if(c.q===1)return janela(c.mes,2);const[y,m]=c.mes.split('-').map(Number);return janela(m===12?(y+1)+'-01':y+'-'+pad2(m+1),1)}
+const qAbre=q=>q.abre?Date.parse(q.abre):janela(q.mes,q.quinzena||1).abre;
+const qFecha=q=>q.fecha?Date.parse(q.fecha):janela(q.mes,q.quinzena||1).fecha;
+const qNPerg=q=>q.nPerg||(q.perguntas||[]).length;
+const qzLabel=q=>(+q===2?'2ª':'1ª')+' quinzena';
+function quizzesAbertos(){const t=agoraMs();return S.pub?S.pub.quizzes.filter(q=>q.ativo&&t>=qAbre(q)&&t<qFecha(q)):[]}
+function proximaAbertura(){
+  /* Próximo quiz agendado (se a gestão já criou); senão, o início da próxima quinzena */
+  const t=agoraMs(),ag=S.pub?S.pub.quizzes.filter(q=>q.ativo&&qAbre(q)>t).sort((a,b)=>qAbre(a)-qAbre(b))[0]:null;
+  if(ag)return {ms:qAbre(ag),quiz:ag,c:janela(ag.mes,ag.quinzena||1)};
+  const c=cicloAgora(),n=t<c.abre?c:cicloSeguinte(c);return {ms:n.abre,quiz:null,c:n};
+}
+const DSEM=['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
+function dataBel(ms,comSemana){const p=belParts(ms);return (comSemana?DSEM[p.w]+', ':'')+pad2(p.d)+'/'+pad2(p.m)}
+function prazoTxt(q){return dataBel(qFecha(q)-60000,true)+' às 23h49'}
+
+/* ---------- Contagem regressiva (atualiza sozinha a cada segundo) ---------- */
+function cdPartes(alvo){let s=Math.max(0,Math.floor((alvo-agoraMs())/1000));const d=Math.floor(s/86400);s%=86400;const h=Math.floor(s/3600);s%=3600;return {d,h,m:Math.floor(s/60),s:s%60}}
+function cdInner(alvo,modo){const p=cdPartes(alvo);
+  if(modo==='c')return p.d?`${p.d}d ${p.h}h ${pad2(p.m)}min`:p.h?`${p.h}h ${pad2(p.m)}min`:`${p.m}min ${pad2(p.s)}s`;
+  return [[p.d,p.d===1?'dia':'dias'],[p.h,p.h===1?'hora':'horas'],[p.m,'min'],[p.s,'seg']].map(([v,l])=>`<span class="cdu"><b class="num">${pad2(v)}</b><small>${l}</small></span>`).join('<i class="cdsep">:</i>');}
+function cdHtml(alvo,modo){return modo==='c'?`<b class="num" data-cd="${alvo}" data-cdm="c">${cdInner(alvo,'c')}</b>`:`<div class="cd" data-cd="${alvo}" role="timer" aria-live="off">${cdInner(alvo)}</div>`}
+setInterval(()=>{
+  let virou=false;
+  document.querySelectorAll('[data-cd]').forEach(e=>{const a=+e.dataset.cd;e.innerHTML=cdInner(a,e.dataset.cdm);if(a<=agoraMs()&&!e.dataset.fim){e.dataset.fim=1;virou=true}});
+  if(virou&&!S.play&&!$('#modal').innerHTML)setTimeout(()=>{render();if(S.me)carregar(true);else if(S.view==='admin')carregarGestao()},1200);
+},1000);
+
+/* ---------- Notificações ---------- */
+function estadoAvisos(){
+  if(avisosLigados())return 'on';
+  if(IOS&&!STANDALONE)return 'ios';
+  if(!pushSuportado())return 'nao';
+  if(Notification.permission==='denied')return 'bloq';
+  return 'off';
+}
+function lembDias(){return (S.pub&&S.pub.lembreteDias)||(S.adm&&S.adm.lembreteDias)||2}
+function avisoCard(compacto){
+  const e=estadoAvisos(),n=lembDias();
+  if(e==='on')return compacto?'':`<div class="avon">${ic('bell')}<span><b>Notificações ativadas.</b> Você recebe o aviso quando o quiz abrir e um lembrete a cada ${n} dias enquanto não responder.</span></div>`;
+  if(e==='nao')return '';
+  if(e==='ios')return `<div class="avbox"><div class="avh"><span class="avi">${ic('bell')}</span><div><b>Receba o lembrete do quiz no iPhone</b><small>Primeiro instale o app na tela inicial:</small></div></div>
+    <ol class="avsteps"><li>Toque em <b>Compartilhar</b> (o quadrado com a seta, embaixo).</li><li>Escolha <b>Adicionar à Tela de Início</b>.</li><li>Abra o app pelo ícone novo e toque em <b>Ativar notificações</b>.</li></ol></div>`;
+  if(e==='bloq')return `<div class="avbox bloq"><div class="avh"><span class="avi">${ic('bellOff')}</span><div><b>As notificações estão bloqueadas</b><small>Assim você pode perder o prazo do quiz.</small></div></div>
+    <ol class="avsteps"><li>Toque no <b>cadeado</b> ao lado do endereço do site (ou segure o ícone do app e toque em <b>Informações do app</b>).</li><li>Em <b>Notificações</b>, escolha <b>Permitir</b>.</li><li>Volte aqui e toque em <b>Já liberei</b>.</li></ol>
+    <button class="btn sm block" data-act="qAvisos">${ic('refresh')} Já liberei</button></div>`;
+  return `<div class="avbox"><div class="avh"><span class="avi">${ic('bell')}</span><div><b>Ative as notificações</b><small>Para não perder nenhum quiz.</small></div></div>
+    ${notifPrev()}
+    <p class="avtxt">Avisamos quando o quiz abrir e lembramos <b>a cada ${n} dias</b> se você ainda não respondeu. Quem já respondeu não recebe lembrete.</p>
+    <button class="btn block" data-act="qAvisos">${ic('bell')} Ativar notificações</button></div>`;
+}
+function notifPrev(){
+  const me=eu(),nome=me?String(me.nome).split(' ')[0]:'Ana';
+  return `<div class="nprev" aria-hidden="true"><img src="./icon-192.png" alt=""><div><div class="nph"><b>Quiz Natura</b><small>agora</small></div><b>Falta você no quiz</b><span>${esc(nome)}, você ainda não respondeu. Encerra dia 15 às 23h49.</span></div></div>`;
+}
+function pedirAvisosModal(){
+  if(!S.me||S.view!=='home'||S.play||$('#modal').innerHTML)return;
+  const e=estadoAvisos();if(e==='on'||e==='nao'||e==='bloq')return;
+  const ult=+(LS.get('qsn_pedaviso')||0);if(Date.now()-ult<3*864e5)return;
+  LS.set('qsn_pedaviso',String(Date.now()));
+  M={};
+  openModal(`<div class="avmodal"><span class="avbig">${ic('bell')}</span><h2>Ative as notificações do quiz</h2>
+    <p class="muted" style="margin:6px 0 14px">O quiz abre a cada 15 dias e tem prazo. Com as notificações, o app te avisa no celular.</p>
+    ${notifPrev()}
+    <ul class="avlist"><li>${ic('quiz')}<span>Aviso quando o quiz <b>abrir</b> (dia 1 e dia 16)</span></li><li>${ic('bell')}<span>Lembrete <b>a cada ${lembDias()} dias</b> se ainda não respondeu</span></li><li>${ic('clock')}<span>Alerta no <b>último dia</b>, antes das 23h49</span></li></ul>
+    ${e==='ios'?`<div class="notice" style="margin-top:12px"><b>No iPhone:</b> toque em Compartilhar e depois em <b>Adicionar à Tela de Início</b>. Abra o app pelo ícone novo e ative por lá.</div>
+      <div class="acts" style="margin-top:14px"><button class="btn block" data-act="close">Entendi</button></div>`
+    :`<div class="acts" style="margin-top:16px"><button class="btn alt" data-act="close">Agora não</button><button class="btn" data-act="qAvisosModal">${ic('bell')} Ativar</button></div>
+      <p class="muted" style="font-size:13px;margin:10px 0 0;text-align:center">O celular vai perguntar se pode enviar notificações. Toque em <b>Permitir</b>.</p>`}</div>`);
+}
+
+/* ---------- Ilustração do ciclo (calendário das duas quinzenas) ---------- */
+function cicloIlustrado(){
+  const c=cicloAgora(),[y,m]=c.mes.split('-').map(Number),p=belParts(agoraMs()),n=lembDias();
+  const qs=S.pub?S.pub.quizzes.filter(q=>q.ativo&&q.mes===c.mes):[];
+  const linha=(qn)=>{const j=janela(c.mes,qn),tem=qs.some(q=>(q.quinzena||1)===qn),cel=[];
+    for(let d=j.ini;d<=j.fim;d++){const off=d-j.ini,cls=['dc'];
+      if(d<p.d||(qn===1&&c.q===2))cls.push('pass');if(d===p.d&&qn===c.q)cls.push('hoje');
+      let mk='';if(off===0)mk=`<i class="mk ab" title="Abre">${ic('quiz')}</i>`;else if(d===j.fim)mk=`<i class="mk fe" title="Encerra 23h49">${ic('clock')}</i>`;else if(off%n===0)mk=`<i class="mk lb" title="Lembrete">${ic('bell')}</i>`;
+      cel.push(`<span class="${cls.join(' ')}">${mk}<b class="num">${d}</b></span>`)}
+    return `<div class="cqrow ${qn===c.q?'cur':''}"><div class="cqh"><b>${qzLabel(qn)}</b><span class="muted num">dia ${j.ini} a ${j.fim}${tem?'':' · sem quiz ainda'}</span></div><div class="cqdays" style="grid-template-columns:repeat(${j.fim-j.ini+1},1fr)">${cel.join('')}</div></div>`};
+  return `<div class="panel cqcal"><div class="sec-h" style="margin-bottom:8px"><h2 style="text-transform:capitalize">${esc(MESES[m-1])}</h2><span class="muted" style="font-size:13px">calendário do quiz</span></div>
+    ${linha(1)}${linha(2)}
+    <div class="cqleg"><span><i class="mk ab">${ic('quiz')}</i> Abre 00h</span><span><i class="mk lb">${ic('bell')}</i> Lembrete</span><span><i class="mk fe">${ic('clock')}</i> Encerra 23h49</span><span><i class="dc hoje sw"></i> Hoje</span></div></div>`;
+}
+function comoFunciona(aberto){
+  const n=lembDias();
+  const st=[['quiz','Abre','No <b>dia 1</b> e no <b>dia 16</b> de cada mês, à meia-noite, o quiz novo aparece aqui.'],
+    ['bell','Avisa no celular','Você recebe uma notificação quando abre e um lembrete <b>a cada '+n+' dias</b> até responder.'],
+    ['listCheck','Você responde','Uma vez só, com calma. Leva poucos minutos. Depois aparece a correção.'],
+    ['clock','Encerra','No <b>dia 15</b> e no <b>último dia do mês</b>, às <b>23h49</b>. Depois disso não dá mais para responder.'],
+    ['trophy','Soma pontos','<b>+'+QUIZ_PART+' pts</b> por participar. Os 3 que mais acertarem no seu grupo ganham <b>+5, +3 e +1</b>.']];
+  return `<details class="panel how" ${aberto?'open':''}><summary><span>${ic('info')} Como funciona o quiz</span>${ic('chevR','chv')}</summary>
+    <ol class="steps">${st.map(([i,t,d],k)=>`<li><span class="si">${ic(i)}<i class="num">${k+1}</i></span><div><b>${t}</b><p>${d}</p></div></li>`).join('')}</ol></details>`;
+}
+
+/* ---------- Tela do colaborador: aba Quiz ---------- */
+function quizHero(){
+  const ab=quizzesAbertos(),pend=ab.filter(q=>!minhaResp(q.id));
+  if(pend.length){const q=pend.slice().sort((a,b)=>qFecha(a)-qFecha(b))[0],f=qFecha(q),urg=f-agoraMs()<864e5;
+    return `<section class="qhero ${urg?'urg':''}"><div class="qh-top"><span class="pill">${ic('quiz')} Quiz aberto · ${qzLabel(q.quinzena||1)}</span></div>
+      <div class="qh-l">${urg?'Último dia! Encerra em':'Encerra em'}</div>${cdHtml(f)}
+      <div class="qh-p">${ic('clock')} Prazo: ${esc(prazoTxt(q))}</div>
+      ${pend.length===1?`<button class="btn block qh-b" data-act="startQuiz" data-id="${esc(q.id)}">Responder agora ›</button>`:`<div class="qh-p" style="font-weight:800">${pend.length} quizzes esperando você</div>`}</section>`}
+  const prox=proximaAbertura();
+  if(ab.length)return `<section class="qhero ok"><div class="qh-top"><span class="pill">${ic('checkCircle')} Você já respondeu</span></div>
+      <div class="qh-l">Próximo quiz abre em</div>${cdHtml(prox.ms)}
+      <div class="qh-p">${ic('calendar')} ${esc(dataBel(prox.ms,true))} à meia-noite · ${qzLabel(prox.c.q)}</div></section>`;
+  const c=cicloAgora(),encerrouAgora=agoraMs()>=c.fecha;
+  return `<section class="qhero off"><div class="qh-top"><span class="pill">${ic('clock')} ${encerrouAgora?'Quiz encerrado':'Sem quiz aberto agora'}</span></div>
+      <div class="qh-l">Próximo quiz abre em</div>${cdHtml(prox.ms)}
+      <div class="qh-p">${ic('calendar')} ${esc(dataBel(prox.ms,true))} à meia-noite · ${qzLabel(prox.c.q)}${prox.quiz?'':' (a gestão ainda vai publicar)'}</div></section>`;
+}
+function cQuiz(me){
+  const t=agoraMs(),qp=quizPontos(S.pub),ab=quizzesAbertos();
+  const pend=ab.filter(q=>!minhaResp(q.id));
+  const recentes=S.pub.quizzes.filter(q=>q.ativo&&qAbre(q)<=t&&qFecha(q)>t-75*864e5).sort((a,b)=>qAbre(b)-qAbre(a));
+  const feitos=recentes.filter(q=>minhaResp(q.id)),perdidos=recentes.filter(q=>!minhaResp(q.id)&&qFecha(q)<=t);
+  const nunca=!S.pub.respostas.some(r=>r.colabId===me.id);
+  return `<div><h1 style="font-size:24px">Quiz</h1><p class="muted" style="margin:4px 0 0">Um quiz a cada 15 dias. Fique de olho no prazo.</p></div>
+    ${quizHero()}
+    ${avisoCard(true)}
+    ${pend.length?`<section><div class="sec-h"><h2>Para responder</h2><span class="chip gold num">${pend.length}</span></div><div class="list">${pend.map(q=>`<button class="qitem" data-act="startQuiz" data-id="${esc(q.id)}"><span class="t">${esc(q.titulo)}<br><small class="muted" style="font-weight:600">${qNPerg(q)} pergunta${qNPerg(q)>1?'s':''} · até ${esc(dataBel(qFecha(q)-60000))} 23h49</small></span><span class="chip gold">Começar ›</span></button>`).join('')}</div></section>`:''}
+    ${cicloIlustrado()}
+    ${comoFunciona(nunca)}
+    ${feitos.length||perdidos.length?`<section><div class="sec-h"><h2>Seus últimos quizzes</h2></div><div class="panel" style="padding-block:6px">${feitos.map(q=>{const r=minhaResp(q.id),p=qp[r.id]||{pts:QUIZ_PART,pos:'-'};return `<div class="done"><span class="t">${esc(q.titulo)}<br><small class="muted num">${r.acertos}/${r.total} acertos · ${p.pos}º no grupo</small></span><span class="chip ok num">+${p.pts}</span></div>`}).join('')}${perdidos.map(q=>`<div class="done"><span class="t">${esc(q.titulo)}<br><small class="muted">Encerrou ${esc(dataBel(qFecha(q)-60000))} às 23h49</small></span><span class="chip bad">Não respondeu</span></div>`).join('')}</div></section>`:''}`;
+}
+/* Cartão do quiz na aba Hoje */
+function hojeQuizCard(){
+  const pend=quizzesAbertos().filter(q=>!minhaResp(q.id));
+  if(pend.length){const f=Math.min(...pend.map(qFecha));
+    return `<button class="cta" data-act="ctab" data-k="quiz"><span class="ic">${ic('quiz')}</span><span style="flex:1">Tem ${pend.length>1?pend.length+' quizzes':'quiz'} para responder!<br><small style="font-weight:600">Encerra em ${cdHtml(f,'c')} · vale ${QUIZ_PART} pts + bônus</small></span><span>›</span></button>`}
+  const prox=proximaAbertura();
+  return `<button class="cta soft" data-act="ctab" data-k="quiz"><span class="ic">${ic('clock')}</span><span style="flex:1">${quizzesAbertos().length?'Quiz respondido. Próximo em':'Próximo quiz abre em'} ${cdHtml(prox.ms,'c')}<br><small style="font-weight:600">${esc(dataBel(prox.ms,true))} à meia-noite · toque para ver como funciona</small></span><span>›</span></button>`;
+}
+
+/* ---------- Gestão: status do quiz e lembretes ---------- */
+function statusQuiz(q){
+  const t=agoraMs();
+  if(!q.ativo)return '<span class="chip off">Pausado</span>';
+  if(t<qAbre(q))return `<span class="chip gold">${ic('calendar')} Abre ${esc(dataBel(qAbre(q)))} 00h</span>`;
+  if(t<qFecha(q))return `<span class="chip ok">${ic('clock')} Aberto até ${esc(dataBel(qFecha(q)-60000))} 23h49</span>`;
+  return `<span class="chip off">Encerrado ${esc(dataBel(qFecha(q)-60000))}</span>`;
+}
+function painelLembretes(){
+  const d=S.adm,n=d.lembreteDias||2,t=agoraMs();
+  const ab=d.quizzes.filter(q=>q.ativo&&t>=qAbre(q)&&t<qFecha(q));
+  const ativos=d.equipe.filter(c=>c.ativo),push=new Set(d.pushColabs||[]);
+  const comAviso=ativos.filter(c=>push.has(c.id)).length;
+  const pend=ab.length?ativos.filter(c=>ab.some(q=>!d.respostas.some(r=>r.quizId===q.id&&r.colabId===c.id))):[];
+  const f=ab.length?Math.min(...ab.map(qFecha)):0;
+  return `<div class="panel lemb">
+    <div class="lemb-h"><span class="avi">${ic('bell')}</span><div style="flex:1"><b>Lembretes no celular</b><small class="muted">Saem sozinhos, só para quem ainda não respondeu.</small></div></div>
+    <div class="seg" style="grid-template-columns:repeat(2,1fr)"><button class="${n===2?'on':''}" data-act="lembDias" data-k="2">A cada 2 dias</button><button class="${n===3?'on':''}" data-act="lembDias" data-k="3">A cada 3 dias</button></div>
+    <ul class="lemb-l"><li>${ic('quiz')}<span><b>Dia que abre</b> (1 e 16), às 9h: aviso para todos</span></li><li>${ic('bell')}<span><b>A cada ${n} dias</b>, às 9h: lembrete para quem não respondeu</span></li><li>${ic('clock')}<span><b>Último dia</b> (15 e fim do mês): às 9h e às 18h</span></li></ul>
+    <div class="lemb-s"><span><b class="num">${comAviso}</b> de <b class="num">${ativos.length}</b> com notificações ativadas</span>${ab.length?`<span><b class="num">${pend.length}</b> ainda não responderam · encerra em ${cdHtml(f,'c')}</span>`:'<span>Nenhum quiz aberto agora</span>'}</div>
+    ${pend.length?`<details class="pendl"><summary>Ver quem falta (${pend.length})</summary><div class="pendn">${pend.map(c=>`<span class="chip ${push.has(c.id)?'gold':'off'}">${push.has(c.id)?ic('bell'):ic('bellOff')} ${esc(String(c.nome).split(' ')[0])}</span>`).join('')}</div><p class="muted" style="font-size:13px;margin:8px 0 0">Quem está com o sino cortado não ativou as notificações. Para essas pessoas, avise pelo WhatsApp.</p></details>`:''}
+    <div class="acts"><button class="btn sm" data-act="avisarQuiz" ${pend.length?'':'disabled'}>${ic('megaphone')} Avisar quem falta agora</button></div></div>`;
+}
+function aQuizLista(){
+  const d=S.adm,mes=S.mesQuiz,qs=d.quizzes.filter(q=>q.mes===mes).sort((a,b)=>(a.quinzena||1)-(b.quinzena||1)||String(a.criado).localeCompare(String(b.criado)));
+  const nAt=d.equipe.filter(c=>c.ativo).length;
+  const sem=[1,2].filter(qn=>!qs.some(q=>(q.quinzena||1)===qn)&&janela(mes,qn).fecha>agoraMs());
+  return `<div class="toolbar"><div class="grp"><h2 style="font-size:22px">Quizzes de</h2>${mesSelect('selMesQz',mes)}</div><button class="btn sm" data-act="newQuiz">Novo quiz</button></div>
+   <p class="muted" style="margin:0">Cada quiz vale para uma quinzena: <b>1ª</b> (dia 1 a 15) ou <b>2ª</b> (dia 16 ao fim do mês). Ele abre sozinho à meia-noite do primeiro dia e encerra às <b>23h49</b> do último. Participar vale ${QUIZ_PART} pts; o top 3 de cada grupo ganha +5, +3 e +1.</p>
+   ${painelLembretes()}
+   ${sem.length?`<div class="notice">${ic('info')} Ainda sem quiz na ${sem.map(qn=>`<b>${qzLabel(qn)}</b> (dia ${janela(mes,qn).ini} a ${janela(mes,qn).fim})`).join(' e na ')}. Crie antes para ele abrir sozinho no dia certo.</div>`:''}
+   ${qs.length?`<div class="cards">${qs.map(q=>{const rs=d.respostas.filter(r=>r.quizId===q.id),j=janela(q.mes,q.quinzena||1);
+     return `<div class="card"><div class="row">${statusQuiz(q)}<span class="chip gold num">${qNPerg(q)} pergunta${qNPerg(q)>1?'s':''}</span></div>
+     <div class="qq">${esc(q.titulo)}</div>
+     <div class="muted num" style="font-size:14px">${qzLabel(q.quinzena||1)} · dia ${j.ini} a ${j.fim} · ${rs.length}/${nAt} responderam</div>
+     <div class="acts"><button class="btn sm alt" data-act="editQuiz" data-id="${esc(q.id)}">Editar</button><button class="btn sm alt" data-act="toggleQuiz" data-id="${esc(q.id)}">${q.ativo?'Pausar':'Liberar'}</button><button class="btn sm alt" data-act="delQuiz" data-id="${esc(q.id)}">Excluir</button></div></div>`}).join('')}</div>`
+   :`<div class="empty">Nenhum quiz em ${esc(mesLabel(mes))}. Toque em “Novo quiz”.</div>`}`;
+}
+async function avisarQuizAgora(b){
+  busyBtn(b,true,'Enviando…');
+  try{
+    if(DEMO){await new Promise(r=>setTimeout(r,400));toast('Modo demonstração: nada foi enviado.');busyBtn(b,false,'Avisar quem falta agora');return}
+    const r=await fetch(SUPA_URL.replace(/\/$/,'')+'/functions/v1/lembrar-quiz',{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPA_KEY},body:JSON.stringify({pin:adminPin})});
+    const j=await r.json().catch(()=>null);
+    if(!j||j.erro)throw new Error((j&&j.erro)||'Não foi possível enviar agora.');
+    if(!j.pessoas)toast(j.motivo||'Todo mundo já respondeu.');
+    else if(!j.enviados)toast('Quem falta ainda não ativou as notificações. Avise pelo WhatsApp.');
+    else toast(`Lembrete enviado para ${j.enviados} de ${j.pessoas} pessoa${j.pessoas>1?'s':''}.${j.semCelular?` ${j.semCelular} sem notificações: avise pelo WhatsApp.`:''}`);
+  }catch(e){toast(msg(e))}
+  busyBtn(b,false,ic('megaphone')+' Avisar quem falta agora');
+}
+Object.assign(RPC,{salvarLembreteQuiz:['salvar_lembrete_quiz',['p_pin','p_dias']]});
+Object.assign(A,{
+  qAvisos:async()=>{const ok=await ligarAvisos(false);render();return ok},
+  qAvisosModal:async()=>{closeModal();await ligarAvisos(false);render()},
+  lembDias:async d=>{try{await acao('salvarLembreteQuiz',+d.k);toast(`Lembrete a cada ${d.k} dias`)}catch(e){toast(msg(e))}},
+  avisarQuiz:(d,b)=>{confirmModal('Avisar quem ainda não respondeu?','Quem ativou as notificações recebe agora um lembrete no celular. Quem já respondeu não recebe nada.','Enviar agora',async()=>{await avisarQuizAgora(b)})},
+});
+addEventListener('hashchange',()=>{if(S.me&&S.view==='home'&&(location.hash==='#quiz'||location.hash==='#tarefas')){S.play=null;S.ctab=location.hash.slice(1);render()}});
+
 let TV_MODE=false;try{TV_MODE=new URLSearchParams(location.search).has('tv')}catch(e){}
 if(TV_MODE){S.view='tv';iniciarTv();tvPintar(true)}
 else{
 if(S.me&&location.hash==='#tarefas')S.ctab='tarefas';
+if(S.me&&location.hash==='#quiz')S.ctab='quiz';
 if(S.me&&S.view==='home')registrar('abriu');
 render();
 if(S.view==='admin')carregarGestao();
