@@ -450,49 +450,52 @@ body.tvmode.nocur{cursor:none}
 .tvs.media img.fg,.tvs.media video.fg{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .tvs.media.vid{background:#0f1440}
 /* Animação de boas-vindas (feita em código: quase nada para baixar) */
-.tvs.anim{background:#2B3797;color:#fff;--e:cubic-bezier(.65,0,.35,1)}
+.tvs.anim{background:#2B3797;color:#fff;--e:cubic-bezier(.22,.8,.24,1)}
 .tvs.anim .orb{position:absolute;border-radius:50%;pointer-events:none}
 .tvs.anim .oa{width:100em;height:100em;left:-38em;top:-24em;background:radial-gradient(circle,rgba(255,255,255,.09) 0,rgba(255,255,255,0) 62%);animation:bvOA 12s ease-in-out var(--o) infinite}
 .tvs.anim .ob{width:110em;height:110em;right:-48em;bottom:-33em;background:radial-gradient(circle,rgba(237,28,36,.16) 0,rgba(237,28,36,0) 60%);animation:bvOB 12s ease-in-out var(--o) infinite}
+/* Cada exibição roda UMA vez em 12 s: entra (0-3,5 s), fica parada, e tudo sai junto (10,7-11,6 s) antes da próxima tela */
+.tvs.anim .bvx{position:absolute;inset:0;animation:bvOut 12s cubic-bezier(.45,0,.55,1) var(--o) 1 both}
 .tvs.anim .band{position:absolute;width:57em;height:2em;border-radius:1em;background:#ED1C24}
-.tvs.anim .bl{left:-5.5em;top:10%;animation:bvBL 12s var(--e) var(--o) infinite both}
-.tvs.anim .br{right:-5.5em;bottom:11%;animation:bvBR 12s var(--e) var(--o) infinite both}
+.tvs.anim .bl{left:-5.5em;top:10%;animation:bvBLi 1.2s var(--e) calc(var(--o) + .1s) 1 both}
+.tvs.anim .br{right:-5.5em;bottom:11%;animation:bvBRi 1.2s var(--e) calc(var(--o) + .35s) 1 both}
 .tvs.anim .bvw{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:13em;animation:bvBreath 6s ease-in-out infinite}
-.tvs.anim .bvc{width:86em;height:26em;border-radius:3.4em;background:#fff;display:flex;align-items:center;justify-content:center;gap:4.8em;box-shadow:0 3.7em 8.3em rgba(0,0,0,.28);animation:bvCard 12s var(--e) var(--o) infinite both}
+.tvs.anim .bvc{width:86em;height:26em;border-radius:3.4em;background:#fff;display:flex;align-items:center;justify-content:center;gap:4.8em;box-shadow:0 3.7em 8.3em rgba(0,0,0,.28);animation:bvCardIn 1.1s var(--e) calc(var(--o) + .2s) 1 both}
 .tvs.anim .bvc .sx{height:12em;width:auto}
 .tvs.anim .bvc .dv{width:.3em;height:13em;background:#d6d6e2;border-radius:.2em}
 .tvs.anim .bvc .nt{height:5.8em;width:auto}
 .tvs.anim .tx{display:flex;flex-direction:column;align-items:center;text-align:center;font-family:'Nunito',system-ui,sans-serif;font-weight:900;line-height:1.05}
-.tvs.anim .l{animation:bvLine 12s var(--e) infinite both}
+.tvs.anim .l{animation:bvIn 1s var(--e) 1 both}
 .tvs.anim .l1{font-size:10.6em;letter-spacing:.09em;animation-delay:calc(var(--o) + .9s)}
-.tvs.anim .l2{font-size:11.6em;letter-spacing:.02em;animation-delay:calc(var(--o) + 1.2s)}
-.tvs.anim .l3{font-size:10.6em;letter-spacing:.05em;animation-delay:calc(var(--o) + 1.5s)}
-.tvs.anim .bar{width:31em;height:1.5em;border-radius:.75em;background:#ED1C24;margin-top:6em;animation:bvBar 12s var(--e) var(--o) infinite both}
-@keyframes bvCard{0%,2%{opacity:0;transform:translateY(3.7em) scale(.94)}12%,86%{opacity:1;transform:none}95%,100%{opacity:0;transform:translateY(-2.2em) scale(.98)}}
-@keyframes bvLine{0%{opacity:0;transform:translateY(.6em);filter:blur(.07em)}10%,80%{opacity:1;transform:none;filter:none}90%,100%{opacity:0;transform:translateY(-.35em);filter:blur(.05em)}}
-@keyframes bvBar{0%,20%{transform:scaleX(0)}30%,80%{transform:scaleX(1)}88%,100%{transform:scaleX(0)}}
-@keyframes bvBL{0%,1%{transform:translateX(-110%)}13%,87%{transform:none}99%,100%{transform:translateX(-110%)}}
-@keyframes bvBR{0%,4%{transform:translateX(110%)}16%,84%{transform:none}96%,100%{transform:translateX(110%)}}
+.tvs.anim .l2{font-size:11.6em;letter-spacing:.02em;animation-delay:calc(var(--o) + 1.15s)}
+.tvs.anim .l3{font-size:10.6em;letter-spacing:.05em;animation-delay:calc(var(--o) + 1.4s)}
+.tvs.anim .bar{width:31em;height:1.5em;border-radius:.75em;background:#ED1C24;margin-top:6em;transform-origin:center;animation:bvBarIn .9s var(--e) calc(var(--o) + 1.9s) 1 both}
+@keyframes bvOut{0%,89%{opacity:1;transform:none;filter:none}97%,100%{opacity:0;transform:scale(.985);filter:blur(.35em)}}
+@keyframes bvIn{from{opacity:0;transform:translateY(.6em);filter:blur(.07em)}to{opacity:1;transform:none;filter:none}}
+@keyframes bvCardIn{from{opacity:0;transform:translateY(3.7em) scale(.94)}to{opacity:1;transform:none}}
+@keyframes bvBarIn{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes bvBLi{from{transform:translateX(-110%)}to{transform:none}}
+@keyframes bvBRi{from{transform:translateX(110%)}to{transform:none}}
 @keyframes bvBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.015)}}
 @keyframes bvOA{0%,100%{transform:translate(0,0)}50%{transform:translate(5.5em,8.3em)}}
 @keyframes bvOB{0%,100%{transform:translate(0,0)}50%{transform:translate(-7.4em,-5.5em)}}
 .tvs.anim.frz .bl{top:3.2%}
 .tvs.anim.frz .br{bottom:3.2%}
 .tvs.anim .fz{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 8em;text-align:center;animation:bvBreath 6s ease-in-out infinite}
-.tvs.anim .fz .lg{position:absolute;top:7.5%;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:3.6em;animation:bvCard 12s var(--e) var(--o) infinite both}
+.tvs.anim .fz .lg{position:absolute;top:7.5%;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:3.6em;animation:bvIn 1s var(--e) calc(var(--o) + .2s) 1 both}
 .tvs.anim .fz .lg .sx{height:7em;width:auto}
 .tvs.anim .fz .lg .pl{width:.25em;height:6em;background:rgba(255,255,255,.45);border-radius:.2em}
 .tvs.anim .fz .lg .nt{height:3.5em;width:auto}
-.tvs.anim .fz .sd{display:inline-flex;align-items:center;gap:.5em;padding:.45em 1.2em;border-radius:99em;background:rgba(255,255,255,.13);font-family:'Nunito',sans-serif;font-weight:800;font-size:3.6em;letter-spacing:.02em;animation:bvLine 12s var(--e) infinite both;animation-delay:calc(var(--o) + .5s)}
+.tvs.anim .fz .sd{display:inline-flex;align-items:center;gap:.5em;padding:.45em 1.2em;border-radius:99em;background:rgba(255,255,255,.13);font-family:'Nunito',sans-serif;font-weight:800;font-size:3.6em;letter-spacing:.02em;animation:bvIn 1s var(--e) calc(var(--o) + .5s) 1 both}
 .tvs.anim .fz .sd .i{width:1.15em;height:1.15em}
 .tvs.anim .fz .fr{margin-top:.45em;font-family:'Nunito',system-ui,sans-serif;font-weight:900;line-height:1.1;letter-spacing:.005em;text-wrap:balance}
-.tvs.anim .fz .w{display:inline-block;white-space:pre;animation:bvLine 12s var(--e) infinite both}
+.tvs.anim .fz .w{display:inline-block;white-space:pre;animation:bvIn 1s var(--e) 1 both}
 .tvs.anim .fz .bar{margin-top:5em}
-.tvs.anim .fz .sb{margin-top:1.1em;font-family:'Nunito',sans-serif;font-weight:800;font-size:4.6em;line-height:1.2;color:#FFC7A6;text-wrap:balance;animation:bvLine 12s var(--e) infinite both}
+.tvs.anim .fz .sb{margin-top:1.1em;font-family:'Nunito',sans-serif;font-weight:800;font-size:4.6em;line-height:1.2;color:#FFC7A6;text-wrap:balance;animation:bvIn 1s var(--e) 1 both}
 .tvs.anim .fz .ics{position:absolute;bottom:8.5%;left:0;right:0;display:flex;justify-content:center;gap:5em}
-.tvs.anim .fz .ico{width:10em;height:10em;border-radius:50%;border:.3em solid rgba(255,255,255,.35);display:grid;place-items:center;color:#fff;animation:bvIco 12s var(--e) infinite both}
+.tvs.anim .fz .ico{width:10em;height:10em;border-radius:50%;border:.3em solid rgba(255,255,255,.35);display:grid;place-items:center;color:#fff;animation:bvIcoIn 1s var(--e) 1 both}
 .tvs.anim .fz .ico .i{width:4.6em;height:4.6em}
-@keyframes bvIco{0%,6%{opacity:0;transform:translateY(3em) scale(.8)}18%,84%{opacity:1;transform:none}94%,100%{opacity:0;transform:translateY(-2em) scale(.9)}}
+@keyframes bvIcoIn{from{opacity:0;transform:translateY(3em) scale(.8)}to{opacity:1;transform:none}}
 .mthumb .manim .fq{padding:0 10px;font-size:12px;line-height:1.15}
 .mthumb video{width:100%;height:100%;object-fit:cover;display:block;background:#0f1440}
 .mthumb .mtag{position:absolute;left:6px;bottom:6px;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;background:rgba(0,0,0,.65);color:#fff;font-size:12px;font-weight:700}
@@ -764,7 +767,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261105001021';
+const APP_VERSION='20261105001821';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -1504,9 +1507,9 @@ async function tvVideosPreparar(){
 }
 function tvAnimHtml(nome,dec){
   return `<div class="tvs anim tvfade" style="--o:-${Math.max(0,dec).toFixed(2)}s">
-    <span class="orb oa"></span><span class="orb ob"></span><span class="band bl"></span><span class="band br"></span>
+    <span class="orb oa"></span><span class="orb ob"></span><div class="bvx"><span class="band bl"></span><span class="band br"></span>
     <div class="bvw"><div class="bvc"><img class="sx" src="${LOGO}" alt="Sodexo"><span class="dv"></span>${naturaImg()}</div>
-    <div class="tx"><span class="l l1">SEJAM</span><span class="l l2">BEM-VINDOS</span><span class="l l3">(AS)</span><span class="bar"></span></div></div></div>`;
+    <div class="tx"><span class="l l1">SEJAM</span><span class="l l2">BEM-VINDOS</span><span class="l l3">(AS)</span><span class="bar"></span></div></div></div></div>`;
 }
 function saudacao(b){return b.h>=5&&b.h<12?['Bom dia!','sun']:b.h>=12&&b.h<18?['Boa tarde!','sunset']:['Boa noite!','moon']}
 function tvFraseHtml(m,b,dec){
@@ -1516,15 +1519,15 @@ function tvFraseHtml(m,b,dec){
   const words=ws.map((w,i)=>`<span class="w" style="animation-delay:calc(var(--o) + ${(.9+i*passo).toFixed(2)}s)">${esc(w)}</span>`).join(' ');
   const [sd,sic]=saudacao(b);
   return `<div class="tvs anim frz tvfade" style="--o:-${Math.max(0,dec).toFixed(2)}s">
-    <span class="orb oa"></span><span class="orb ob"></span><span class="band bl"></span><span class="band br"></span>
+    <span class="orb oa"></span><span class="orb ob"></span><div class="bvx"><span class="band bl"></span><span class="band br"></span>
     <div class="fz">
       <div class="lg"><img class="sx" src="${LOGO_W}" alt="Sodexo"><span class="pl"></span>${naturaImg('#FFFFFF')}</div>
       <span class="sd">${ic(sic)} ${sd}</span>
       <div class="fr" style="font-size:${f.toFixed(2)}em">${words}</div>
-      <span class="bar"></span>
-      ${m.s?`<div class="sb" style="animation-delay:calc(var(--o) + ${(1.2+ws.length*passo).toFixed(2)}s)">${esc(m.s)}</div>`:''}
+      <span class="bar" style="animation-delay:calc(var(--o) + ${(1.5+ws.length*passo).toFixed(2)}s)"></span>
+      ${m.s?`<div class="sb" style="animation-delay:calc(var(--o) + ${(1.8+ws.length*passo).toFixed(2)}s)">${esc(m.s)}</div>`:''}
       <div class="ics">${['salad','apple','utensils'].map((k,i)=>`<span class="ico" style="animation-delay:calc(var(--o) + ${(.3+i*.25).toFixed(2)}s)">${ic(k)}</span>`).join('')}</div>
-    </div></div>`;
+    </div></div></div>`;
 }
 function tvMidiaHtml(m,b,dec){
   if(m.tipo==='anim'&&m.nome==='frase')return tvFraseHtml(m,b,dec);
@@ -1637,7 +1640,7 @@ function iniciarTv(){
   setInterval(tvVideosPreparar,2*60000);/* tenta de novo vídeos que não baixaram */
   tvAcordada();
   setInterval(tvChecar,8000);          /* tempo real: confere mudanças a cada 8 segundos */
-  setInterval(()=>tvPintar(false),2000);/* troca de tela no horário certo */
+  setInterval(()=>tvPintar(false),250);/* troca de tela no segundo certo (o loop da animação fecha antes da próxima tela) */
   setInterval(tvBaixar,10*60000);
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){tvAcordada();tvChecar()}});
   addEventListener('online',tvChecar);
