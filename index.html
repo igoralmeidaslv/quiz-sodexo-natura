@@ -476,6 +476,24 @@ body.tvmode.nocur{cursor:none}
 @keyframes bvBreath{0%,100%{transform:scale(1)}50%{transform:scale(1.015)}}
 @keyframes bvOA{0%,100%{transform:translate(0,0)}50%{transform:translate(5.5em,8.3em)}}
 @keyframes bvOB{0%,100%{transform:translate(0,0)}50%{transform:translate(-7.4em,-5.5em)}}
+.tvs.anim.frz .bl{top:3.2%}
+.tvs.anim.frz .br{bottom:3.2%}
+.tvs.anim .fz{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 8em;text-align:center;animation:bvBreath 6s ease-in-out infinite}
+.tvs.anim .fz .lg{position:absolute;top:7.5%;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:3.6em;animation:bvCard 12s var(--e) var(--o) infinite both}
+.tvs.anim .fz .lg .sx{height:7em;width:auto}
+.tvs.anim .fz .lg .pl{width:.25em;height:6em;background:rgba(255,255,255,.45);border-radius:.2em}
+.tvs.anim .fz .lg .nt{height:3.5em;width:auto}
+.tvs.anim .fz .sd{display:inline-flex;align-items:center;gap:.5em;padding:.45em 1.2em;border-radius:99em;background:rgba(255,255,255,.13);font-family:'Nunito',sans-serif;font-weight:800;font-size:3.6em;letter-spacing:.02em;animation:bvLine 12s var(--e) infinite both;animation-delay:calc(var(--o) + .5s)}
+.tvs.anim .fz .sd .i{width:1.15em;height:1.15em}
+.tvs.anim .fz .fr{margin-top:.45em;font-family:'Nunito',system-ui,sans-serif;font-weight:900;line-height:1.1;letter-spacing:.005em;text-wrap:balance}
+.tvs.anim .fz .w{display:inline-block;white-space:pre;animation:bvLine 12s var(--e) infinite both}
+.tvs.anim .fz .bar{margin-top:5em}
+.tvs.anim .fz .sb{margin-top:1.1em;font-family:'Nunito',sans-serif;font-weight:800;font-size:4.6em;line-height:1.2;color:#FFC7A6;text-wrap:balance;animation:bvLine 12s var(--e) infinite both}
+.tvs.anim .fz .ics{position:absolute;bottom:8.5%;left:0;right:0;display:flex;justify-content:center;gap:5em}
+.tvs.anim .fz .ico{width:10em;height:10em;border-radius:50%;border:.3em solid rgba(255,255,255,.35);display:grid;place-items:center;color:#fff;animation:bvIco 12s var(--e) infinite both}
+.tvs.anim .fz .ico .i{width:4.6em;height:4.6em}
+@keyframes bvIco{0%,6%{opacity:0;transform:translateY(3em) scale(.8)}18%,84%{opacity:1;transform:none}94%,100%{opacity:0;transform:translateY(-2em) scale(.9)}}
+.mthumb .manim .fq{padding:0 10px;font-size:12px;line-height:1.15}
 .mthumb video{width:100%;height:100%;object-fit:cover;display:block;background:#0f1440}
 .mthumb .mtag{position:absolute;left:6px;bottom:6px;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;background:rgba(0,0,0,.65);color:#fff;font-size:12px;font-weight:700}
 .mthumb .mtag .i{width:14px;height:14px}
@@ -746,7 +764,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261104173728';
+const APP_VERSION='20261105001021';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -1452,6 +1470,7 @@ function tvStandbyHtml(b,emPreparo){
 /* Mídias do stand-by: imagem (data:image), animação pronta (anim:boasvindas) e vídeo (video:<segundos>:<link>) */
 function midiaInfo(s){
   s=String(s||'');
+  if(s.startsWith('anim:frase:')){const [t,sb]=s.slice(11).split('|');let a='',b='';try{a=decodeURIComponent(t||'');b=decodeURIComponent(sb||'')}catch(e){}return {tipo:'anim',nome:'frase',t:a,s:b,d:12,src:s}}
   if(s.startsWith('anim:'))return {tipo:'anim',nome:s.slice(5),d:12,src:s};
   const v=s.match(/^video:(\d+):(.+)$/);
   if(v)return {tipo:'video',d:Math.min(60,Math.max(6,+v[1]||12)),url:v[2],src:s};
@@ -1489,7 +1508,26 @@ function tvAnimHtml(nome,dec){
     <div class="bvw"><div class="bvc"><img class="sx" src="${LOGO}" alt="Sodexo"><span class="dv"></span>${naturaImg()}</div>
     <div class="tx"><span class="l l1">SEJAM</span><span class="l l2">BEM-VINDOS</span><span class="l l3">(AS)</span><span class="bar"></span></div></div></div>`;
 }
+function saudacao(b){return b.h>=5&&b.h<12?['Bom dia!','sun']:b.h>=12&&b.h<18?['Boa tarde!','sunset']:['Boa noite!','moon']}
+function tvFraseHtml(m,b,dec){
+  const t=String(m.t||'').trim(),L=Math.max(8,t.length);
+  const f=Math.min(12.5,Math.max(6,Math.sqrt(7000/L)));
+  const ws=t.split(/\s+/).filter(Boolean),passo=Math.min(.14,1.6/Math.max(1,ws.length));
+  const words=ws.map((w,i)=>`<span class="w" style="animation-delay:calc(var(--o) + ${(.9+i*passo).toFixed(2)}s)">${esc(w)}</span>`).join(' ');
+  const [sd,sic]=saudacao(b);
+  return `<div class="tvs anim frz tvfade" style="--o:-${Math.max(0,dec).toFixed(2)}s">
+    <span class="orb oa"></span><span class="orb ob"></span><span class="band bl"></span><span class="band br"></span>
+    <div class="fz">
+      <div class="lg"><img class="sx" src="${LOGO_W}" alt="Sodexo"><span class="pl"></span>${naturaImg('#FFFFFF')}</div>
+      <span class="sd">${ic(sic)} ${sd}</span>
+      <div class="fr" style="font-size:${f.toFixed(2)}em">${words}</div>
+      <span class="bar"></span>
+      ${m.s?`<div class="sb" style="animation-delay:calc(var(--o) + ${(1.2+ws.length*passo).toFixed(2)}s)">${esc(m.s)}</div>`:''}
+      <div class="ics">${['salad','apple','utensils'].map((k,i)=>`<span class="ico" style="animation-delay:calc(var(--o) + ${(.3+i*.25).toFixed(2)}s)">${ic(k)}</span>`).join('')}</div>
+    </div></div>`;
+}
 function tvMidiaHtml(m,b,dec){
+  if(m.tipo==='anim'&&m.nome==='frase')return tvFraseHtml(m,b,dec);
   if(m.tipo==='anim')return tvAnimHtml(m.nome,dec);
   const prox=REF[proximaRefeicao(b)];
   const faixa=`<div class="strip">`;
@@ -1660,7 +1698,7 @@ function aCardapio(){
       <p class="muted" style="margin:0;font-size:14px">Abra esse link no navegador da TV e toque em <b>Tela cheia</b>. Ela troca sozinha: <b>Almoço 10h às 13h</b>, <b>Janta 17h30 às 20h30</b> e <b>Ceia 00h às 2h30</b>, quando o cardápio estiver <b>Pronto</b>. Fora desses horários fica no stand-by com os logos.</p>
       <div><div class="sec-h"><h2 style="font-size:17px">Mídias do stand-by <span class="muted num" style="font-size:14px">(${S.card.midias.length}/10)</span></h2></div>
       <p class="muted" style="margin:0 0 10px;font-size:14px">Opcional. Tudo em pé (retrato, 1080 × 1920). Imagens e a animação ficam 12 segundos; vídeos ficam o tempo deles (até 60 s, máx. 20 MB). A TV baixa cada vídeo uma vez e guarda no aparelho. Sem mídias, ficam só os logos e os horários.</p>
-      <div class="mgrid">${S.card.midias.map(midiaThumb).join('')}${S.card.midias.length<10?`<label class="mthumb add" for="m-up">${ic('image')}<br>Adicionar imagem</label><label class="mthumb add" for="v-up">${ic('film')}<br>Adicionar vídeo</label>${S.card.midias.some(m=>m.foto==='anim:boasvindas')?'':`<button type="button" class="mthumb add btnlike" data-act="mAnim">${ic('sparkles')}<br>Animação de boas-vindas</button>`}`:''}</div><input id="m-up" type="file" accept="image/*" hidden><input id="v-up" type="file" accept="video/mp4,video/webm" hidden></div>
+      <div class="mgrid">${S.card.midias.map(midiaThumb).join('')}${S.card.midias.length<10?`<label class="mthumb add" for="m-up">${ic('image')}<br>Adicionar imagem</label><label class="mthumb add" for="v-up">${ic('film')}<br>Adicionar vídeo</label><button type="button" class="mthumb add btnlike" data-act="mFrase">${ic('message')}<br>Frase animada</button>${S.card.midias.some(m=>m.foto==='anim:boasvindas')?'':`<button type="button" class="mthumb add btnlike" data-act="mAnim">${ic('sparkles')}<br>Animação de boas-vindas</button>`}`:''}</div><input id="m-up" type="file" accept="image/*" hidden><input id="v-up" type="file" accept="video/mp4,video/webm" hidden></div>
     </section>
 
     <section class="panel stack" style="gap:10px"><div class="sec-h" style="margin:0"><h2>${ic('utensils')} Banco de pratos <span class="muted num" style="font-size:14px">(${S.card.pratos.length})</span></h2><button class="btn sm alt" data-act="pNovo">${ic('plus')} Prato</button></div>
@@ -1671,6 +1709,7 @@ function aCardapio(){
 function midiaThumb(m){
   const x=midiaInfo(m.foto);
   const corpo=x.tipo==='video'?`<video src="${esc(x.url)}#t=0.5" muted playsinline preload="metadata"></video><span class="mtag">${ic('film')} Vídeo · ${x.d}s</span>`
+    :x.tipo==='anim'&&x.nome==='frase'?`<div class="manim"><span class="fq">${esc(x.t)}</span></div><span class="mtag">${ic('sparkles')} Frase</span>`
     :x.tipo==='anim'?`<div class="manim"><img src="${LOGO_W}" alt=""><span>SEJAM<br>BEM-VINDOS<br>(AS)</span></div><span class="mtag">${ic('sparkles')} Animação</span>`
     :`<img src="${esc(m.foto)}" alt="">`;
   return `<div class="mthumb">${corpo}<button data-act="mRm" data-id="${esc(m.id)}" aria-label="Remover mídia">${ic('x')}</button></div>`;
@@ -2066,6 +2105,16 @@ Object.assign(A,{
     await call('removerMidia',adminPin,d.id);
     if(x&&x.tipo==='video'&&!DEMO){const k=x.url.split('/tv-midias/')[1];if(k)funcaoMidia({acao:'apagar',path:k}).catch(()=>{})}
     await carregarCardapio();toast('Mídia removida')}),
+  mFrase:()=>{M={};openModal(`<h2>Frase animada</h2>
+    <p class="muted" style="margin-top:0">Aparece na TV com os logos, a saudação do horário (bom dia, boa tarde ou boa noite) e animação em loop. Fica 12 segundos no rodízio.</p>
+    <div class="fld"><label for="fr-t">Frase principal</label><input id="fr-t" maxlength="90" placeholder="Ex.: Comer bem é cuidar de você." style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px;width:100%"></div>
+    <div class="fld"><label for="fr-s">Complemento (opcional)</label><input id="fr-s" maxlength="60" placeholder="Ex.: Boa refeição e ótimo turno!" style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px;width:100%"></div>
+    <p class="ferr"></p><div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="mFraseOk">Colocar na TV</button></div>`)},
+  mFraseOk:async(d,b)=>{const t=$('#fr-t').value.replace(/\|/g,' ').trim(),sb=$('#fr-s').value.replace(/\|/g,' ').trim();
+    if(t.length<3)return ferr('Escreva a frase principal.');
+    busyBtn(b,true,'Salvando…');
+    try{await call('salvarMidia',adminPin,'anim:frase:'+encodeURIComponent(t)+(sb?'|'+encodeURIComponent(sb):''));closeModal();await carregarCardapio();toast('Frase adicionada ao stand-by')}
+    catch(e){busyBtn(b,false,'Colocar na TV');ferr(msg(e))}},
   mAnim:async(d,b)=>{try{await call('salvarMidia',adminPin,'anim:boasvindas');await carregarCardapio();toast('Animação de boas-vindas adicionada ao stand-by')}catch(e){toast('Não foi possível adicionar: '+msg(e))}},
   lDia:d=>{S.ldia=somaDia(S.ldia,+d.k);render()},
   lHoje:()=>{S.ldia=isoDia();render()},
