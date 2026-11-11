@@ -701,6 +701,9 @@ const GRUPOS={
 };
 const ORDEM_G=['coz','ofc','lim'];
 const QUIZ_PART=3, QUIZ_BONUS=[5,3,1];
+/* Escala 12x36: trabalha dia sim, dia não, então é avaliada cerca de metade dos dias. A avaliação diária vale em dobro. */
+const PESO_ESCALA={'5x2':1,'12x36':2};
+function pesoDe(c){return PESO_ESCALA[c&&c.escala]||1}
 function itensDe(c){const g=GRUPOS[c&&c.grupo];return g?g.itens.filter(i=>i[4]!=='extra'||c.extra):[]}
 function maxDia(c){return itensDe(c).reduce((s,i)=>s+i[2],0)}
 function ptsItens(c,ids){const set=new Set(ids);return itensDe(c).reduce((s,i)=>s+(set.has(i[0])?i[2]:0),0)}
@@ -734,7 +737,7 @@ async function call(fn,...args){
 const MOCK=(()=>{
   const m=mesKey();
   const nomes=[['Ana (exemplo)','coz','1111',true],['Bia (exemplo)','coz','1112',false],['Caio (exemplo)','coz','1113',false],['Davi (exemplo)','ofc','2221',false],['Eva (exemplo)','ofc','2222',false],['Fábio (exemplo)','lim','3331',false],['Gil (exemplo)','lim','3332',false]];
-  const db={pin:'123456',equipe:nomes.map(([nome,grupo,pin,extra],i)=>({id:'e'+i,nome,grupo,pin,extra,ativo:true,foto:'',criado:''})),
+  const db={pin:'123456',equipe:nomes.map(([nome,grupo,pin,extra],i)=>({id:'e'+i,nome,grupo,pin,extra,escala:i===1?'12x36':'5x2',ativo:true,foto:'',criado:''})),
     quizzes:[{id:'q1',titulo:'Boas práticas: semana 1',mes:m,quinzena:new Date().getDate()<=15?1:2,ativo:true,criado:'1',perguntas:[
       {p:'Qual a temperatura mínima para manter alimentos quentes no balcão térmico?',ops:['40 °C','50 °C','60 °C','75 °C'],c:2},
       {p:'Na lavagem das mãos, por quanto tempo esfregamos com sabão, no mínimo?',ops:['5 segundos','10 segundos','20 segundos','Não importa'],c:2},
@@ -767,7 +770,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261105001821';
+const APP_VERSION='20261111233214';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -806,7 +809,8 @@ function anos(d){return [...new Set(meses(d).map(m=>m.slice(0,4)))].sort().rever
 function placar(d,mes){
   const t={},qp=quizPontos(d);
   const get=id=>t[id]||(t[id]={aval:0,quiz:0,dias:0,nq:0});
-  d.avaliacoes.forEach(a=>{if(noPeriodo(mes,a.mes)){const o=get(a.colabId);o.aval+=Number(a.pontos)||0;o.dias++}});
+  const peso={};d.equipe.forEach(c=>peso[c.id]=pesoDe(c));
+  d.avaliacoes.forEach(a=>{if(noPeriodo(mes,a.mes)){const o=get(a.colabId);o.aval+=(Number(a.pontos)||0)*(peso[a.colabId]||1);o.dias++}});
   d.respostas.forEach(r=>{if(noPeriodo(mes,r.mes)&&qp[r.id]){const o=get(r.colabId);o.quiz+=qp[r.id].pts;o.nq++}});
   Object.values(t).forEach(o=>o.total=o.aval+o.quiz);
   return t;
@@ -979,6 +983,7 @@ function cHist(me){
   const dias=S.pub.avaliacoes.filter(a=>a.colabId===me.id&&a.mes===mes).sort((a,b)=>b.data.localeCompare(a.data));
   const passados=meses(S.pub).filter(m=>m<mes);
   return `<div><h1 style="font-size:24px">Histórico</h1></div>
+    ${pesoDe(me)>1?'<div class="panel" style="font-size:14px"><b>Sua escala é 12x36.</b> Como você trabalha dia sim, dia não, cada avaliação vale <b>em dobro</b> no ranking. Abaixo aparecem os pontos do dia; no ranking eles contam x2.</div>':''}
     <section><div class="sec-h"><h2>Este mês, dia a dia</h2></div>
     ${dias.length?`<div class="panel daylist" style="padding-block:4px">${dias.map(a=>`<div class="done"><span class="t" style="text-transform:capitalize">${esc(diaLabel(a.data))}</span><span class="chip ${a.pontos>=maxDia(me)?'ok':'gold'} num">${a.pontos}/${maxDia(me)}</span></div>`).join('')}</div>`:'<div class="empty">Nenhuma avaliação neste mês ainda.</div>'}</section>
     ${anos(S.pub).filter(a=>a<anoKey()).map(a=>{const rk=ranking(S.pub,a,me.grupo),mine=rk.find(x=>x.c.id===me.id),p=premioDe(S.pub,a,me.grupo);
@@ -1028,7 +1033,7 @@ function aRanking(){
     const pd=(x,cls)=>x?`<div class="pd ${cls}"><span class="medal-e">${MED[x.pos]||x.pos+'º'}</span>${avatar(x.c,cls==='p1'?64:52)}<span class="nm">${esc(x.c.nome)}</span><span class="pt num">${x.total}</span>${p['p'+x.pos]?`<span class="prz">${esc(p['p'+x.pos])}</span>`:''}</div>`:'<div></div>';
     return `<section class="stack" style="gap:12px"><h2 style="font-size:20px">${esc(GRUPOS[g].nome)}</h2>
       ${top.length?`<div class="podium">${pd(top[1],'p2')}${pd(top[0],'p1')}${pd(top[2],'p3')}</div>`:'<div class="empty">Sem pontos ainda.</div>'}
-      <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Nome</th><th class="r">Aval.</th><th class="r">Quiz</th><th class="r">Total</th></tr></thead><tbody>${rk.map(x=>`<tr><td class="num">${x.pos}º</td><td><span class="who">${avatar(x.c,28)}${esc(x.c.nome)}</span></td><td class="r num">${x.aval}</td><td class="r num">${x.quiz}</td><td class="r num"><b>${x.total}</b></td></tr>`).join('')}</tbody></table></div></section>`};
+      <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Nome</th><th class="r">Aval.</th><th class="r">Quiz</th><th class="r">Total</th></tr></thead><tbody>${rk.map(x=>`<tr><td class="num">${x.pos}º</td><td><span class="who">${avatar(x.c,28)}${esc(x.c.nome)}${pesoDe(x.c)>1?' <small class="chip gold" title="Escala 12x36: avaliação vale em dobro">x2</small>':''}</span></td><td class="r num">${x.aval}</td><td class="r num">${x.quiz}</td><td class="r num"><b>${x.total}</b></td></tr>`).join('')}</tbody></table></div></section>`};
   return `<div class="seg" style="grid-template-columns:repeat(2,1fr);max-width:420px"><button class="${ano?'':'on'}" data-act="admModo" data-k="mes">${ic('calendar')} Do mês</button><button class="${ano?'on':''}" data-act="admModo" data-k="ano">${ic('trophy')} Do ano (acumulado)</button></div>
     <div class="toolbar"><div class="grp"><h2 style="font-size:22px">Ranking ${ano?'de':'de'}</h2>${ano?anoSelect('selAnoRk',mes):mesSelect('selMesRk',mes)}</div><div class="grp"><button class="btn sm alt" data-act="reloadAdm">Atualizar</button>${d.planilhaUrl?`<a class="btn sm alt" href="${esc(d.planilhaUrl)}" target="_blank" rel="noopener">Abrir planilha</a>`:''}</div></div>
     <div class="stats"><div class="stat"><b class="num">${nAval}</b><span>avaliações no ${ano?'ano':'mês'}</span></div><div class="stat"><b class="num">${nQ}</b><span>quizzes no ${ano?'ano':'mês'}</span></div><div class="stat"><b class="num">${nPr}/9</b><span>prêmios ${ano?'do ano':'do mês'}</span></div></div>
@@ -1051,7 +1056,7 @@ function msgGrupo(){
 function aEquipe(){
   const d=S.adm;
   const semG=d.equipe.filter(c=>!GRUPOS[c.grupo]);
-  const card=c=>`<div class="card"><div class="row">${avatar(c,48)}<div style="min-width:0;flex:1"><b style="display:block">${esc(c.nome)}</b><span class="muted" style="font-size:13px">${GRUPOS[c.grupo]?esc(GRUPOS[c.grupo].um):'Sem grupo'}${c.extra?' · +2 incentivo':''}</span></div></div>
+  const card=c=>`<div class="card"><div class="row">${avatar(c,48)}<div style="min-width:0;flex:1"><b style="display:block">${esc(c.nome)}</b><span class="muted" style="font-size:13px">${GRUPOS[c.grupo]?esc(GRUPOS[c.grupo].um):'Sem grupo'}${c.extra?' · +2 incentivo':''}${c.escala==='12x36'?' · 12x36 (avaliação x2)':' · 5x2'}</span></div></div>
      <div class="row" style="justify-content:space-between"><span>PIN <span class="pinv num">${esc(c.pin)}</span></span>${c.ativo?'':'<span class="chip off">Inativo</span>'}</div>
      ${c.telefone?`<span class="muted num" style="font-size:13px">${ic('phone')} ${esc(telFmt(c.telefone))}</span>`:''}
      <div class="acts"><a class="btn sm" href="${esc(waLink(c.telefone,msgPin(c)))}" target="_blank" rel="noopener">${ic('message')} Enviar PIN</a><button class="btn sm alt" data-act="editColab" data-id="${esc(c.id)}">Editar</button><button class="btn sm alt" data-act="delColab" data-id="${esc(c.id)}">Remover</button></div></div>`;
@@ -1175,6 +1180,7 @@ function colabForm(id){
    <div class="fld"><span class="lb">Foto</span><div class="photo"><span id="fprev">${avatar({nome:c?c.nome:'?',foto:M.foto},72)}</span><div style="display:flex;flex-direction:column;gap:6px"><label class="btn sm alt" for="f-foto" style="cursor:pointer">Escolher foto</label><input id="f-foto" type="file" accept="image/*" hidden>${M.foto?'<button class="link" style="padding:0;text-align:left" data-act="rmFoto">Remover foto</button>':''}</div></div></div>
    <div class="fld"><label for="f-nome">Nome</label><input id="f-nome" type="text" value="${esc(c?c.nome:'')}" autocomplete="off"></div>
    <div class="fld"><label for="f-grupo">Grupo (define o ranking)</label><select id="f-grupo" style="width:100%">${ORDEM_G.map(k=>`<option value="${k}" ${k===g?'selected':''}>${esc(GRUPOS[k].nome)}</option>`).join('')}</select></div>
+   <div class="fld"><label for="f-escala">Escala de trabalho</label><select id="f-escala" style="width:100%"><option value="5x2" ${!c||c.escala!=='12x36'?'selected':''}>5x2 (segunda a sexta)</option><option value="12x36" ${c&&c.escala==='12x36'?'selected':''}>12x36 (dia sim, dia não): avaliação vale em dobro</option></select></div>
    <label class="check" id="f-extra-w" style="margin-bottom:14px" ${g==='coz'?'':'hidden'}><input id="f-extra" type="checkbox" ${c&&c.extra?'checked':''}> Avaliar também “Incentivar o time” (+2)</label>
    <div class="fld"><label for="f-pin">PIN de 4 números</label><div style="display:flex;gap:8px"><input id="f-pin" type="tel" inputmode="numeric" maxlength="4" value="${esc(c?c.pin:freePin())}" class="num"><button class="btn sm alt" data-act="genPin" style="min-height:44px">Gerar outro</button></div><span class="hint">Entregue o PIN só para a pessoa.</span></div>
    <div class="fld"><label for="f-tel">WhatsApp com DDD (opcional)</label><input id="f-tel" type="tel" inputmode="tel" placeholder="Ex.: 91 98888-7777" value="${esc(c?telFmt(c.telefone):'')}"><span class="hint">Com o número, o botão “Enviar PIN” abre direto na conversa da pessoa.</span></div>
@@ -1262,7 +1268,7 @@ const A={
   genPin:()=>{$('#f-pin').value=freePin()},
   rmFoto:()=>{M.foto='';$('#fprev').innerHTML=avatar({nome:$('#f-nome').value||'?'},72)},
   saveColab:async(d,b)=>{
-    const data={id:M.id||'',nome:$('#f-nome').value.trim(),grupo:$('#f-grupo').value,extra:$('#f-grupo').value==='coz'&&$('#f-extra').checked,pin:$('#f-pin').value.trim(),telefone:$('#f-tel').value.trim(),ativo:$('#f-ativo').checked,foto:M.foto||''};
+    const data={id:M.id||'',nome:$('#f-nome').value.trim(),grupo:$('#f-grupo').value,extra:$('#f-grupo').value==='coz'&&$('#f-extra').checked,pin:$('#f-pin').value.trim(),telefone:$('#f-tel').value.trim(),escala:$('#f-escala').value,ativo:$('#f-ativo').checked,foto:M.foto||''};
     if(!data.nome)return ferr('Informe o nome.');
     if(!/^\d{4}$/.test(data.pin))return ferr('O PIN precisa ter exatamente 4 números.');
     busyBtn(b,true,'Salvando…');
