@@ -941,7 +941,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261112144159';
+const APP_VERSION='20261112144346';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -1762,8 +1762,9 @@ function tvTela(){
       const ads=(D.anuncios||[]).map(midiaInfo).filter(m=>(m.tipo!=='video'||TVV.prontos[m.url])&&(m.nome!=='destaque'||dq));
       if(ads.length&&!TV.semAnuncio){
         const M=Math.min(300,Math.max(20,+D.anuncioCada||45)),seq=[];
-        /* Vídeo no meio do cardápio fica no máximo 15 s, para não esconder o cardápio por muito tempo */
-        ads.forEach(a=>{seq.push({tipo:'menu',d:M});seq.push(a.tipo==='video'?{...a,d:Math.min(a.d,15)}:a)});
+        /* Cardápio por M s, depois TODOS os anúncios em sequência, e volta ao cardápio.
+           Vídeo no meio do cardápio fica no máximo 15 s, para não esconder o cardápio por muito tempo */
+        seq.push({tipo:'menu',d:M});ads.forEach(a=>seq.push(a.tipo==='video'?{...a,d:Math.min(a.d,15)}:a));
         const total=seq.reduce((a,m)=>a+m.d,0);
         let t=(Date.now()/1000)%total,i=0;while(i<seq.length-1&&t>=seq[i].d){t-=seq[i].d;i++}
         const m=seq[i];
@@ -1955,7 +1956,7 @@ function midiaLista(lg){
   const cada=+(S.card.anuncioCada||45);
   const tit=lg==='cardapio'?`<div class="mlist-h"><h2 style="font-size:17px;margin:0">Anúncios durante o cardápio <span class="muted num" style="font-size:14px">(${n}/10)</span></h2>
       <label style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700">Cardápio fica <select id="an-cada" aria-label="Tempo do cardápio entre anúncios">${[...new Set([30,45,60,90,120,cada])].sort((a,b)=>a-b).map(v=>`<option value="${v}"${v===cada?' selected':''}>${v} s</option>`).join('')}</select> entre anúncios</label></div>
-      <p class="muted" style="margin:8px 0 10px;font-size:14px">Na hora do almoço, da janta e da ceia, a TV mostra o cardápio por ${cada} segundos, depois <b>um</b> anúncio, volta ao cardápio, depois o próximo anúncio, e assim por diante. Cada anúncio fica 12 segundos (vídeo: até 15 segundos aqui, para não esconder o cardápio). Sem anúncios, fica só o cardápio.</p>`
+      <p class="muted" style="margin:8px 0 10px;font-size:14px">Na hora do almoço, da janta e da ceia, a TV mostra o cardápio por ${cada} segundos, depois passa <b>todos os anúncios em sequência</b> e volta ao cardápio. Cada anúncio fica 12 segundos (vídeo: até 15 segundos aqui, para não esconder o cardápio). Sem anúncios, fica só o cardápio.</p>`
     :`<div class="sec-h"><h2 style="font-size:17px">Mídias do stand-by <span class="muted num" style="font-size:14px">(${n}/10)</span></h2></div>
       <p class="muted" style="margin:0 0 10px;font-size:14px">Fora do horário das refeições. Tudo em pé (retrato, 1080 × 1920). Imagens e animações ficam 12 segundos; vídeos ficam o tempo deles (até 60 s, máx. 20 MB). A TV baixa cada vídeo uma vez e guarda no aparelho. Sem mídias, ficam só os logos e os horários.</p>`;
   return `<div style="${lg==='cardapio'?'margin-top:18px;padding-top:16px;border-top:1px solid var(--line)':''}">${tit}
