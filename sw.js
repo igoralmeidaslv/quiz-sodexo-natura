@@ -2,7 +2,7 @@
    - Página: sempre busca a versão mais nova na internet (rede primeiro); sem internet, usa a cópia salva.
    - Dados (Supabase) nunca passam pelo cache.
    - Cada publicação troca a VERSION, e o app se atualiza sozinho. */
-const VERSION='20261112144001';
+const VERSION='20261112144159';
 const CACHE='quiznatura-'+VERSION;
 const SHELL=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./favicon.ico','./apple-touch-icon.png'];
 
