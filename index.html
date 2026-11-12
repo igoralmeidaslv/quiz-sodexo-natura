@@ -363,6 +363,33 @@ table.esc button.nmb{background:none;border:0;padding:0;font:inherit;font-weight
 .escolha button{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:10px 12px;text-align:left;font:inherit;color:inherit}
 .escolha button.on{border-color:#E0A100;background:#FFF6DA}
 .escolha button span.t{flex:1;min-width:0}.escolha button small{color:var(--muted);font-weight:700}
+.mnav{background:var(--surface);border-bottom:1px solid var(--line)}
+.mnav .wrap{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding-top:6px;padding-bottom:6px}
+.mnav button{background:none;border:0;border-radius:12px;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:3px;font-weight:800;font-size:12.5px;color:var(--muted);min-height:54px;white-space:nowrap}
+.mnav button .i{font-size:20px}
+.mnav button.on{background:var(--accent-soft);color:var(--brand)}
+@media (min-width:760px){.mnav button{flex-direction:row;justify-content:center;gap:8px;font-size:14.5px}}
+.snav{background:var(--bg);border-bottom:1px solid var(--line)}
+.snav .wrap{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-top:10px;padding-bottom:10px}
+.snav button{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:8px 16px;font-weight:800;font-size:14px;min-height:40px}
+.snav button.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.ghost.icob{padding:8px;min-width:44px;display:inline-flex;align-items:center;justify-content:center;font-size:20px;margin-right:6px}
+.ghost.icob.on{background:var(--accent-soft)}
+.stars{display:flex;gap:6px}
+.stars button{width:46px;height:46px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:#C9CEDF;font-size:24px;display:flex;align-items:center;justify-content:center}
+.stars button.on{background:#FFF1D6;border-color:#F0A92E;color:#E09A00}
+.stars button.on .i path{fill:currentColor}
+.crit2{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.crit2 b{font-size:15px}.crit2 small{color:var(--muted)}
+.colgrid{display:flex;flex-direction:column;gap:8px}
+.colrow{display:flex;align-items:center;gap:12px;border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:10px 12px;width:100%;text-align:left;font:inherit;color:inherit}
+.colrow .t{flex:1;min-width:0}.colrow .t small{color:var(--muted);font-weight:700}
+.medias{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:8px}
+.medias div{background:var(--sunk);border-radius:10px;padding:6px 2px;text-align:center;font-size:11px;font-weight:800;color:var(--muted);line-height:1.25}
+.medias div b{display:block;font-size:16px;color:var(--ink)}
+.medias div.bx b{color:var(--bad)}
+.avlist{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.avlist .avc{background:var(--bg);border-radius:12px;padding:8px 10px;font-size:13.5px}
 </style>
 <style>*,*::before,*::after{box-sizing:border-box}body{margin:0}html{padding-top:env(safe-area-inset-top,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
@@ -945,6 +972,10 @@ const MOCK=(()=>{
   const byPin=p=>{const c=db.equipe.find(x=>x.pin===String(p)&&x.ativo);if(!c)throw new Error('PIN não encontrado ou inativo. Confira com a gestão.');return c};
   const base=s=>({equipe:s?db.equipe:db.equipe.map(({pin,...c})=>c),quizzes:s?db.quizzes:db.quizzes.map(q=>({...q,perguntas:q.perguntas.map(x=>({p:x.p,ops:x.ops}))})),respostas:db.respostas,avaliacoes:db.avaliacoes,premios:db.premios,destaques:db.destaques,temGestao:true,lembreteDias:db.lembreteDias||2});
   return{
+    colegasStatus:pin=>{const c=byPin(pin);db.ac=db.ac||[];return {aberto:true,data:isoDia(),colegas:db.equipe.filter(x=>x.ativo&&x.grupo===c.grupo&&x.id!==c.id).map(({pin,...x})=>x),feitas:db.ac.filter(a=>a.autorId===c.id&&a.data===isoDia()).map(a=>a.alvoId)}},
+    avaliarColega:(pin,alvo,n,com)=>{const c=byPin(pin);db.ac=(db.ac||[]).filter(a=>!(a.autorId===c.id&&a.alvoId===alvo&&a.data===isoDia()));db.ac.push({id:Date.now(),autorId:c.id,alvoId:alvo,data:isoDia(),notas:n,comentario:com||'',em:new Date().toISOString()});return {ok:true}},
+    colegasGestao:p=>{chk(p);db.ac=db.ac||[{id:1,autorId:'e1',alvoId:'e0',data:isoDia(),notas:{epi:5,processos:5,educacao:4,cordialidade:5,equipe:4},comentario:'Sempre ajuda no almoço.'},{id:2,autorId:'e2',alvoId:'e0',data:isoDia(),notas:{epi:4,processos:5,educacao:5,cordialidade:5,equipe:5},comentario:''},{id:3,autorId:'e0',alvoId:'e2',data:isoDia(),notas:{epi:2,processos:3,educacao:4,cordialidade:4,equipe:3},comentario:'Esqueceu a touca.'}];return {hoje:isoDia(),abertoHoje:true,liberados:db.lib||[],avals:db.ac}},
+    liberarColegas:(p,dia,on)=>{chk(p);db.lib=(db.lib||[]).filter(x=>x!==dia);if(on)db.lib.push(dia);return {ok:true}},
     definirDestaque:(p,dia,g,cid,mot)=>{chk(p);db.destaques=db.destaques.filter(x=>!(x.data===dia&&x.grupo===g));if(cid)db.destaques.push({data:dia,grupo:g,colabId:cid,mes:dia.slice(0,7),pontos:3,motivo:mot||''});return{ok:true}},
     dadosPublicos:()=>base(false),
     entrar:p=>{const c=byPin(p);return{id:c.id,nome:c.nome}},
@@ -966,7 +997,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261112172121';
+const APP_VERSION='20261112172958';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -1093,7 +1124,7 @@ function bnav(){
   const me=eu(),lim=me&&me.grupo==='lim';
   const t=[['hoje','listCheck','Hoje'],...(lim?[['tarefas','sparkles','Tarefas']]:[]),['cursos','grad','Cursos'],['quiz','quiz','Quiz'],['ranking','trophy','Ranking'],['escala','calendar','Escala']];
   const dot=k=>(k==='quiz'&&pend)||(k==='tarefas'&&tarefasPendentesHoje())||(k==='cursos'&&cursosNovos()>0);
-  return `<nav class="bnav" aria-label="Menu"><div class="in" style="grid-template-columns:repeat(${t.length},1fr)">${t.map(([k,icn,l])=>`<button class="${S.ctab===k||(k==='ranking'&&S.ctab==='hist')?'on':''}" data-act="ctab" data-k="${k}"><span class="ic" aria-hidden="true">${ic(icn)}</span>${l}${dot(k)?'<span class="dotn" aria-label="pendente"></span>':''}</button>`).join('')}</div></nav>`;
+  return `<nav class="bnav" aria-label="Menu"><div class="in" style="grid-template-columns:repeat(${t.length},1fr)">${t.map(([k,icn,l])=>`<button class="${S.ctab===k||(k==='ranking'&&S.ctab==='hist')||(k==='hoje'&&S.ctab==='colegas')?'on':''}" data-act="ctab" data-k="${k}"><span class="ic" aria-hidden="true">${ic(icn)}</span>${l}${dot(k)?'<span class="dotn" aria-label="pendente"></span>':''}</button>`).join('')}</div></nav>`;
 }
 function vHome(){
   const sair=`<button class="ghost" data-act="logout">Sair</button>`;
@@ -1102,7 +1133,7 @@ function vHome(){
   if(!GRUPOS[me.grupo])return topbar('Unidade Natura',sair)+`<main class="wrap"><div class="empty">Olá, ${esc(me.nome)}! Seu cadastro ainda está sem grupo. Peça para a gestão escolher seu grupo na aba Equipe.</div></main>`;
   let body;
   if(S.play)return vPlay();
-  if(S.ctab==='tarefas'&&me.grupo==='lim')body=cTarefas(me);else if(S.ctab==='cursos')body=cCursos(me);else if(S.ctab==='escala')body=cEscala(me);else if(S.ctab==='quiz')body=cQuiz(me);else if(S.ctab==='ranking')body=cRanking(me);else if(S.ctab==='hist')body=`<div style="display:flex;justify-content:space-between;align-items:center"><button class="link" data-act="ctab" data-k="ranking" style="padding:0">${ic('chevL')} Ranking</button></div>`+cHist(me);else body=cHoje(me);
+  if(S.ctab==='tarefas'&&me.grupo==='lim')body=cTarefas(me);else if(S.ctab==='colegas')body=cColegas(me);else if(S.ctab==='cursos')body=cCursos(me);else if(S.ctab==='escala')body=cEscala(me);else if(S.ctab==='quiz')body=cQuiz(me);else if(S.ctab==='ranking')body=cRanking(me);else if(S.ctab==='hist')body=`<div style="display:flex;justify-content:space-between;align-items:center"><button class="link" data-act="ctab" data-k="ranking" style="padding:0">${ic('chevL')} Ranking</button></div>`+cHist(me);else body=cHoje(me);
   return topbar(GRUPOS[me.grupo]?GRUPOS[me.grupo].nome:'Unidade Natura',sair)+`<main class="wrap stack">${body}</main>`+footer()+bnav();
 }
 function scoreCard(me){
@@ -1128,6 +1159,7 @@ function cHoje(me){
     ${falt.length?`<p class="miss" style="margin:8px 0 0">Faltou: ${falt.map(i=>esc(i[1])).join(', ')}</p>`:''}</div></section>`}
   return `<div style="display:flex;align-items:center;gap:12px">${avatar(me,52)}<div style="flex:1;min-width:0"><div class="eyebrow">Olá,</div><h1 style="font-size:24px">${esc(String(me.nome).split(' ')[0])}</h1></div><span class="gchip">${esc(GRUPOS[me.grupo].um)}</span></div>
     ${destaqueHojeCard(me)}
+    ${colegasCard()}
     ${scoreCard(me)}
     ${me.grupo==='lim'&&minhasTarefas(hoje).length?(()=>{let a=0,b=0;minhasTarefas(hoje).forEach(t=>{const[x,y]=progTarefa(t);a+=x;b+=y});return `<button class="cta" data-act="ctab" data-k="tarefas"><span class="ic">${ic('sparkles')}</span><span style="flex:1">${a>=b?'Tarefas de hoje concluídas!':`Você tem ${minhasTarefas(hoje).length} tarefa${minhasTarefas(hoje).length>1?'s':''} hoje`}<br><small style="font-weight:600">${a} de ${b} itens feitos · toque para abrir o checklist</small></span><span>›</span></button>`})():''}
     ${hojeQuizCard()}
@@ -1194,11 +1226,12 @@ function cHist(me){
 
 /* ---------- Telas: gestão ---------- */
 function vAdmin(){
-  const tabs=[['avaliar','Avaliar'],['limpeza','Limpeza'],['cardapio','Cardápio'],['ranking','Ranking'],['quiz','Quizzes'],['treinos','Treinamentos'],['escala','Escala e férias'],['acessos','Acessos'],['equipe','Equipe'],['premios','Prêmios'],['ajustes','Ajustes']];
-  const body=!S.adm?(S.status==='err'?`<div class="notice">Sem conexão com o servidor agora. Você continua logada. ${esc(S.errMsg)} <button class="link" data-act="reloadAdm">Tentar de novo</button></div>`:carregando('Abrindo a gestão…')):S.tab==='avaliar'?aAvaliar():S.tab==='limpeza'?aLimpeza():S.tab==='cardapio'?aCardapio():S.tab==='ranking'?aRanking():S.tab==='quiz'?aQuiz():S.tab==='treinos'?aTreinos():S.tab==='escala'?aEscala():S.tab==='acessos'?aAcessos():S.tab==='equipe'?aEquipe():S.tab==='premios'?aPremios():aAjustes();
+  const grp=grupoDaAba(S.tab);
+  const body=!S.adm?(S.status==='err'?`<div class="notice">Sem conexão com o servidor agora. Você continua logada. ${esc(S.errMsg)} <button class="link" data-act="reloadAdm">Tentar de novo</button></div>`:carregando('Abrindo a gestão…')):S.tab==='avaliar'?aAvaliar():S.tab==='colegas'?aColegas():S.tab==='tv'?aTv():S.tab==='limpeza'?aLimpeza():S.tab==='cardapio'?aCardapio():S.tab==='ranking'?aRanking():S.tab==='quiz'?aQuiz():S.tab==='treinos'?aTreinos():S.tab==='escala'?aEscala():S.tab==='acessos'?aAcessos():S.tab==='equipe'?aEquipe():S.tab==='premios'?aPremios():aAjustes();
   const quem=S.adm&&S.adm.eu&&S.adm.eu!=='Gestão'?'Gestão · '+String(S.adm.eu).split(' ')[0]:'Gestão · Natura';
-  return topbar(esc(quem),`<button class="ghost" data-act="adminOut">Sair</button>`)+
-   `<nav class="tabs"><div class="wrap wide">${tabs.map(([k,l])=>`<button class="tab ${S.tab===k?'on':''}" data-act="tab" data-k="${k}">${l}</button>`).join('')}</div></nav>
+  return topbar(esc(quem),`<button class="ghost icob ${S.tab==='ajustes'?'on':''}" data-act="tab" data-k="ajustes" aria-label="Ajustes" title="Ajustes">${ic('cog')}</button><button class="ghost" data-act="adminOut">Sair</button>`)+
+   `<nav class="mnav"><div class="wrap wide">${MENU.map(([g,l,icn,subs])=>`<button class="${grp&&grp[0]===g?'on':''}" data-act="mgrp" data-k="${g}">${ic(icn)}<span>${l}</span></button>`).join('')}</div></nav>
+   ${grp?`<nav class="snav"><div class="wrap wide">${grp[3].map(([k,l])=>`<button class="${S.tab===k?'on':''}" data-act="tab" data-k="${k}">${l}</button>`).join('')}</div></nav>`:`<nav class="snav"><div class="wrap wide"><button class="on">Ajustes</button></div></nav>`}
    <main class="wrap wide stack">${body}</main>`+footer();
 }
 function mesSelect(id,val,extra){const ms=meses(S.adm);(extra||[]).forEach(m=>{if(!ms.includes(m))ms.unshift(m)});ms.sort().reverse();return `<select id="${id}" aria-label="Mês">${ms.map(m=>`<option value="${m}" ${m===val?'selected':''}>${esc(mesLabel(m))}</option>`).join('')}</select>`}
@@ -1450,7 +1483,7 @@ const A={
     try{P.res=await call('responderQuiz',S.me.pin,P.qid,P.esc);S.busy=false;render();scrollTo(0,0);if(P.res.acertos/P.res.total>=.5)confete();carregar(true)}
     catch(e){S.busy=false;toast(msg(e));render()}
   },
-  tab:d=>{S.tab=d.k;render();if(d.k==='cardapio'&&!S.card)carregarCardapio();if(d.k==='acessos')carregarAcessos();if(d.k==='quiz'&&S.qmodo==='analise')carregarQA()},
+  tab:d=>{S.tab=d.k;const g=grupoDaAba(d.k);if(g)S.subUlt[g[0]]=d.k;render();scrollTo(0,0);if((d.k==='cardapio'||d.k==='tv')&&!S.card)carregarCardapio();if(d.k==='colegas')carregarColegasG();if(d.k==='acessos')carregarAcessos();if(d.k==='quiz'&&S.qmodo==='analise')carregarQA()},
   rkModo:d=>{S.rkModo=d.k;render()},
   admModo:d=>{S.admModo=d.k;render()},
   savePremiosAno:async(d,b)=>{const p={mes:S.anoPremio,grupo:S.grpPremio,p1:$('#pa1').value.trim(),p2:$('#pa2').value.trim(),p3:$('#pa3').value.trim()};busyBtn(b,true,'Salvando…');try{await acao('salvarPremios',p);toast('Prêmios do ano salvos: '+GRUPOS[S.grpPremio].nome)}catch(e){toast(msg(e));busyBtn(b,false,'Salvar prêmios do ano')}},
@@ -1908,7 +1941,7 @@ Object.assign(S,{card:null,cardErr:'',cdia:isoDia(),cref:refPadrao(),ldia:isoDia
 const CPEND={};let cpT=null,cSalvando=false;
 async function carregarCardapio(){
   try{S.card=await call('dadosCardapio',adminPin);S.cardErr=''}catch(e){S.cardErr=msg(e)}
-  if(S.view==='admin'&&S.tab==='cardapio')render();
+  if(S.view==='admin'&&(S.tab==='cardapio'||S.tab==='tv'))render();
 }
 function cardDe(data,ref){return S.card?S.card.cardapios.find(c=>c.data===data&&c.refeicao===ref):null}
 function pratoDe(nome){return S.card?S.card.pratos.find(p=>norm(p.nome)===norm(nome)):null}
@@ -1926,6 +1959,18 @@ async function cFlush(){
     try{await call('salvarCardapio',adminPin,{data:c.data,refeicao:c.refeicao,itens:c.itens,pronto:c.pronto});c.salvo=true}
     catch(e){CPEND[k]=CPEND[k]||c;toast('Não salvou o cardápio: '+msg(e)+' Tentando de novo…');cpT=setTimeout(cFlush,4000)}}
   cSalvando=false;render();
+}
+function aTv(){
+  if(!S.card)return S.cardErr?`<div class="notice">Não foi possível abrir a TV. ${esc(S.cardErr)} <button class="link" data-act="cReload">Tentar de novo</button></div>`:carregando('Abrindo a TV…');
+  return `<div class="toolbar"><h2 style="font-size:22px">TV do refeitório</h2><div class="grp"><a class="btn sm alt" href="${esc(TV_URL)}" target="_blank" rel="noopener">${ic('tv')} Abrir a TV</a><button class="btn sm alt" data-act="cReload">${ic('refresh')} Atualizar</button></div></div>
+    <p class="muted" style="margin:0">O cardápio que você monta na aba <b>Cardápio</b> aparece aqui na TV sozinho, no horário de cada refeição. Nesta aba ficam o link da TV, os vídeos e anúncios.</p>
+    <section class="panel stack" style="gap:12px"><div class="sec-h" style="margin:0"><h2>${ic('tv')} TV vertical</h2></div>
+      <div class="urlbox"><code>${esc(TV_URL)}</code><button class="btn sm" data-act="cCopiarLink">${ic('copy')} Copiar link</button></div>
+      <p class="muted" style="margin:0;font-size:14px">Abra esse link no navegador da TV e toque em <b>Tela cheia</b>. Ela troca sozinha: <b>Almoço 10h às 13h</b>, <b>Janta 17h30 às 20h30</b> e <b>Ceia 00h às 2h30</b>, quando o cardápio estiver <b>Pronto</b>. Fora desses horários fica no stand-by com os logos.</p>
+      ${midiaLista('standby')}
+      ${midiaLista('cardapio')}
+    </section>
+`;
 }
 function aCardapio(){
   if(!S.card)return S.cardErr?`<div class="notice">Não foi possível abrir o cardápio. ${esc(S.cardErr)} <button class="link" data-act="cReload">Tentar de novo</button></div>`:carregando('Abrindo o cardápio…');
@@ -1948,12 +1993,7 @@ function aCardapio(){
     <div class="toolbar"><div class="grp"><button class="btn sm alt" data-act="cPrevia">${ic('eye')} Ver prévia da TV</button><button class="btn sm" data-act="cRepetir">${ic('copy')} Repetir em outro turno</button><button class="btn sm alt" data-act="cImagem">${ic('download')} Baixar imagem do cardápio</button><button class="btn sm alt" data-act="cCopiar">${ic('clipboard')} Copiar de outro dia</button>${itens.length?`<button class="btn sm alt" data-act="cLimpar">Limpar</button>`:''}</div></div>
     <p class="muted" style="font-size:13px;margin:0">Salva sozinho. Foto é opcional: toque no ícone da câmera ao lado do prato. A foto fica guardada no banco de pratos e aparece de novo toda vez que o prato voltar ao cardápio.</p>
 
-    <section class="panel stack" style="gap:12px"><div class="sec-h" style="margin:0"><h2>${ic('tv')} TV vertical</h2></div>
-      <div class="urlbox"><code>${esc(TV_URL)}</code><button class="btn sm" data-act="cCopiarLink">${ic('copy')} Copiar link</button></div>
-      <p class="muted" style="margin:0;font-size:14px">Abra esse link no navegador da TV e toque em <b>Tela cheia</b>. Ela troca sozinha: <b>Almoço 10h às 13h</b>, <b>Janta 17h30 às 20h30</b> e <b>Ceia 00h às 2h30</b>, quando o cardápio estiver <b>Pronto</b>. Fora desses horários fica no stand-by com os logos.</p>
-      ${midiaLista('standby')}
-      ${midiaLista('cardapio')}
-    </section>
+    <button class="btn alt" data-act="tab" data-k="tv" style="width:fit-content">${ic('tv')} Anúncios e vídeos da TV</button>
 
     <section class="panel stack" style="gap:10px"><div class="sec-h" style="margin:0"><h2>${ic('utensils')} Banco de pratos <span class="muted num" style="font-size:14px">(${S.card.pratos.length})</span></h2><button class="btn sm alt" data-act="pNovo">${ic('plus')} Prato</button></div>
       <p class="muted" style="margin:0;font-size:14px">Pratos com foto e categoria. Aparecem como sugestão ao digitar.</p>
@@ -2833,6 +2873,82 @@ Object.assign(A,{
 });
 addEventListener('hashchange',()=>{if(S.me&&S.view==='home'&&(location.hash==='#quiz'||location.hash==='#tarefas')){S.play=null;S.ctab=location.hash.slice(1);render()}});
 
+
+
+/* =============================== MENU DA GESTÃO =============================== */
+(function(){if(!ICO.cog)ICO.cog=['M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z','M12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z'];
+  if(!ICO.users)ICO.users=['M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2','M9 3a4 4 0 1 1 0 8 4 4 0 0 1 0-8z','M22 21v-2a4 4 0 0 0-3-3.87','M16 3.13a4 4 0 0 1 0 7.75'];
+  if(!ICO.grad)ICO.grad=['M22 10 12 5 2 10l10 5 10-5z','M6 12v5c3 3 9 3 12 0v-5'];})();
+const MENU=[['dia','Dia a dia','listCheck',[['avaliar','Avaliar'],['colegas','Colegas avaliam'],['limpeza','Limpeza']]],
+  ['equipe','Equipe','users',[['equipe','Pessoas e PINs'],['escala','Escala e férias'],['acessos','Acessos']]],
+  ['aprend','Cursos','grad',[['treinos','Treinamentos'],['quiz','Quizzes']]],
+  ['recon','Ranking','trophy',[['ranking','Ranking'],['premios','Prêmios']]],
+  ['tv','TV','tv',[['cardapio','Cardápio'],['tv','Anúncios e vídeos']]]];
+S.subUlt={};
+function grupoDaAba(k){return MENU.find(m=>m[3].some(x=>x[0]===k))}
+A.mgrp=d=>{const g=MENU.find(m=>m[0]===d.k);A.tab({k:S.subUlt[g[0]]||g[3][0][0]})};
+
+/* =============================== COLEGAS AVALIAM (anônimo entre a equipe) =============================== */
+const CRIT_COL=[['epi','Uso de EPI','Touca, avental, luvas e sapato'],['processos','Segue os processos','Faz do jeito certo, sem atalhos'],['educacao','Educação e respeito','Trata todos com respeito'],['cordialidade','Cordialidade','Simpatia com colegas e clientes'],['equipe','Trabalho em equipe','Ajuda quando precisa']];
+Object.assign(RPC,{colegasStatus:['colegas_status',['p_pin']],avaliarColega:['avaliar_colega',['p_pin','p_alvo','p_notas','p_coment']],colegasGestao:['colegas_gestao',['p_pin','p_de','p_ate']],liberarColegas:['liberar_colegas',['p_pin','p_data','p_on']]});
+/* equipe */
+async function carregarColegas(){if(!S.me)return;try{S.col=await call('colegasStatus',S.me.pin)}catch(e){}if(S.view==='home'&&(S.ctab==='hoje'||S.ctab==='colegas')&&!S.play&&!$('#modal').innerHTML&&!/INPUT|TEXTAREA/.test((document.activeElement||{}).tagName||''))render()}
+function colegasCard(){
+  if(!S.col){carregarColegasUmaVez();return ''}
+  const c=S.col;if(!c.aberto||!c.colegas.length)return '';
+  const f=c.feitas.length,t=c.colegas.length;
+  return `<button class="cta" data-act="ctab" data-k="colegas"><span class="ic">${ic('users')}</span><span class="t"><b>${f>=t?'Você avaliou todos os colegas hoje':'Avalie seus colegas hoje'}</b><small>${f}/${t} avaliados · seus colegas não veem quem avaliou</small></span>${ic('chevR')}</button>`;
+}
+let _colCarregou=0;function carregarColegasUmaVez(){if(Date.now()-_colCarregou>60000){_colCarregou=Date.now();carregarColegas()}}
+function cColegas(me){
+  const c=S.col;if(!c)return carregando('Abrindo…');
+  const volta=`<div><button class="link" data-act="ctab" data-k="hoje" style="padding:0">${ic('chevL')} Hoje</button></div>`;
+  if(!c.aberto)return volta+`<div class="empty">A avaliação dos colegas abre nos fins de semana e nos dias que a gestão liberar.</div>`;
+  if(S.colAlvo){const a=c.colegas.find(x=>x.id===S.colAlvo);M.colNotas=M.colNotas||{};
+    return `<div><button class="link" data-act="colVoltar" style="padding:0">${ic('chevL')} Colegas</button></div>
+     <section class="panel"><div style="display:flex;gap:12px;align-items:center;margin-bottom:14px">${avatar(a,52)}<div><div class="eyebrow">Avaliando</div><h2 style="font-size:20px;margin:0">${esc(a.nome)}</h2></div></div>
+     ${CRIT_COL.map(([k,l,h])=>`<div class="crit2"><span><b>${esc(l)}</b><br><small>${esc(h)}</small></span><div class="stars" role="radiogroup" aria-label="${esc(l)}">${[1,2,3,4,5].map(n=>`<button class="${(M.colNotas[k]||0)>=n?'on':''}" data-act="colNota" data-k="${k}" data-n="${n}" aria-label="${n} de 5">${ic('star')}</button>`).join('')}</div></div>`).join('')}
+     <div class="fld"><label for="col-com">Comentário (opcional)</label><textarea id="col-com" maxlength="300" style="min-height:70px" placeholder="Ex.: Sempre ajuda na montagem do almoço."></textarea></div>
+     <p class="muted" style="font-size:13px;margin:0 0 12px">${ic('eye')} <b>Seus colegas não veem quem avaliou.</b> A gestão vê, para acompanhar a equipe. Seja justo e respeitoso.</p>
+     <button class="btn" style="width:100%" data-act="colEnviar">Enviar avaliação</button></section>`}
+  const f=new Set(c.feitas);
+  return volta+`<section class="stack" style="gap:6px"><h1 style="font-size:24px">Avalie seus colegas</h1><p class="muted" style="margin:0">Dê de 1 a 5 estrelas em EPI, processos, educação, cordialidade e trabalho em equipe. Leva 1 minuto por pessoa. Não vale pontos no ranking: serve para a gestão acompanhar a equipe.</p></section>
+   <div class="colgrid">${c.colegas.map(x=>`<button class="colrow" data-act="colAbrir" data-id="${esc(x.id)}">${avatar(x,44)}<span class="t"><b>${esc(x.nome)}</b><br><small>${f.has(x.id)?'Avaliado hoje · toque para mudar':'Ainda não avaliado'}</small></span>${f.has(x.id)?`<span class="chip ok">${ic('check')} Feito</span>`:ic('chevR')}</button>`).join('')}</div>`;
+}
+Object.assign(A,{
+  colAbrir:d=>{S.colAlvo=d.id;M={colNotas:{}};render();scrollTo(0,0)},
+  colVoltar:()=>{S.colAlvo=null;render();scrollTo(0,0)},
+  colNota:d=>{M.colNotas=M.colNotas||{};M.colNotas[d.k]=+d.n;document.querySelectorAll(`[data-act=colNota][data-k=${d.k}]`).forEach(b=>b.classList.toggle('on',+b.dataset.n<=+d.n))},
+  colEnviar:async(d,b)=>{const n=M.colNotas||{};const falta=CRIT_COL.filter(([k])=>!n[k]);if(falta.length){toast('Dê estrelas em: '+falta.map(x=>x[1]).join(', '));return}
+    busyBtn(b,true,'Enviando…');try{await call('avaliarColega',S.me.pin,S.colAlvo,n,$('#col-com').value.trim());S.col.feitas=[...new Set([...S.col.feitas,S.colAlvo])];S.colAlvo=null;M={};render();scrollTo(0,0);toast('Avaliação enviada. Obrigado!')}catch(e){toast(msg(e));busyBtn(b,false,'Tentar de novo')}}
+});
+/* gestão */
+S.colDias=7;
+async function carregarColegasG(){const ate=isoDia(),de=somaDias(ate,-(S.colDias-1));try{S.colG=await call('colegasGestao',adminPin,de,ate);S.colGErr=''}catch(e){S.colGErr=msg(e)}if(S.view==='admin'&&S.tab==='colegas'&&!$('#modal').innerHTML)render()}
+function aColegas(){
+  const g=S.colG;if(!g){if(!S.colGErr)carregarColegasG();return S.colGErr?`<div class="notice">${esc(S.colGErr)}</div>`:carregando('Abrindo…')}
+  const hoje=g.hoje,fds=[0,6].includes(deIso(hoje).getDay()),lib=g.liberados.includes(hoje);
+  const eq=S.adm.equipe,nome=id=>(eq.find(c=>c.id===id)||{nome:'—'}).nome;
+  const porAlvo={};g.avals.forEach(a=>(porAlvo[a.alvoId]=porAlvo[a.alvoId]||[]).push(a));
+  const md=(ls,k)=>ls.length?(ls.reduce((s,a)=>s+(a.notas[k]||0),0)/ls.length):0;
+  const f1=v=>v.toFixed(1).replace('.',',');
+  const grupoBloco=gr=>{const cs=eq.filter(c=>c.ativo&&c.grupo===gr);if(!cs.length)return '';
+    return `<section class="stack" style="gap:10px"><h2 style="font-size:18px">${esc(GRUPOS[gr].nome)}</h2>${cs.map(c=>{const ls=porAlvo[c.id]||[];
+      return `<div class="panel" style="padding:12px 14px"><div style="display:flex;align-items:center;gap:12px">${avatar(c,40)}<span style="flex:1;min-width:0"><b>${esc(c.nome)}</b><br><small class="muted">${ls.length?`${ls.length} avaliaç${ls.length>1?'ões':'ão'} de colegas`:'Nenhuma avaliação no período'}</small></span>${ls.length?`<span class="chip ${md(ls,'epi')+md(ls,'processos')+md(ls,'educacao')+md(ls,'cordialidade')+md(ls,'equipe')>=20?'ok':'gold'} num">${f1(CRIT_COL.reduce((s,[k])=>s+md(ls,k),0)/5)} / 5</span>`:''}</div>
+       ${ls.length?`<div class="medias">${CRIT_COL.map(([k,l])=>`<div class="${md(ls,k)<3?'bx':''}"><b class="num">${f1(md(ls,k))}</b>${esc(l.split(' ')[0]==='Uso'?'EPI':l.split(' ')[0]==='Segue'?'Processos':l.split(' ')[0]==='Trabalho'?'Equipe':l.split(' ')[0])}</div>`).join('')}</div>
+       <details style="margin-top:8px"><summary class="link" style="cursor:pointer;font-weight:800">Ver quem avaliou</summary><div class="avlist">${ls.map(a=>`<div class="avc"><b>${esc(nome(a.autorId))}</b> · <span class="muted">${esc(diaLabel(a.data))}</span><br>${CRIT_COL.map(([k,l])=>`${esc(l.split(' ').slice(-1)[0]==='EPI'?'EPI':l)}: <b class="num">${a.notas[k]}</b>`).join(' · ')}${a.comentario?`<br><i>“${esc(a.comentario)}”</i>`:''}</div>`).join('')}</div></details>`:''}</div>`}).join('')}</section>`};
+  return `<section class="stack" style="gap:6px"><h2 style="font-size:20px">${ic('users')} Colegas avaliam</h2><p class="muted" style="margin:0">A equipe avalia os colegas do mesmo grupo com 1 a 5 estrelas. Entre eles é anônimo; aqui a gestão vê quem avaliou. Não vale pontos no ranking.</p></section>
+   <section class="panel" style="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap"><div><b>${fds?'Hoje é fim de semana: a avaliação já está aberta.':lib?'Avaliação liberada hoje.':'Hoje a avaliação está fechada.'}</b><br><small class="muted">${fds?'Abre sozinha aos sábados e domingos.':'Vai ficar fora hoje? Libere para a equipe avaliar.'}</small></div>
+     ${fds?'':`<button class="switch ${lib?'on':''}" data-act="colLiberar" role="switch" aria-checked="${lib}" aria-label="Liberar avaliação hoje"></button>`}</section>
+   <div class="seg" style="grid-template-columns:repeat(3,1fr);max-width:420px">${[[7,'7 dias'],[30,'30 dias'],[90,'90 dias']].map(([n,l])=>`<button class="${S.colDias===n?'on':''}" data-act="colDias" data-k="${n}">${l}</button>`).join('')}</div>
+   <p class="muted" style="margin:0;font-size:13px">${g.avals.length} avaliações nos últimos ${S.colDias} dias. Nota abaixo de 3 aparece em vermelho.</p>
+   ${ORDEM_G.map(grupoBloco).join('')}`;
+}
+Object.assign(A,{
+  colDias:d=>{S.colDias=+d.k;S.colG=null;render()},
+  colLiberar:async(d,b)=>{const on=!S.colG.liberados.includes(S.colG.hoje);b.disabled=true;try{await call('liberarColegas',adminPin,S.colG.hoje,on);await carregarColegasG();toast(on?'Liberado! A equipe já vê no app.':'Avaliação fechada hoje.')}catch(e){toast(msg(e));b.disabled=false}}
+});
+(function(){const ant=A.ctab;A.ctab=d=>{if(d.k!=='colegas')S.colAlvo=null;ant(d);if(d.k==='colegas'||d.k==='hoje')carregarColegas()}})();
 
 /* =============================== DESTAQUE DO DIA =============================== */
 const DEST_PTS=3;
