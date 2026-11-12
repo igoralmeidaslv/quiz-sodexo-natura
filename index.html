@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#283897">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Quiz Natura">
+<meta name="apple-mobile-web-app-title" content="soDEXo">
 <meta name="robots" content="noindex, nofollow">
-<title>Quiz Sodexo Natura</title>
+<title>soDEXo · Unidade Natura</title>
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png">
@@ -53,7 +53,7 @@ h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
 .brand img{height:30px;width:auto;flex:none}
 .brand .sep{width:1px;height:30px;background:#C9CEE6;flex:none}
 .brand .q{line-height:1.05;letter-spacing:-.01em;min-width:0}
-.brand .q span{color:#DA2020}
+.brand .q span.dx{color:#DA2020}
 .brand small{display:block;font-family:var(--body);font-weight:700;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#5B6285}
 .ghost{background:transparent;border:1.5px solid #283897;color:#283897;border-radius:999px;padding:7px 14px;font-size:14px;font-weight:600}
 
@@ -390,6 +390,12 @@ table.esc button.nmb{background:none;border:0;padding:0;font:inherit;font-weight
 .medias div.bx b{color:var(--bad)}
 .avlist{display:flex;flex-direction:column;gap:6px;margin-top:10px}
 .avlist .avc{background:var(--bg);border-radius:12px;padding:8px 10px;font-size:13.5px}
+.foot details.sobre{margin-top:10px}
+.foot details.sobre summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;opacity:.85;flex-wrap:wrap;min-height:40px}
+.foot details.sobre summary::-webkit-details-marker{display:none}
+.foot details.sobre summary .ver{opacity:.75;font-weight:600}
+.foot details.sobre[open] summary{margin-bottom:6px}
+.bnav button{white-space:nowrap;font-size:clamp(9.5px,2.75vw,12px)}
 </style>
 <style>*,*::before,*::after{box-sizing:border-box}body{margin:0}html{padding-top:env(safe-area-inset-top,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
@@ -408,6 +414,7 @@ a.btn{text-decoration:none}
 
 /* Navegação inferior (equipe) */
 body.has-nav main{padding-bottom:110px}
+body.has-nav .foot{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
 .bnav{position:fixed;left:0;right:0;bottom:0;z-index:15;background:var(--surface);border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));display:flex;justify-content:center}
 .bnav .in{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;width:100%;max-width:560px}
 .bnav button{background:none;border:0;border-radius:12px;padding:6px 2px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:12px;font-weight:700;color:var(--muted);position:relative}
@@ -997,7 +1004,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261112172958';
+const APP_VERSION='20261112174015';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -1069,13 +1076,16 @@ function avatar(c,size){
 let toastT;
 function toast(t){const e=$('#toast');e.textContent=t;e.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>e.hidden=true,3000)}
 function topbar(sub,right){
-  return `${DEMO?'<div class="demo">Modo demonstração com dados de exemplo. Equipe: PIN 1111 · Gestão: 123456</div>':''}<header class="top"><div class="wrap ${S.view==='admin'?'wide':''}"><div class="brand"><img src="${LOGO}" alt="Sodexo"><span class="sep" aria-hidden="true"></span><div class="q">Quiz<span>.</span>${sub?`<small>${sub}</small>`:''}</div></div>${right||''}</div></header>`;
+  return `${DEMO?'<div class="demo">Modo demonstração com dados de exemplo. Equipe: PIN 1111 · Gestão: 123456</div>':''}<header class="top"><div class="wrap ${S.view==='admin'?'wide':''}"><div class="brand"><img src="${LOGO}" alt="Sodexo"><span class="sep" aria-hidden="true"></span><div class="q">so<span class="dx">DEX</span>o${sub?`<small>${sub}</small>`:''}</div></div>${right||''}</div></header>`;
 }
+function versaoTxt(){const v=String(typeof APP_VERSION!=='undefined'?APP_VERSION:'');return v.length>=12?'Versão '+v.slice(6,8)+'/'+v.slice(4,6)+'/'+v.slice(0,4)+' · '+v.slice(8,10)+'h'+v.slice(10,12):'Versão '+v}
 function footer(){
   return `<footer class="foot ${S.view==='admin'?'wide':''}"><div class="wrap">
-    <div class="fl"><img src="${LOGO_W}" alt="Sodexo"><span class="tag">Quiz · Unidade Natura</span></div>
-    <p class="disc"><b>Ferramenta interna, não oficial.</b> Este portal não é um sistema da Sodexo nem da Natura. Foi criado pela gestão da unidade para atividades internas da equipe, como quizzes, avaliações diárias e premiações do mês. Não informe aqui senhas, documentos ou dados pessoais além do seu PIN.</p>
-    <span class="small">Uso exclusivo da equipe Sodexo na unidade Natura.</span>
+    <div class="fl"><img src="${LOGO_W}" alt="Sodexo"><span class="tag">so<b style="color:#FF6B6B">DEX</b>o · Unidade Natura</span></div>
+    <details class="sobre"><summary>${ic('info')} Sobre este app · <span class="ver num">${versaoTxt()}</span></summary>
+    <p class="disc"><b>soDEXo</b> = Sodexo + <b>DEX</b> (Digital Employee Experience, a experiência digital do funcionário).</p>
+    <p class="disc"><b>Ferramenta interna, não oficial.</b> Este portal não é um sistema da Sodexo nem da Natura. Foi criado pela gestão da unidade para atividades internas da equipe, como treinamentos, quizzes, avaliações e premiações. Não informe aqui senhas, documentos ou dados pessoais além do seu PIN.</p>
+    <span class="small">Uso exclusivo da equipe Sodexo na unidade Natura.</span></details>
   </div></footer>`;
 }
 function keypad(){
@@ -1122,7 +1132,7 @@ function vAdminLogin(){
 function bnav(){
   const pend=quizzesAbertos().some(q=>!minhaResp(q.id));
   const me=eu(),lim=me&&me.grupo==='lim';
-  const t=[['hoje','listCheck','Hoje'],...(lim?[['tarefas','sparkles','Tarefas']]:[]),['cursos','grad','Cursos'],['quiz','quiz','Quiz'],['ranking','trophy','Ranking'],['escala','calendar','Escala']];
+  const t=[['hoje','listCheck','Hoje'],...(lim?[['tarefas','sparkles','Tarefas']]:[]),['cursos','grad','Treinamentos'],['quiz','quiz','Quiz'],['ranking','trophy','Ranking'],['escala','calendar','Escala']];
   const dot=k=>(k==='quiz'&&pend)||(k==='tarefas'&&tarefasPendentesHoje())||(k==='cursos'&&cursosNovos()>0);
   return `<nav class="bnav" aria-label="Menu"><div class="in" style="grid-template-columns:repeat(${t.length},1fr)">${t.map(([k,icn,l])=>`<button class="${S.ctab===k||(k==='ranking'&&S.ctab==='hist')||(k==='hoje'&&S.ctab==='colegas')?'on':''}" data-act="ctab" data-k="${k}"><span class="ic" aria-hidden="true">${ic(icn)}</span>${l}${dot(k)?'<span class="dotn" aria-label="pendente"></span>':''}</button>`).join('')}</div></nav>`;
 }
@@ -1551,7 +1561,7 @@ function gestorForm(id){
 }
 A.instalar=async()=>{if(!instalarEvt)return;const ev=instalarEvt;instalarEvt=null;ev.prompt();try{await ev.userChoice}catch(e){}render()};
 window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();instalarEvt=e;render()});
-window.addEventListener('appinstalled',()=>{instalarEvt=null;toast('App instalado! Procure o ícone Quiz Natura.');render()});
+window.addEventListener('appinstalled',()=>{instalarEvt=null;toast('App instalado! Procure o ícone soDEXo.');render()});
 
 /* Atualização forçada: compara a versão do app com a publicada */
 let esperandoAtt=false;
@@ -2730,7 +2740,7 @@ function avisoCard(compacto){
 }
 function notifPrev(){
   const me=eu(),nome=me?String(me.nome).split(' ')[0]:'Ana';
-  return `<div class="nprev" aria-hidden="true"><img src="./icon-192.png" alt=""><div><div class="nph"><b>Quiz Natura</b><small>agora</small></div><b>Falta você no quiz</b><span>${esc(nome)}, você ainda não respondeu. Encerra dia 15 às 23h49.</span></div></div>`;
+  return `<div class="nprev" aria-hidden="true"><img src="./icon-192.png" alt=""><div><div class="nph"><b>soDEXo</b><small>agora</small></div><b>Falta você no quiz</b><span>${esc(nome)}, você ainda não respondeu. Encerra dia 15 às 23h49.</span></div></div>`;
 }
 function pedirAvisosModal(){
   if(!S.me||S.view!=='home'||S.play||$('#modal').innerHTML)return;
@@ -2881,7 +2891,7 @@ addEventListener('hashchange',()=>{if(S.me&&S.view==='home'&&(location.hash==='#
   if(!ICO.grad)ICO.grad=['M22 10 12 5 2 10l10 5 10-5z','M6 12v5c3 3 9 3 12 0v-5'];})();
 const MENU=[['dia','Dia a dia','listCheck',[['avaliar','Avaliar'],['colegas','Colegas avaliam'],['limpeza','Limpeza']]],
   ['equipe','Equipe','users',[['equipe','Pessoas e PINs'],['escala','Escala e férias'],['acessos','Acessos']]],
-  ['aprend','Cursos','grad',[['treinos','Treinamentos'],['quiz','Quizzes']]],
+  ['aprend','Treinamentos','grad',[['treinos','Treinamentos'],['quiz','Quizzes']]],
   ['recon','Ranking','trophy',[['ranking','Ranking'],['premios','Prêmios']]],
   ['tv','TV','tv',[['cardapio','Cardápio'],['tv','Anúncios e vídeos']]]];
 S.subUlt={};
@@ -2897,7 +2907,7 @@ function colegasCard(){
   if(!S.col){carregarColegasUmaVez();return ''}
   const c=S.col;if(!c.aberto||!c.colegas.length)return '';
   const f=c.feitas.length,t=c.colegas.length;
-  return `<button class="cta" data-act="ctab" data-k="colegas"><span class="ic">${ic('users')}</span><span class="t"><b>${f>=t?'Você avaliou todos os colegas hoje':'Avalie seus colegas hoje'}</b><small>${f}/${t} avaliados · seus colegas não veem quem avaliou</small></span>${ic('chevR')}</button>`;
+  return `<button class="cta" data-act="ctab" data-k="colegas"><span class="ic">${ic('users')}</span><span style="flex:1;min-width:0"><b style="display:block">${f>=t?'Você avaliou todos os colegas hoje':'Avalie seus colegas hoje'}</b><small style="display:block;font-weight:600">${f}/${t} avaliados · anônimo entre a equipe</small></span>${ic('chevR')}</button>`;
 }
 let _colCarregou=0;function carregarColegasUmaVez(){if(Date.now()-_colCarregou>60000){_colCarregou=Date.now();carregarColegas()}}
 function cColegas(me){
@@ -3190,7 +3200,7 @@ function aTreinoEditor(){
      <span class="hint">Ex.: POP em PDF, cartaz de boas práticas, ficha técnica, link de vídeo do YouTube.</span></section>
    <section class="panel stack" style="gap:10px"><div class="toolbar"><div class="grp"><h2 style="font-size:18px">${ic('eye')} Publicação</h2></div>
      <button class="btn ${t.publicado?'alt':''}" data-act="trPublicar">${t.publicado?'Tirar do ar':`${ic('megaphone')} Publicar para a equipe`}</button></div>
-     <p class="muted" style="margin:0">${t.publicado?'Está visível no app da equipe, na aba Cursos.':'Ainda é rascunho: só a gestão vê. Revise o resumo e publique.'}</p>
+     <p class="muted" style="margin:0">${t.publicado?'Está visível no app da equipe, na aba Treinamentos.':'Ainda é rascunho: só a gestão vê. Revise o resumo e publique.'}</p>
      ${alvo.length?`<div class="list" style="margin-top:4px">${alvo.sort((a,b)=>a.nome.localeCompare(b.nome,'pt-BR')).map(c=>{const v=vis.find(z=>z.colabId===c.id);return `<div class="done"><span class="t">${esc(c.nome)}<br><small class="muted">${esc(GRUPOS[c.grupo]?GRUPOS[c.grupo].nome:'')}</small></span>${v&&v.concluido?`<span class="chip ok num">${ic('check')} Concluiu${v.total?` · ${v.acertos}/${v.total}`:''}</span>`:v?`<span class="chip warn num">Assistiu ${v.progresso}%</span>`:'<span class="chip mute">Não começou</span>'}</div>`}).join('')}</div>`:''}</section>`:''}`;
 }
 function trColetar(){
@@ -3278,7 +3288,7 @@ Object.assign(A,{
     busyBtn(b,true,'Salvando…');try{await call('salvarTreino',adminPin,{titulo:t.titulo,categoria:t.categoria,descricao:t.descricao,grupos:t.grupos,id:t.id,materiais:[...(t.materiais||[]),{tipo:'link',nome:nome||url.replace(/^https?:\/\//,'').slice(0,60),url}]});closeModal();await carregarTreinosG();toast('Link adicionado')}catch(e){ferr(msg(e));busyBtn(b,false,'Adicionar')}},
   trPublicar:async(d,b)=>{const t=trAtual();const p=trColetar();if(!t.publicado&&!(p.resumo||t.resumo)&&!(t.pontos||[]).length){openModal(`<h2>Publicar sem resumo?</h2><p>Este treinamento ainda não tem resumo. A equipe vai ver só o vídeo.</p><div class="acts"><button class="btn alt" data-act="close">Voltar</button><button class="btn" data-act="trPublicarOk">Publicar mesmo assim</button></div>`);return}
     A.trPublicarOk(d,b)},
-  trPublicarOk:async(d,b)=>{const t=trAtual();const pub=!t.publicado;closeModal();busyBtn(b,true,'Salvando…');try{await call('salvarTreino',adminPin,{...trColetar(),id:t.id,publicado:pub});await carregarTreinosG();toast(pub?'Publicado! A equipe já vê na aba Cursos.':'Tirado do ar')}catch(e){toast(msg(e));busyBtn(b,false)}},
+  trPublicarOk:async(d,b)=>{const t=trAtual();const pub=!t.publicado;closeModal();busyBtn(b,true,'Salvando…');try{await call('salvarTreino',adminPin,{...trColetar(),id:t.id,publicado:pub});await carregarTreinosG();toast(pub?'Publicado! A equipe já vê na aba Treinamentos.':'Tirado do ar')}catch(e){toast(msg(e));busyBtn(b,false)}},
   trInfoImg:async()=>{const t=S.view==='admin'?trAtual():trColabAtual();if(!t)return;const c=await infoCanvas(t);salvarImagem(c,'infografico-'+norm(t.titulo).replace(/[^a-z0-9]+/g,'-').slice(0,40)+'.png','Infográfico: '+t.titulo)},
   trTestarIA:async(d,b)=>{busyBtn(b,true,'Testando…');try{await funcaoTreino({acao:'testar'});await carregarTreinosG();toast('IA ligada e funcionando!')}catch(e){openModal(`<h2>A IA ainda não respondeu</h2><p>${esc(msg(e))}</p><p class="muted">Confira se a chave foi salva no Supabase com o nome <b>GEMINI_API_KEY</b>.</p><div class="acts"><button class="btn" data-act="close">Entendi</button></div>`);busyBtn(b,false,'Testar de novo')}}
 });
@@ -3292,7 +3302,7 @@ function trColabAtual(){return S.trc&&S.trc.treinos.find(t=>t.id===S.trSel)}
 function meuTr(id){return S.trc&&S.trc.meus.find(m=>m.treinoId===id)}
 function cursosNovos(){return S.trc?S.trc.treinos.filter(t=>!meuTr(t.id)).length:0}
 function cCursos(me){
-  if(!S.trc){if(!S.trcErr)carregarCursos();return S.trcErr?`<div class="notice">${esc(S.trcErr)} <button class="link" data-act="cuRecarregar">Tentar de novo</button></div>`:carregando('Abrindo cursos…')}
+  if(!S.trc){if(!S.trcErr)carregarCursos();return S.trcErr?`<div class="notice">${esc(S.trcErr)} <button class="link" data-act="cuRecarregar">Tentar de novo</button></div>`:carregando('Abrindo treinamentos…')}
   if(S.trSel){const t=trColabAtual();if(t)return cCurso(t);S.trSel=null}
   const ts=S.trc.treinos,feitos=ts.filter(t=>(meuTr(t.id)||{}).concluido).length,pct=ts.length?Math.round(feitos/ts.length*100):0;
   const andamento=ts.filter(t=>{const m=meuTr(t.id);return m&&!m.concluido});
@@ -3303,7 +3313,7 @@ function cCursos(me){
     <h3>${esc(t.titulo)}</h3>${t.descricao?`<span class="muted" style="font-size:13.5px;line-height:1.4">${esc(t.descricao)}</span>`:''}</div></button>`};
   return `<section class="trhero"><div class="ring" style="--p:${pct}"><span class="num">${pct}%</span></div><div><h2>Seus treinamentos</h2><p>Você concluiu <b style="color:#fff">${feitos} de ${ts.length}</b>. Assista ao vídeo, leia o resumo e faça o teste rápido no fim.</p></div></section>
    ${andamento.length?`<section><div class="sec-h"><h2>Continue de onde parou</h2></div><div class="trgrid">${andamento.slice(0,2).map(card).join('')}</div></section>`:''}
-   <section class="stack" style="gap:12px"><div class="sec-h" style="margin:0"><h2>Todos os cursos</h2><span class="muted num">${ts.length}</span></div>
+   <section class="stack" style="gap:12px"><div class="sec-h" style="margin:0"><h2>Todos os treinamentos</h2><span class="muted num">${ts.length}</span></div>
    ${cats.length>1?`<div class="filtros"><button class="${!S.trcCat?'on':''}" data-act="cuCat" data-k="">Todos</button>${cats.map(c=>`<button class="${S.trcCat===c?'on':''}" data-act="cuCat" data-k="${esc(c)}">${esc(c)}</button>`).join('')}</div>`:''}
    ${lista.length?`<div class="trgrid">${lista.map(card).join('')}</div>`:`<div class="empty">Nenhum treinamento por enquanto. Quando a gestão publicar, ele aparece aqui.</div>`}</section>`;
 }
@@ -3322,7 +3332,7 @@ function cCurso(t){
       ${!podeConcluir?`<div class="notice">${ic('play')} Assista pelo menos 80% do vídeo para liberar ${qs.length?'o teste':'a conclusão'}. Você está em <b>${visto}%</b>.</div>`:''}
       ${podeConcluir?qs.map((q,i)=>`<div class="trq"><p>${i+1}. ${esc(q.p)}</p>${(q.ops||[]).map((o,j)=>{const sel=R.esc[i]===j,cls=R.fim?(j===q.c?'c':sel?'e':''):'';return `<label class="${cls}"><input type="radio" name="trq${i}" data-act="cuResp" data-i="${i}" data-j="${j}" ${sel?'checked':''} ${R.fim?'disabled':''}> ${esc(o)}</label>`}).join('')}${R.fim&&q.exp?`<p class="exp">${ic('bulb')} ${esc(q.exp)}</p>`:''}</div>`).join(''):''}
       ${podeConcluir?`<button class="btn" data-act="cuConcluir" style="width:100%">${ic('checkCircle')} ${qs.length?'Enviar respostas e concluir':'Marcar como concluído'}</button>`:''}</section>`;
-  return `<div><button class="link" data-act="cuVoltar" style="padding:0">${ic('chevL')} Todos os cursos</button></div>
+  return `<div><button class="link" data-act="cuVoltar" style="padding:0">${ic('chevL')} Todos os treinamentos</button></div>
    <section class="stack" style="gap:8px"><div class="trmeta"><span class="chip cat">${esc(t.categoria)}</span>${t.duracao?`<span class="chip mute num">${ic('clock')} ${fmtDur(t.duracao)}</span>`:''}</div><h2 style="font-size:22px;line-height:1.25">${esc(t.titulo)}</h2>${t.descricao?`<p class="muted" style="margin:0">${esc(t.descricao)}</p>`:''}</section>
    ${t.videoUrl?`<div class="trplayer"><video id="cuVideo" src="${esc(t.videoUrl)}" controls playsinline preload="metadata" ${t.capa?`poster="${esc(t.capa)}"`:''}></video></div>`:''}
    <div class="trsegs" role="tablist">${segs.map(([k,icn,l])=>`<button class="${S.trSeg===k?'on':''}" data-act="cuSeg" data-k="${k}">${ic(icn)} ${l}</button>`).join('')}</div>

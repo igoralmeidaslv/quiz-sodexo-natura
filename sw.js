@@ -1,8 +1,8 @@
-/* Quiz Natura · service worker
+/* soDEXo · service worker
    - Página: sempre busca a versão mais nova na internet (rede primeiro); sem internet, usa a cópia salva.
    - Dados (Supabase) nunca passam pelo cache.
    - Cada publicação troca a VERSION, e o app se atualiza sozinho. */
-const VERSION='20261112172958';
+const VERSION='20261112174015';
 const CACHE='quiznatura-'+VERSION;
 const SHELL=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./favicon.ico','./apple-touch-icon.png'];
 
@@ -43,7 +43,7 @@ self.addEventListener('fetch',e=>{
 /* Avisos no celular (tarefas da limpeza) */
 self.addEventListener('push',e=>{
   let d={};try{d=e.data?e.data.json():{}}catch(_){d={body:e.data?e.data.text():''}}
-  e.waitUntil(self.registration.showNotification(d.title||'Quiz Natura',{body:d.body||'Você tem novidades no app.',icon:'./icon-192.png',badge:'./favicon-32.png',tag:d.tag||'aviso',renotify:true,data:{url:d.url||'./'}}));
+  e.waitUntil(self.registration.showNotification(d.title||'soDEXo',{body:d.body||'Você tem novidades no app.',icon:'./icon-192.png',badge:'./favicon-32.png',tag:d.tag||'aviso',renotify:true,data:{url:d.url||'./'}}));
 });
 self.addEventListener('notificationclick',e=>{
   e.notification.close();
