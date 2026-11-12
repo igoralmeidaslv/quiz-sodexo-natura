@@ -496,6 +496,51 @@ body.tvmode.nocur{cursor:none}
 .tvs.anim .fz .ico{width:10em;height:10em;border-radius:50%;border:.3em solid rgba(255,255,255,.35);display:grid;place-items:center;color:#fff;animation:bvIcoIn 1s var(--e) 1 both}
 .tvs.anim .fz .ico .i{width:4.6em;height:4.6em}
 @keyframes bvIcoIn{from{opacity:0;transform:translateY(3em) scale(.8)}to{opacity:1;transform:none}}
+.tvs.anim.promo{--ac:#FFD23F;--ink:#1B1A45;--tk:#2B3797;--pk:#FFD23F}
+.tvs.anim.promo.t-vermelho{background:#ED1C24;--tk:#2B3797}
+.tvs.anim.promo.t-azul{background:#2B3797;--tk:#ED1C24}
+.tvs.anim.promo.t-laranja{background:#EB6619;--ac:#FFFFFF;--pk:#2B3797;--tk:#2B3797}
+.tvs.anim.promo .rays{position:absolute;left:50%;top:36%;width:230em;height:230em;margin:-115em 0 0 -115em;border-radius:50%;background:repeating-conic-gradient(rgba(255,255,255,.085) 0 7.5deg,rgba(255,255,255,0) 7.5deg 15deg);animation:pmSpin 40s linear infinite}
+.tvs.anim.promo .pmw{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4.5em;padding:13em 6em 16em;text-align:center;font-family:'Nunito',system-ui,sans-serif}
+.tvs.anim.promo .pm-lg{position:absolute;top:4.2%;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:3.4em;animation:bvIn 1s var(--e) calc(var(--o) + .1s) 1 both}
+.tvs.anim.promo .pm-lg .sx{height:6.4em;width:auto}
+.tvs.anim.promo .pm-lg .pl{width:.25em;height:5.6em;background:rgba(255,255,255,.5);border-radius:.2em}
+.tvs.anim.promo .pm-lg .nt{height:3.2em;width:auto}
+.tvs.anim.promo .pm-ph{position:relative;width:66em;height:66em;flex:none;animation:pmPop 1.1s cubic-bezier(.34,1.56,.64,1) calc(var(--o) + .35s) 1 both}
+.tvs.anim.promo .pm-ph .im{position:absolute;inset:0;border-radius:50%;border:1.6em solid #fff;background:#fff center/cover no-repeat;box-shadow:0 3em 7em rgba(0,0,0,.3)}
+.tvs.anim.promo .pm-ph .im.vazio{display:grid;place-items:center;background:rgba(255,255,255,.14);color:#fff}
+.tvs.anim.promo .pm-ph .im.vazio .i{width:26em;height:26em;stroke-width:1.3}
+.tvs.anim.promo .pm-bd{position:absolute;right:-7em;top:-5em;width:32em;height:32em;display:grid;place-items:center;background:var(--pk);color:var(--ink);clip-path:polygon(50% 0%,59.5% 13%,75% 6.7%,77% 23%,93.3% 25%,87% 40.5%,100% 50%,87% 59.5%,93.3% 75%,77% 77%,75% 93.3%,59.5% 87%,50% 100%,40.5% 87%,25% 93.3%,23% 77%,6.7% 75%,13% 59.5%,0% 50%,13% 40.5%,6.7% 25%,23% 23%,25% 6.7%,40.5% 13%);animation:pmStamp .7s cubic-bezier(.34,1.56,.64,1) calc(var(--o) + 1.1s) 1 both}
+.t-laranja .pm-bd{color:#fff}
+.tvs.anim.promo .pm-bd span{display:block;transform:rotate(-12deg);font-weight:900;font-size:4.6em;line-height:1;letter-spacing:.01em;padding:0 1.1em;text-transform:uppercase;animation:pmWob 1.6s ease-in-out calc(var(--o) + 2s) 5 both}
+.tvs.anim.promo .pm-t{font-weight:900;line-height:1;text-transform:uppercase;color:#fff;letter-spacing:.01em;text-wrap:balance;text-shadow:0 .06em 0 rgba(0,0,0,.18);animation:pmSlideL .9s var(--e) calc(var(--o) + .8s) 1 both}
+.tvs.anim.promo .pm-d{position:relative;overflow:hidden;display:inline-block;max-width:88em;padding:.22em .6em .28em;border-radius:.28em;background:var(--ac);color:var(--ink);font-weight:900;line-height:1.05;text-wrap:balance;box-shadow:0 .25em 0 rgba(0,0,0,.18);animation:pmSlideR .9s var(--e) calc(var(--o) + 1.25s) 1 both}
+.t-laranja .pm-d{color:#2B3797}
+.tvs.anim.promo .pm-d::after{content:'';position:absolute;top:-20%;bottom:-20%;left:-40%;width:22%;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.75),rgba(255,255,255,0));transform:skewX(-20deg) translateX(-100%);animation:pmShine 2.6s ease-in-out calc(var(--o) + 2.4s) 3 both}
+.tvs.anim.promo .pm-x{font-weight:800;font-size:4.6em;line-height:1.2;color:#fff;max-width:19em;text-wrap:balance;animation:bvIn 1s var(--e) calc(var(--o) + 1.7s) 1 both}
+.tvs.anim.promo .pm-tk{position:absolute;left:0;right:0;bottom:0;height:11em;background:var(--tk);overflow:hidden;display:flex;align-items:center;animation:pmUp .8s var(--e) calc(var(--o) + .2s) 1 both}
+.tvs.anim.promo .pm-tk .run{display:flex;white-space:nowrap;animation:pmRun 16s linear infinite}
+.tvs.anim.promo .pm-tk .run span{font-family:'Nunito',sans-serif;font-weight:900;font-size:4.8em;color:#fff;letter-spacing:.06em;text-transform:uppercase;padding-right:1.2em}
+@keyframes pmSpin{to{transform:rotate(360deg)}}
+@keyframes pmPop{from{opacity:0;transform:scale(.2) rotate(-25deg)}to{opacity:1;transform:none}}
+@keyframes pmStamp{from{opacity:0;transform:scale(2.4) rotate(30deg)}to{opacity:1;transform:none}}
+@keyframes pmWob{0%,100%{transform:rotate(-12deg) scale(1)}50%{transform:rotate(-8deg) scale(1.07)}}
+@keyframes pmSlideL{from{opacity:0;transform:translateX(-60%) skewX(-14deg)}to{opacity:1;transform:none}}
+@keyframes pmSlideR{from{opacity:0;transform:translateX(60%) skewX(-14deg)}to{opacity:1;transform:none}}
+@keyframes pmShine{0%{transform:skewX(-20deg) translateX(-100%)}60%,100%{transform:skewX(-20deg) translateX(700%)}}
+@keyframes pmUp{from{transform:translateY(100%)}to{transform:none}}
+@keyframes pmRun{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.mthumb .mpromo{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:8px;box-sizing:border-box;text-align:center;font-family:'Nunito',sans-serif;color:#fff;background:#ED1C24}
+.mthumb .mpromo.t-azul{background:#2B3797}.mthumb .mpromo.t-laranja{background:#EB6619}
+.mthumb .mpromo b{font-weight:900;font-size:13px;line-height:1.05;text-transform:uppercase}
+.mthumb .mpromo i{font-style:normal;font-weight:900;font-size:11px;background:#FFD23F;color:#1B1A45;padding:2px 6px;border-radius:4px}
+.mthumb .mpromo img{width:54px;height:54px;border-radius:50%;object-fit:cover;border:3px solid #fff}
+.mthumb .mpromo .i{width:34px;height:34px}
+.mlist-h{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.mlist-h select{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;min-height:44px;font:inherit}
+.pr-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.pr-cor{display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;border-radius:10px;border:2px solid transparent;color:#fff;font-weight:800;font:inherit;font-weight:800;cursor:pointer}
+.pr-cor[aria-pressed="true"]{border-color:var(--ink,#1B1A45);box-shadow:0 0 0 2px #fff inset}
 .mthumb .manim .fq{padding:0 10px;font-size:12px;line-height:1.15}
 .mthumb video{width:100%;height:100%;object-fit:cover;display:block;background:#0f1440}
 .mthumb .mtag{position:absolute;left:6px;bottom:6px;display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:999px;background:rgba(0,0,0,.65);color:#fff;font-size:12px;font-weight:700}
@@ -770,7 +815,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261111233214';
+const APP_VERSION='20261112143347';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -1401,7 +1446,7 @@ function resizeFoto(file,maxW,maxH,quadrado,limite){return new Promise((res,rej)
 /* Chamadas novas ao Supabase */
 Object.assign(RPC,{
   tvVersao:['tv_versao',[]],tvDados:['tv_dados',[]],dadosCardapio:['dados_cardapio',['p_pin']],salvarCardapio:['salvar_cardapio',['p_pin','p']],
-  salvarPrato:['salvar_prato',['p_pin','p']],removerPrato:['remover_prato',['p_pin','p_id']],salvarMidia:['salvar_midia',['p_pin','p_foto']],removerMidia:['remover_midia',['p_pin','p_id']],
+  salvarPrato:['salvar_prato',['p_pin','p']],removerPrato:['remover_prato',['p_pin','p_id']],salvarMidia:['salvar_midia',['p_pin','p_foto','p_lugar']],salvarAnuncioCada:['salvar_anuncio_cada',['p_pin','p_seg']],removerMidia:['remover_midia',['p_pin','p_id']],
   salvarTarefa:['salvar_tarefa',['p_pin','p']],removerTarefa:['remover_tarefa',['p_pin','p_id']],copiarTarefas:['copiar_tarefas',['p_pin','p_de','p_para']],
   marcarTarefa:['marcar_tarefa',['p_pin','p_id','p_feitos']],salvarPush:['salvar_push',['p_pin','p_sub']]});
 const TV_URL=SITE+'?tv';
@@ -1479,6 +1524,8 @@ function tvStandbyHtml(b,emPreparo){
 /* Mídias do stand-by: imagem (data:image), animação pronta (anim:boasvindas) e vídeo (video:<segundos>:<link>) */
 function midiaInfo(s){
   s=String(s||'');
+  if(s==='anim:destaque')return {tipo:'anim',nome:'destaque',d:12,src:s};
+  if(s.startsWith('anim:promo:')){let o={};try{o=JSON.parse(decodeURIComponent(s.slice(11)))||{}}catch(e){}return {tipo:'anim',nome:'promo',p:o,d:12,src:s}}
   if(s.startsWith('anim:frase:')){const [t,sb]=s.slice(11).split('|');let a='',b='';try{a=decodeURIComponent(t||'');b=decodeURIComponent(sb||'')}catch(e){}return {tipo:'anim',nome:'frase',t:a,s:b,d:12,src:s}}
   if(s.startsWith('anim:'))return {tipo:'anim',nome:s.slice(5),d:12,src:s};
   const v=s.match(/^video:(\d+):(.+)$/);
@@ -1490,7 +1537,7 @@ const TVV={prontos:{},falhou:{},rodando:false};
 async function tvVideosPreparar(){
   if(TVV.rodando)return;TVV.rodando=true;
   try{
-    const urls=((TV.dados||{}).midias||[]).map(midiaInfo).filter(m=>m.tipo==='video').map(m=>m.url);
+    const urls=[...((TV.dados||{}).midias||[]),...((TV.dados||{}).anuncios||[])].map(midiaInfo).filter(m=>m.tipo==='video').map(m=>m.url);
     let c=null;try{c=await caches.open('tv-videos')}catch(e){}
     if(c){try{for(const r of await c.keys())if(!urls.includes(r.url))await c.delete(r)}catch(e){}}
     for(const u of Object.keys(TVV.prontos))if(!urls.includes(u)){try{URL.revokeObjectURL(TVV.prontos[u])}catch(e){}delete TVV.prontos[u]}
@@ -1535,7 +1582,36 @@ function tvFraseHtml(m,b,dec){
       <div class="ics">${['salad','apple','utensils'].map((k,i)=>`<span class="ico" style="animation-delay:calc(var(--o) + ${(.3+i*.25).toFixed(2)}s)">${ic(k)}</span>`).join('')}</div>
     </div></div></div>`;
 }
+/* Anúncio estilo merchan: raios girando, foto que "pula", selo carimbado, título e destaque deslizando, faixa correndo */
+function tamTexto(t,max,min,k){const L=Math.max(4,String(t||'').length);return Math.min(max,Math.max(min,k/Math.sqrt(L)))}
+function tvPromoHtml(p,b,dec){
+  p=p||{};const cor=['vermelho','azul','laranja'].includes(p.c)?p.c:'vermelho';
+  const tit=String(p.t||'').trim(),dst=String(p.d||'').trim(),sup=String(p.x||'').trim(),selo=String(p.s||'').trim();
+  const tk=String(p.k||'').trim()||'Cardápio de hoje • Bom apetite';
+  const pedaco=`<span>${esc(tk)} •</span>`.repeat(4);
+  return `<div class="tvs anim promo t-${cor} tvfade" style="--o:-${Math.max(0,dec).toFixed(2)}s">
+    <span class="rays"></span><div class="bvx">
+    <div class="pm-lg"><img class="sx" src="${LOGO_W}" alt="Sodexo"><span class="pl"></span>${naturaImg('#FFFFFF')}</div>
+    <div class="pmw">
+      <div class="pm-ph">${p.f?`<span class="im" style="background-image:url('${esc(p.f)}')"></span>`:`<span class="im vazio">${ic(p.ic||'utensils')}</span>`}${selo?`<span class="pm-bd"><span>${esc(selo)}</span></span>`:''}</div>
+      ${tit?`<div class="pm-t" style="font-size:${tamTexto(tit,11,5.5,40).toFixed(2)}em">${esc(tit)}</div>`:''}
+      ${dst?`<div class="pm-d" style="font-size:${tamTexto(dst,8.5,4.6,30).toFixed(2)}em">${esc(dst)}</div>`:''}
+      ${sup?`<div class="pm-x">${esc(sup)}</div>`:''}
+    </div>
+    <div class="pm-tk"><div class="run">${pedaco}${pedaco}</div></div>
+    </div></div>`;
+}
+/* Destaque automático: pega o prato principal do cardápio que está no ar */
+function destaqueDe(itens){
+  const l=(itens||[]).filter(i=>i&&String(i.nome||'').trim());
+  const pr=l.filter(i=>i.cat==='prato');if(!pr.length)return null;
+  const sob=l.filter(i=>i.cat==='sobremesa').map(i=>i.nome),gu=l.filter(i=>i.cat==='guarnicao').map(i=>i.nome);
+  const nome=pr[0].nome,ex=pr.slice(1).map(i=>i.nome);
+  const x=sob.length?'Sobremesa: '+sob.join(' e '):gu.length?'Acompanha '+gu.slice(0,2).join(' e '):ex.length?'Opção: '+ex.join(' ou '):'';
+  return {s:'Hoje tem',t:'Prato do dia',d:nome,x,f:fotoTv(nome),c:'vermelho',k:'Bom apetite • Cardápio de hoje'};
+}
 function tvMidiaHtml(m,b,dec){
+  if(m.tipo==='anim'&&(m.nome==='promo'||m.nome==='destaque'))return tvPromoHtml(m.p,b,dec);
   if(m.tipo==='anim'&&m.nome==='frase')return tvFraseHtml(m,b,dec);
   if(m.tipo==='anim')return tvAnimHtml(m.nome,dec);
   const prox=REF[proximaRefeicao(b)];
@@ -1547,21 +1623,35 @@ function tvMidiaHtml(m,b,dec){
     <div class="strip"><img src="${LOGO_W}" alt="Sodexo">${naturaImg('#FFFFFF')}<span class="t"><span class="hora">${pad2(b.h)}:${pad2(b.m)}</span> · ${esc(prox.nome)} às ${hhmm(prox.ini)}</span></div></div>`;
 }
 function vTv(){return `<div class="tv" id="tv"></div><div class="tvbtns" id="tvbtns"><button class="tvfs" data-act="tvGirar">${ic('refresh')} Girar tela</button>${document.fullscreenElement?'':`<button class="tvfs" data-act="tvFull">${ic('maximize')} Tela cheia</button>`}</div>`}
-const TV_VAZIO={cardapios:[],fotos:{},midias:[],v:'0'};
+const TV_VAZIO={cardapios:[],fotos:{},midias:[],anuncios:[],v:'0'};
 function tvTela(){
   const b=belemAgora(),D=TV.dados||TV_VAZIO;
   let atual=refeicaoAgora(b);
   if(TV.forcar&&REF[TV.forcar]){atual={ref:TV.forcar,data:REF[TV.forcar].seguinte&&b.min>=REF.ceia.fim?b.dia:(REF[TV.forcar].seguinte?somaDia(b.dia,-1):b.dia)}}
   if(TV.forcar!=='standby'&&atual){
     const c=D.cardapios.find(x=>x.data===atual.data&&x.refeicao===atual.ref);
-    if(c)return {k:'menu:'+atual.data+atual.ref+TV.v,html:tvMenuHtml(atual.ref,atual.data,c.itens,fotoTv)};
+    if(c){
+      /* Cardápio no ar: mostra o cardápio por X s, depois um anúncio, volta ao cardápio, próximo anúncio... */
+      const dq=destaqueDe(c.itens);
+      const ads=(D.anuncios||[]).map(midiaInfo).filter(m=>(m.tipo!=='video'||TVV.prontos[m.url])&&(m.nome!=='destaque'||dq));
+      if(ads.length&&!TV.semAnuncio){
+        const M=Math.min(300,Math.max(20,+D.anuncioCada||45)),seq=[];
+        ads.forEach(a=>{seq.push({tipo:'menu',d:M});seq.push(a)});
+        const total=seq.reduce((a,m)=>a+m.d,0);
+        let t=(Date.now()/1000)%total,i=0;while(i<seq.length-1&&t>=seq[i].d){t-=seq[i].d;i++}
+        const m=seq[i];
+        if(m.tipo!=='menu'){const mm=m.nome==='destaque'?{...m,p:dq}:m;
+          return {k:'anun:'+i+':'+m.src.length+':'+m.src.slice(-32)+atual.ref+TV.v,html:tvMidiaHtml(mm,b,t)}}
+      }
+      return {k:'menu:'+atual.data+atual.ref+TV.v,html:tvMenuHtml(atual.ref,atual.data,c.itens,fotoTv)};
+    }
   }
   /* Antes de receber os dados (internet lenta), mostra o stand-by direto, sem tela de carregando */
   const preparo=TV.dados&&atual&&TV.forcar!=='standby'?atual.ref:null;
   const ms=D.midias||[],prox=proximaRefeicao(b);
   /* Stand-by: alterna logos/horários (12 s) e as mídias (imagem e animação 12 s; vídeo = a duração dele).
      Vídeo só entra no rodízio depois de salvo na TV. */
-  const itens=[{tipo:'logos',d:12}].concat(ms.map(midiaInfo).filter(m=>m.tipo!=='video'||TVV.prontos[m.url]));
+  const itens=[{tipo:'logos',d:12}].concat(ms.map(midiaInfo).filter(m=>(m.tipo!=='video'||TVV.prontos[m.url])&&m.nome!=='destaque'));
   const total=itens.reduce((a,m)=>a+m.d,0);
   let t=(Date.now()/1000)%total,i=0;while(i<itens.length-1&&t>=itens[i].d){t-=itens[i].d;i++}
   if(i>0){const m=itens[i];return {k:'midia:'+i+':'+m.src.length+':'+m.src.slice(-32)+prox+TV.v,html:tvMidiaHtml(m,b,t)}}
@@ -1617,7 +1707,7 @@ function tvPintar(forcar){
 function comPrazo(p,ms){return Promise.race([p,new Promise((_,rej)=>setTimeout(()=>rej(new Error('tempo')),ms))])}
 async function tvCacheSalvar(d){
   try{const c=await caches.open('tv-dados');await c.put('./__tv-dados.json',new Response(JSON.stringify(d),{headers:{'Content-Type':'application/json'}}));return}catch(e){}
-  try{LS.set('tv_cache',JSON.stringify(d))}catch(e){try{LS.set('tv_cache',JSON.stringify({...d,fotos:{},midias:[]}))}catch(_){}}
+  try{LS.set('tv_cache',JSON.stringify(d))}catch(e){try{LS.set('tv_cache',JSON.stringify({...d,fotos:{},midias:[],anuncios:[]}))}catch(_){}}
 }
 async function tvCacheLer(){
   try{const c=await caches.open('tv-dados');const r=await c.match('./__tv-dados.json');if(r)return await r.json()}catch(e){}
@@ -1705,9 +1795,8 @@ function aCardapio(){
     <section class="panel stack" style="gap:12px"><div class="sec-h" style="margin:0"><h2>${ic('tv')} TV vertical</h2></div>
       <div class="urlbox"><code>${esc(TV_URL)}</code><button class="btn sm" data-act="cCopiarLink">${ic('copy')} Copiar link</button></div>
       <p class="muted" style="margin:0;font-size:14px">Abra esse link no navegador da TV e toque em <b>Tela cheia</b>. Ela troca sozinha: <b>Almoço 10h às 13h</b>, <b>Janta 17h30 às 20h30</b> e <b>Ceia 00h às 2h30</b>, quando o cardápio estiver <b>Pronto</b>. Fora desses horários fica no stand-by com os logos.</p>
-      <div><div class="sec-h"><h2 style="font-size:17px">Mídias do stand-by <span class="muted num" style="font-size:14px">(${S.card.midias.length}/10)</span></h2></div>
-      <p class="muted" style="margin:0 0 10px;font-size:14px">Opcional. Tudo em pé (retrato, 1080 × 1920). Imagens e a animação ficam 12 segundos; vídeos ficam o tempo deles (até 60 s, máx. 20 MB). A TV baixa cada vídeo uma vez e guarda no aparelho. Sem mídias, ficam só os logos e os horários.</p>
-      <div class="mgrid">${S.card.midias.map(midiaThumb).join('')}${S.card.midias.length<10?`<label class="mthumb add" for="m-up">${ic('image')}<br>Adicionar imagem</label><label class="mthumb add" for="v-up">${ic('film')}<br>Adicionar vídeo</label><button type="button" class="mthumb add btnlike" data-act="mFrase">${ic('message')}<br>Frase animada</button>${S.card.midias.some(m=>m.foto==='anim:boasvindas')?'':`<button type="button" class="mthumb add btnlike" data-act="mAnim">${ic('sparkles')}<br>Animação de boas-vindas</button>`}`:''}</div><input id="m-up" type="file" accept="image/*" hidden><input id="v-up" type="file" accept="video/mp4,video/webm" hidden></div>
+      ${midiaLista('standby')}
+      ${midiaLista('cardapio')}
     </section>
 
     <section class="panel stack" style="gap:10px"><div class="sec-h" style="margin:0"><h2>${ic('utensils')} Banco de pratos <span class="muted num" style="font-size:14px">(${S.card.pratos.length})</span></h2><button class="btn sm alt" data-act="pNovo">${ic('plus')} Prato</button></div>
@@ -1715,9 +1804,41 @@ function aCardapio(){
       ${S.card.pratos.length?`<div class="plist">${S.card.pratos.map(p=>`<div class="citem"><span class="th">${p.foto?`<img src="${esc(p.foto)}" alt="">`:ic((CATN[p.categoria]||['','','utensils'])[2])}</span><span class="nm">${esc(p.nome)}<br><small class="muted" style="font-weight:600">${esc((CATN[p.categoria]||['','Sem categoria'])[1])}</small></span><button data-act="pEdit" data-id="${esc(p.id)}" aria-label="Editar ${esc(p.nome)}">${ic('pencil')}</button></div>`).join('')}</div>`:'<div class="empty">Os pratos que você adicionar no cardápio aparecem aqui.</div>'}
     </section>`;
 }
+function promoForm(){
+  const inp=(id,lb,ph,max,val)=>`<div class="fld"><label for="${id}">${lb}</label><input id="${id}" maxlength="${max}" placeholder="${esc(ph)}" value="${esc(val||'')}" style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px;width:100%"></div>`;
+  const selos=['Só hoje','Hoje tem','Novidade','Destaque','Imperdível','Aproveite'];
+  openModal(`<h2>Anúncio animado</h2>
+   <p class="muted" style="margin-top:0">Entra entre as telas do cardápio, com selo carimbado, foto, texto deslizando e faixa correndo embaixo.</p>
+   <div class="fld"><span class="lb">Foto (opcional)</span><div class="photo"><span id="pr-prev" class="citem" style="background:none;padding:0"><span class="th" style="width:86px;height:86px">${ic('utensils')}</span></span><div style="display:flex;flex-direction:column;gap:6px"><label class="btn sm alt" for="pr-foto" style="cursor:pointer">${ic('camera')} Escolher foto</label><input id="pr-foto" type="file" accept="image/*" hidden><button class="link" style="padding:0;text-align:left" data-act="mPromoSem" id="pr-rm" hidden>Remover foto</button></div></div><span class="hint">Sem foto, usa a foto do prato se ele estiver no banco de pratos.</span></div>
+   <div class="fld"><label for="pr-s">Selo</label><select id="pr-s" style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px;width:100%"><option value="">Sem selo</option>${selos.map((x,i)=>`<option${i===0?' selected':''}>${x}</option>`).join('')}</select></div>
+   ${inp('pr-t','Título','Ex.: Sobremesa especial',28)}
+   ${inp('pr-d','Destaque (fica na tarja colorida)','Ex.: Pudim de leite',32)}
+   ${inp('pr-x','Texto de apoio (opcional)','Ex.: Peça no balcão de sobremesas',60)}
+   ${inp('pr-k','Frase da faixa de baixo (opcional)','Cardápio de hoje • Bom apetite',40)}
+   <div class="fld"><span class="lb">Cor</span><div class="pr-grid">${[['vermelho','#ED1C24','Vermelho'],['azul','#2B3797','Azul'],['laranja','#EB6619','Laranja']].map(([k,h,n])=>`<button type="button" class="pr-cor" data-act="mPromoCor" data-c="${k}" aria-pressed="${k===M.c}" style="background:${h}">${n}</button>`).join('')}</div></div>
+   <p class="ferr"></p><div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="mPromoOk">Colocar na TV</button></div>`);
+}
+function midiaLista(lg){
+  const ls=(S.card.midias||[]).filter(m=>(m.lugar||'standby')===lg),c=lg==='cardapio'?'-c':'',n=ls.length;
+  const tem=k=>ls.some(m=>m.foto===k);
+  const add=n>=10?'':`<label class="mthumb add" for="m-up${c}">${ic('image')}<br>Adicionar imagem</label><label class="mthumb add" for="v-up${c}">${ic('film')}<br>Adicionar vídeo</label>`+
+    (lg==='cardapio'?`<button type="button" class="mthumb add btnlike" data-act="mPromo" data-lugar="${lg}">${ic('megaphone')}<br>Anúncio animado</button>${tem('anim:destaque')?'':`<button type="button" class="mthumb add btnlike" data-act="mDestaque" data-lugar="${lg}">${ic('star')}<br>Prato do dia (automático)</button>`}`:'')+
+    `<button type="button" class="mthumb add btnlike" data-act="mFrase" data-lugar="${lg}">${ic('message')}<br>Frase animada</button>`+
+    (lg==='standby'&&!tem('anim:boasvindas')?`<button type="button" class="mthumb add btnlike" data-act="mAnim" data-lugar="${lg}">${ic('sparkles')}<br>Animação de boas-vindas</button>`:'');
+  const cada=+(S.card.anuncioCada||45);
+  const tit=lg==='cardapio'?`<div class="mlist-h"><h2 style="font-size:17px;margin:0">Anúncios durante o cardápio <span class="muted num" style="font-size:14px">(${n}/10)</span></h2>
+      <label style="display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700">Cardápio fica <select id="an-cada" aria-label="Tempo do cardápio entre anúncios">${[...new Set([30,45,60,90,120,cada])].sort((a,b)=>a-b).map(v=>`<option value="${v}"${v===cada?' selected':''}>${v} s</option>`).join('')}</select> entre anúncios</label></div>
+      <p class="muted" style="margin:8px 0 10px;font-size:14px">Na hora do almoço, da janta e da ceia, a TV mostra o cardápio por ${cada} segundos, depois <b>um</b> anúncio, volta ao cardápio, depois o próximo anúncio, e assim por diante. Cada anúncio fica 12 segundos (vídeo: o tempo dele). Sem anúncios, fica só o cardápio.</p>`
+    :`<div class="sec-h"><h2 style="font-size:17px">Mídias do stand-by <span class="muted num" style="font-size:14px">(${n}/10)</span></h2></div>
+      <p class="muted" style="margin:0 0 10px;font-size:14px">Fora do horário das refeições. Tudo em pé (retrato, 1080 × 1920). Imagens e animações ficam 12 segundos; vídeos ficam o tempo deles (até 60 s, máx. 20 MB). A TV baixa cada vídeo uma vez e guarda no aparelho. Sem mídias, ficam só os logos e os horários.</p>`;
+  return `<div style="${lg==='cardapio'?'margin-top:18px;padding-top:16px;border-top:1px solid var(--line)':''}">${tit}
+      <div class="mgrid">${ls.map(midiaThumb).join('')}${add}</div><input id="m-up${c}" data-lugar="${lg}" type="file" accept="image/*" hidden><input id="v-up${c}" data-lugar="${lg}" type="file" accept="video/mp4,video/webm" hidden></div>`;
+}
 function midiaThumb(m){
   const x=midiaInfo(m.foto);
-  const corpo=x.tipo==='video'?`<video src="${esc(x.url)}#t=0.5" muted playsinline preload="metadata"></video><span class="mtag">${ic('film')} Vídeo · ${x.d}s</span>`
+  const corpo=x.tipo==='anim'&&x.nome==='promo'?`<div class="mpromo t-${esc(x.p.c||'vermelho')}">${x.p.f?`<img src="${esc(x.p.f)}" alt="">`:ic('utensils')}<b>${esc(x.p.t||'')}</b>${x.p.d?`<i>${esc(x.p.d)}</i>`:''}</div><span class="mtag">${ic('megaphone')} Anúncio</span>`
+    :x.tipo==='anim'&&x.nome==='destaque'?`<div class="mpromo">${ic('star')}<b>Prato do dia</b><i>automático</i></div><span class="mtag">${ic('sparkles')} Automático</span>`
+    :x.tipo==='video'?`<video src="${esc(x.url)}#t=0.5" muted playsinline preload="metadata"></video><span class="mtag">${ic('film')} Vídeo · ${x.d}s</span>`
     :x.tipo==='anim'&&x.nome==='frase'?`<div class="manim"><span class="fq">${esc(x.t)}</span></div><span class="mtag">${ic('sparkles')} Frase</span>`
     :x.tipo==='anim'?`<div class="manim"><img src="${LOGO_W}" alt=""><span>SEJAM<br>BEM-VINDOS<br>(AS)</span></div><span class="mtag">${ic('sparkles')} Animação</span>`
     :`<img src="${esc(m.foto)}" alt="">`;
@@ -1737,7 +1858,7 @@ async function funcaoMidia(body){
   catch(e){throw new Error('sem conexão com a internet.')}
   const j=await r.json().catch(()=>null);if(!j)throw new Error('o servidor não respondeu.');if(j.erro)throw new Error(j.erro);return j;
 }
-async function enviarVideo(f){
+async function enviarVideo(f,lugar){
   if(!/^video\/(mp4|webm)$/.test(f.type))throw new Error('use um vídeo MP4 ou WebM.');
   if(f.size>20*1024*1024)throw new Error(`o vídeo tem ${(f.size/1048576).toFixed(1).replace('.',',')} MB. O máximo é 20 MB.`);
   const info=await lerVideo(f);
@@ -1752,7 +1873,7 @@ async function enviarVideo(f){
     await enviarArquivo(SUPA_URL.replace(/\/$/,'')+'/storage/v1/object/upload/sign/tv-midias/'+r.path+'?token='+encodeURIComponent(r.token),f,p=>toast('Enviando vídeo… '+p+'% (não feche esta tela)'));
     link=r.publico;
   }
-  await call('salvarMidia',adminPin,'video:'+seg+':'+link);
+  await call('salvarMidia',adminPin,'video:'+seg+':'+link,lugar||'standby');
   await carregarCardapio();
   toast(info.w>info.h?'Vídeo adicionado. Ele está deitado: na TV aparece com faixas em cima e embaixo.':'Vídeo adicionado ao stand-by');
 }
@@ -2114,7 +2235,7 @@ Object.assign(A,{
     await call('removerMidia',adminPin,d.id);
     if(x&&x.tipo==='video'&&!DEMO){const k=x.url.split('/tv-midias/')[1];if(k)funcaoMidia({acao:'apagar',path:k}).catch(()=>{})}
     await carregarCardapio();toast('Mídia removida')}),
-  mFrase:()=>{M={};openModal(`<h2>Frase animada</h2>
+  mFrase:d=>{M={lugar:d.lugar||'standby'};openModal(`<h2>Frase animada</h2>
     <p class="muted" style="margin-top:0">Aparece na TV com os logos, a saudação do horário (bom dia, boa tarde ou boa noite) e animação em loop. Fica 12 segundos no rodízio.</p>
     <div class="fld"><label for="fr-t">Frase principal</label><input id="fr-t" maxlength="90" placeholder="Ex.: Comer bem é cuidar de você." style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px;width:100%"></div>
     <div class="fld"><label for="fr-s">Complemento (opcional)</label><input id="fr-s" maxlength="60" placeholder="Ex.: Boa refeição e ótimo turno!" style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px;width:100%"></div>
@@ -2122,9 +2243,22 @@ Object.assign(A,{
   mFraseOk:async(d,b)=>{const t=$('#fr-t').value.replace(/\|/g,' ').trim(),sb=$('#fr-s').value.replace(/\|/g,' ').trim();
     if(t.length<3)return ferr('Escreva a frase principal.');
     busyBtn(b,true,'Salvando…');
-    try{await call('salvarMidia',adminPin,'anim:frase:'+encodeURIComponent(t)+(sb?'|'+encodeURIComponent(sb):''));closeModal();await carregarCardapio();toast('Frase adicionada ao stand-by')}
+    try{await call('salvarMidia',adminPin,'anim:frase:'+encodeURIComponent(t)+(sb?'|'+encodeURIComponent(sb):''),M.lugar||'standby');closeModal();await carregarCardapio();toast('Frase adicionada ao stand-by')}
     catch(e){busyBtn(b,false,'Colocar na TV');ferr(msg(e))}},
-  mAnim:async(d,b)=>{try{await call('salvarMidia',adminPin,'anim:boasvindas');await carregarCardapio();toast('Animação de boas-vindas adicionada ao stand-by')}catch(e){toast('Não foi possível adicionar: '+msg(e))}},
+  mDestaque:async d=>{try{await call('salvarMidia',adminPin,'anim:destaque','cardapio');await carregarCardapio();toast('Prato do dia automático adicionado aos anúncios')}catch(e){toast('Não foi possível adicionar: '+msg(e))}},
+  mPromo:()=>{M={lugar:'cardapio',c:'vermelho',f:''};promoForm()},
+  mPromoCor:d=>{M.c=d.c;document.querySelectorAll('.pr-cor').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.c===d.c)))},
+  mPromoSem:()=>{M.f='';const pv=$('#pr-prev');if(pv)pv.innerHTML=ic('utensils');const r=$('#pr-rm');if(r)r.hidden=true},
+  mPromoOk:async(d,b)=>{
+    const v=id=>($('#'+id).value||'').trim();
+    const o={s:v('pr-s'),t:v('pr-t'),d:v('pr-d'),x:v('pr-x'),k:v('pr-k'),c:M.c||'vermelho'};
+    if(!o.t&&!o.d)return ferr('Escreva pelo menos o título ou o destaque.');
+    let f=M.f;if(!f&&o.d){const pd=pratoDe(o.d);if(pd&&pd.foto)f=pd.foto}
+    if(f)o.f=f;
+    busyBtn(b,true,'Salvando…');
+    try{await call('salvarMidia',adminPin,'anim:promo:'+encodeURIComponent(JSON.stringify(o)),'cardapio');closeModal();await carregarCardapio();toast('Anúncio adicionado: ele entra entre as telas do cardápio')}
+    catch(e){busyBtn(b,false,'Colocar na TV');ferr(msg(e))}},
+  mAnim:async(d,b)=>{try{await call('salvarMidia',adminPin,'anim:boasvindas',d.lugar||'standby');await carregarCardapio();toast('Animação de boas-vindas adicionada ao stand-by')}catch(e){toast('Não foi possível adicionar: '+msg(e))}},
   lDia:d=>{S.ldia=somaDia(S.ldia,+d.k);render()},
   lHoje:()=>{S.ldia=isoDia();render()},
   lNova:d=>tarefaForm(null,d.id),
@@ -2148,10 +2282,14 @@ Object.assign(A,{
   tAvisos:()=>ligarAvisos(false),
 });
 document.addEventListener('change',async e=>{
-  if(e.target.id==='v-up'){const f=e.target.files[0];e.target.value='';if(!f)return;
-    try{await enviarVideo(f)}catch(err){toast('Não foi possível enviar: '+msg(err))}}
-  if(e.target.id==='m-up'){const f=e.target.files[0];if(!f)return;toast('Enviando imagem…');
-    try{const u=await resizeFoto(f,1080,1920,false,1100000);await call('salvarMidia',adminPin,u);await carregarCardapio();toast('Mídia adicionada ao stand-by')}catch(err){toast('Não foi possível enviar: '+msg(err))}}
+  const lgx=e.target.dataset&&e.target.dataset.lugar||'standby',ondeTxt=lgx==='cardapio'?'aos anúncios do cardápio':'ao stand-by';
+  if(/^v-up/.test(e.target.id)){const f=e.target.files[0];e.target.value='';if(!f)return;
+    try{await enviarVideo(f,lgx)}catch(err){toast('Não foi possível enviar: '+msg(err))}}
+  if(/^m-up/.test(e.target.id)){const f=e.target.files[0];e.target.value='';if(!f)return;toast('Enviando imagem…');
+    try{const u=await resizeFoto(f,1080,1920,false,1100000);await call('salvarMidia',adminPin,u,lgx);await carregarCardapio();toast('Imagem adicionada '+ondeTxt)}catch(err){toast('Não foi possível enviar: '+msg(err))}}
+  if(e.target.id==='pr-foto'){const f=e.target.files[0];e.target.value='';if(!f)return;
+    try{M.f=await resizeFoto(f,720,720,true,320000);const pv=$('#pr-prev');if(pv)pv.innerHTML=`<span class="th" style="width:86px;height:86px"><img src="${M.f}" alt=""></span>`;const r=$('#pr-rm');if(r)r.hidden=false}catch(err){ferr('Não foi possível ler a foto.')}}
+  if(e.target.id==='an-cada'){const v=+e.target.value;try{await call('salvarAnuncioCada',adminPin,v);S.card.anuncioCada=v;render();toast('Pronto: o cardápio fica '+v+' segundos entre os anúncios')}catch(err){toast('Não foi possível salvar: '+msg(err))}}
 });
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.dataset&&e.target.dataset.cat){e.preventDefault();addItem(e.target.dataset.cat)}});
 window.addEventListener('beforeunload',e=>{if(Object.keys(CPEND).length){e.preventDefault();e.returnValue=''}});
@@ -2301,12 +2439,13 @@ document.addEventListener('change',e=>{if(e.target.id==='selAnoQa'){S.mesQuiz=e.
     dadosGestao:p=>({...dg(p),tarefas:tj(db.tarefas),pushColabs:[]}),
     dadosColab:p=>{const r=dc(p),me=MOCK.entrar(p);return {...r,minhasTarefas:tj(db.tarefas.filter(t=>t.colabId===me.id))}},
     tvVersao:()=>({v:db.v,agora:null}),
-    tvDados:()=>{const f={};db.pratos.forEach(p=>{if(p.foto)f[norm(p.nome)]=p.foto});return {v:db.v,agora:null,cardapios:db.card.filter(c=>c.pronto),fotos:f,midias:db.midias.map(m=>m.foto)}},
-    dadosCardapio:p=>{chk(p);return {cardapios:db.card,pratos:db.pratos,midias:db.midias}},
+    tvDados:()=>{const f={};db.pratos.forEach(p=>{if(p.foto)f[norm(p.nome)]=p.foto});return {v:db.v,agora:null,anuncioCada:db.cada||45,anuncios:db.midias.filter(m=>m.lugar==='cardapio').map(m=>m.foto),cardapios:db.card.filter(c=>c.pronto),fotos:f,midias:db.midias.filter(m=>(m.lugar||'standby')==='standby').map(m=>m.foto)}},
+    dadosCardapio:p=>{chk(p);return {cardapios:db.card,pratos:db.pratos,midias:db.midias,anuncioCada:db.cada||45}},
     salvarCardapio:(p,x)=>{chk(p);db.card=db.card.filter(c=>!(c.data===x.data&&c.refeicao===x.refeicao));db.card.push({...x,em:String(Date.now())});bump();return {ok:true}},
     salvarPrato:(p,x)=>{chk(p);let o=db.pratos.find(y=>norm(y.nome)===norm(x.nome));if(!o){o={id:'p'+Date.now()+Math.random(),nome:x.nome,categoria:x.categoria||'',foto:''};db.pratos.push(o)}o.nome=x.nome;if(x.categoria)o.categoria=x.categoria;if('foto' in x)o.foto=x.foto;bump();return {ok:true}},
     removerPrato:(p,id)=>{chk(p);db.pratos=db.pratos.filter(x=>x.id!==id);bump();return {ok:true}},
-    salvarMidia:(p,f)=>{chk(p);db.midias.push({id:'m'+Date.now(),foto:f});bump();return {ok:true}},
+    salvarMidia:(p,f,l)=>{chk(p);db.midias.push({id:'m'+Date.now(),foto:f,lugar:l||'standby'});bump();return {ok:true}},
+    salvarAnuncioCada:(p,v)=>{chk(p);db.cada=v;bump();return {ok:true}},
     removerMidia:(p,id)=>{chk(p);db.midias=db.midias.filter(x=>x.id!==id);bump();return {ok:true}},
     salvarTarefa:(p,x)=>{chk(p);if(x.id){const o=db.tarefas.find(t=>t.id===x.id);Object.assign(o,x,{feitos:o.feitos.filter(f=>x.itens.includes(f))})}else db.tarefas.push({...x,id:'t'+Date.now(),feitos:[],ordem:db.tarefas.length,feitoEm:null});return {ok:true}},
     removerTarefa:(p,id)=>{chk(p);db.tarefas=db.tarefas.filter(t=>t.id!==id);return {ok:true}},
