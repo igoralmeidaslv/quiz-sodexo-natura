@@ -396,6 +396,19 @@ table.esc button.nmb{background:none;border:0;padding:0;font:inherit;font-weight
 .foot details.sobre summary .ver{opacity:.75;font-weight:600}
 .foot details.sobre[open] summary{margin-bottom:6px}
 .bnav button{white-space:nowrap;font-size:clamp(9.5px,2.75vw,12px)}
+.ghost.icob.perfb{padding:3px;border-radius:50%;min-width:0}
+.gestc{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px}
+.gestc h2{font-size:16px;margin:0 0 12px;display:flex;gap:8px;align-items:center;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-size:13px}
+.gestc .gl{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gestc .gp{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px}
+.gestc .gp b{font-size:15px;line-height:1.2}
+.gestc .gp small{color:var(--brand);font-weight:800;font-size:12.5px;background:var(--accent-soft);border-radius:999px;padding:3px 10px}
+.perfprev{display:flex;flex-direction:column;align-items:center;gap:10px;margin:6px 0 16px}
+.topr{display:flex;align-items:center;gap:6px;flex:none}
+.topr .ghost.icob{margin-right:0;width:40px;height:40px;min-width:40px;padding:0}
+.topr .ghost.icob.perfb{border-width:0}
+.brand .q{overflow:hidden;text-overflow:ellipsis}
+@media (max-width:420px){.top .wrap{gap:8px}.brand{gap:8px;font-size:17px}.brand img{height:24px}.brand .sep{height:24px}.brand small{letter-spacing:.06em;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.topr .ghost:not(.icob){padding:7px 11px}}
 </style>
 <style>*,*::before,*::after{box-sizing:border-box}body{margin:0}html{padding-top:env(safe-area-inset-top,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
@@ -977,7 +990,7 @@ const MOCK=(()=>{
   [['e1',3],['e2',2],['e3',3],['e5',1],['e6',2]].forEach(([c,a],i)=>db.respostas.push({id:c+'_q1',colabId:c,quizId:'q1',mes:m,acertos:a,total:3,em:new Date(Date.now()-9e6+i*6e5).toISOString()}));
   const chk=p=>{if(String(p)!==db.pin)throw new Error('PIN da gestão incorreto.')};
   const byPin=p=>{const c=db.equipe.find(x=>x.pin===String(p)&&x.ativo);if(!c)throw new Error('PIN não encontrado ou inativo. Confira com a gestão.');return c};
-  const base=s=>({equipe:s?db.equipe:db.equipe.map(({pin,...c})=>c),quizzes:s?db.quizzes:db.quizzes.map(q=>({...q,perguntas:q.perguntas.map(x=>({p:x.p,ops:x.ops}))})),respostas:db.respostas,avaliacoes:db.avaliacoes,premios:db.premios,destaques:db.destaques,temGestao:true,lembreteDias:db.lembreteDias||2});
+  const base=s=>({equipe:s?db.equipe:db.equipe.map(({pin,...c})=>c),quizzes:s?db.quizzes:db.quizzes.map(q=>({...q,perguntas:q.perguntas.map(x=>({p:x.p,ops:x.ops}))})),respostas:db.respostas,avaliacoes:db.avaliacoes,premios:db.premios,destaques:db.destaques,gestoras:db.gestoras||(db.gestoras=[{nome:'Ianne Tamara',cargo:'Gerente da Unidade',foto:''},{nome:'Jessyca Almeida',cargo:'Gerente Adjunta',foto:''}]),temGestao:true,lembreteDias:db.lembreteDias||2});
   return{
     colegasStatus:pin=>{const c=byPin(pin);db.ac=db.ac||[];return {aberto:true,data:isoDia(),colegas:db.equipe.filter(x=>x.ativo&&x.grupo===c.grupo&&x.id!==c.id).map(({pin,...x})=>x),feitas:db.ac.filter(a=>a.autorId===c.id&&a.data===isoDia()).map(a=>a.alvoId)}},
     avaliarColega:(pin,alvo,n,com)=>{const c=byPin(pin);db.ac=(db.ac||[]).filter(a=>!(a.autorId===c.id&&a.alvoId===alvo&&a.data===isoDia()));db.ac.push({id:Date.now(),autorId:c.id,alvoId:alvo,data:isoDia(),notas:n,comentario:com||'',em:new Date().toISOString()});return {ok:true}},
@@ -990,7 +1003,8 @@ const MOCK=(()=>{
     salvarChecklist:(p,data,itens)=>{const c=byPin(p);db.checks=db.checks.filter(x=>!(x.colabId===c.id&&x.data===data));db.checks.push({colabId:c.id,data,itens});return true},
     responderQuiz:(p,qid,es)=>{const c=byPin(p);const q=db.quizzes.find(x=>x.id===qid);if(!q||!q.ativo)throw new Error('Este quiz não está mais disponível.');if(db.respostas.some(r=>r.id===c.id+'_'+q.id))throw new Error('Você já respondeu este quiz.');let a=0;q.perguntas.forEach((x,i)=>{if(es[i]===x.c)a++});db.respostas.push({id:c.id+'_'+q.id,colabId:c.id,quizId:q.id,mes:q.mes,acertos:a,total:q.perguntas.length,em:new Date().toISOString()});return{acertos:a,total:q.perguntas.length,corretas:q.perguntas.map(x=>x.c),explicacoes:q.perguntas.map(x=>x.e||'')}},
     entrarGestao:p=>{chk(p);return true},
-    dadosGestao:p=>{chk(p);return{...base(true),checks:db.checks,planilhaUrl:''}},
+    dadosGestao:p=>{chk(p);return{...base(true),checks:db.checks,planilhaUrl:'',eu:'Ianne Tamara'}},
+    salvarPerfilGestora:(p,foto,cargo)=>{chk(p);const g=db.gestoras.find(x=>x.nome==='Ianne Tamara');if(foto!=null)g.foto=foto;if(cargo!=null)g.cargo=cargo;return{ok:true}},
     salvarColab:(p,x)=>{chk(p);if(db.equipe.some(c=>c.pin===x.pin&&c.id!==x.id))throw new Error('Esse PIN já é de outra pessoa. Toque em Gerar outro.');const o=db.equipe.find(c=>c.id===x.id);if(o)Object.assign(o,x);else db.equipe.push({...x,id:'e'+Date.now()});return true},
     removerColab:(p,id)=>{chk(p);db.equipe=db.equipe.filter(c=>c.id!==id);return true},
     salvarQuiz:(p,x)=>{chk(p);const o=db.quizzes.find(q=>q.id===x.id);if(o)Object.assign(o,x);else db.quizzes.push({...x,id:'q'+Date.now(),criado:String(Date.now())});return true},
@@ -1004,7 +1018,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261112174015';
+const APP_VERSION='20261112200822';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -1181,7 +1195,8 @@ function cHoje(me){
       <p class="muted" style="font-size:13px;margin:10px 0 0">O checklist é para você se organizar. Os pontos são dados pela gestão na avaliação do dia.</p>`
       :`<div class="empty">Hoje é fim de semana. O checklist volta na segunda. Bom descanso!</div>`}
     </section>
-    ${ultHtml}`;
+    ${ultHtml}
+    ${gestaoCard()}`;
 }
 function vPlay(){
   const P=S.play,q=S.pub.quizzes.find(x=>x.id===P.qid);
@@ -1239,7 +1254,7 @@ function vAdmin(){
   const grp=grupoDaAba(S.tab);
   const body=!S.adm?(S.status==='err'?`<div class="notice">Sem conexão com o servidor agora. Você continua logada. ${esc(S.errMsg)} <button class="link" data-act="reloadAdm">Tentar de novo</button></div>`:carregando('Abrindo a gestão…')):S.tab==='avaliar'?aAvaliar():S.tab==='colegas'?aColegas():S.tab==='tv'?aTv():S.tab==='limpeza'?aLimpeza():S.tab==='cardapio'?aCardapio():S.tab==='ranking'?aRanking():S.tab==='quiz'?aQuiz():S.tab==='treinos'?aTreinos():S.tab==='escala'?aEscala():S.tab==='acessos'?aAcessos():S.tab==='equipe'?aEquipe():S.tab==='premios'?aPremios():aAjustes();
   const quem=S.adm&&S.adm.eu&&S.adm.eu!=='Gestão'?'Gestão · '+String(S.adm.eu).split(' ')[0]:'Gestão · Natura';
-  return topbar(esc(quem),`<button class="ghost icob ${S.tab==='ajustes'?'on':''}" data-act="tab" data-k="ajustes" aria-label="Ajustes" title="Ajustes">${ic('cog')}</button><button class="ghost" data-act="adminOut">Sair</button>`)+
+  return topbar(esc(quem),`<span class="topr">${minhaGestora()?`<button class="ghost icob perfb" data-act="meuPerfil" aria-label="Minha foto e cargo" title="Minha foto e cargo">${avatar(minhaGestora(),40)}</button>`:''}<button class="ghost icob ${S.tab==='ajustes'?'on':''}" data-act="tab" data-k="ajustes" aria-label="Ajustes" title="Ajustes">${ic('cog')}</button><button class="ghost" data-act="adminOut">Sair</button></span>`)+
    `<nav class="mnav"><div class="wrap wide">${MENU.map(([g,l,icn,subs])=>`<button class="${grp&&grp[0]===g?'on':''}" data-act="mgrp" data-k="${g}">${ic(icn)}<span>${l}</span></button>`).join('')}</div></nav>
    ${grp?`<nav class="snav"><div class="wrap wide">${grp[3].map(([k,l])=>`<button class="${S.tab===k?'on':''}" data-act="tab" data-k="${k}">${l}</button>`).join('')}</div></nav>`:`<nav class="snav"><div class="wrap wide"><button class="on">Ajustes</button></div></nav>`}
    <main class="wrap wide stack">${body}</main>`+footer();
@@ -2884,6 +2899,25 @@ Object.assign(A,{
 addEventListener('hashchange',()=>{if(S.me&&S.view==='home'&&(location.hash==='#quiz'||location.hash==='#tarefas')){S.play=null;S.ctab=location.hash.slice(1);render()}});
 
 
+
+
+/* =============================== PERFIL DAS GESTORAS =============================== */
+RPC.salvarPerfilGestora=['salvar_perfil_gestora',['p_pin','p_foto','p_cargo']];
+function minhaGestora(){const d=S.adm;if(!d||!d.eu||d.eu==='Gestão')return null;return (d.gestoras||[]).find(g=>g.nome===d.eu)||null}
+function gestaoCard(){
+  const gs=(S.pub&&S.pub.gestoras)||[];if(!gs.length)return '';
+  return `<section class="gestc"><h2>${ic('users')} Sua gestão</h2><div class="gl" style="${gs.length===1?'grid-template-columns:1fr':''}">${gs.map(g=>`<div class="gp">${avatar(g,72)}<b>${esc(g.nome)}</b>${g.cargo?`<small>${esc(g.cargo)}</small>`:''}</div>`).join('')}</div></section>`;
+}
+A.meuPerfil=()=>{const g=minhaGestora();if(!g)return;M={gfoto:null};
+  openModal(`<h2>Minha foto e cargo</h2><p class="muted" style="margin-top:0">Aparece para toda a equipe na tela <b>Hoje</b> do app, no quadro <b>Sua gestão</b>.</p>
+   <div class="perfprev"><span id="gp-prev">${avatar(g,96)}</span><b>${esc(g.nome)}</b>
+   <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><label class="btn sm alt" style="cursor:pointer">${ic('image')} ${g.foto?'Trocar foto':'Escolher foto'}<input id="gp-foto" type="file" accept="image/*" hidden></label>${g.foto?`<button class="btn sm alt" data-act="gpSemFoto" style="color:var(--bad)">${ic('trash')} Tirar foto</button>`:''}</div></div>
+   <div class="fld"><label for="gp-cargo">Cargo</label><input id="gp-cargo" type="text" maxlength="40" value="${esc(g.cargo)}" placeholder="Ex.: Gerente da Unidade" autocomplete="off"></div>
+   <p class="ferr"></p><div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="gpSalvar">Salvar</button></div>`)};
+A.gpSemFoto=()=>{M.gfoto='';const g=minhaGestora();$('#gp-prev').innerHTML=avatar({nome:g.nome},96)};
+A.gpSalvar=async(d,b)=>{busyBtn(b,true,'Salvando…');try{await call('salvarPerfilGestora',adminPin,M.gfoto,$('#gp-cargo').value.trim());closeModal();await carregarGestao();toast('Pronto! A equipe já vê no app.')}catch(e){ferr(msg(e));busyBtn(b,false,'Salvar')}};
+document.addEventListener('change',async e=>{if(e.target.id!=='gp-foto')return;const f=e.target.files[0];if(!f)return;
+  try{const u=await resizeImg(f);M.gfoto=u;const g=minhaGestora();$('#gp-prev').innerHTML=avatar({nome:g.nome,foto:u},96)}catch(err){ferr('Não consegui abrir essa imagem. Tente outra.')}});
 
 /* =============================== MENU DA GESTÃO =============================== */
 (function(){if(!ICO.cog)ICO.cog=['M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z','M12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z'];
