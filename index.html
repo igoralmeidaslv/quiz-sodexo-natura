@@ -900,6 +900,24 @@ body.tvmode.nocur{cursor:none}
 .iachips{display:flex;flex-wrap:wrap;gap:6px;margin:-6px 0 14px}
 .iachips .chip{border:0;cursor:pointer;font:inherit;font-size:13px;font-weight:700}
 .iachips .chip:hover{background:var(--accent-soft);color:var(--accent-ink)}
+
+/* Recados da gestão + treinamentos no feedback */
+.s4{background:#7A5AF8}
+@media (min-width:421px){.fbsrc{grid-template-columns:repeat(2,1fr)}}
+.rec{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--brand);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.rec.ok{border-left-color:var(--ok)}.rec.bad{border-left-color:var(--bad)}
+.rec-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rec-h .chip .i{width:13px;height:13px}
+.rec-n{font-size:15px}
+.rec p{margin:0;font-size:15px;line-height:1.5}
+.rec small .i{width:13px;height:13px;vertical-align:-2px}
+.rec-cta{border-color:var(--ok);background:var(--ok-soft);color:var(--ink)}
+.rec-cta small .i{width:13px;height:13px;vertical-align:-2px}
+.rec-info{display:flex;gap:10px;align-items:flex-start;font-size:14px}
+.rec-info > .i{flex:none;width:20px;height:20px;color:var(--brand);margin-top:2px}
+.sec-h .chip .i{width:13px;height:13px}
+.rc-tipos button{display:flex;align-items:center;justify-content:center;gap:5px}
+.rc-tipos .i{width:15px;height:15px}
 </style>
 
 <div id="app"></div>
@@ -963,6 +981,8 @@ const ICO={film:['<rect x="2" y="6" width="14" height="12" rx="2"/>','M16 13l5.2
   utensils:['M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2','M7 2v20','M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7'],
   refresh:['M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8','M21 3v5h-5','M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16','M8 16H3v5'],
   maximize:['M8 3H5a2 2 0 0 0-2 2v3','M21 8V5a2 2 0 0 0-2-2h-3','M3 16v3a2 2 0 0 0 2 2h3','M16 21h3a2 2 0 0 0 2-2v-3'],
+  plus:['M12 5v14','M5 12h14'],
+  lock:['<rect x="3" y="11" width="18" height="11" rx="2"/>','M7 11V7a5 5 0 0 1 10 0v4'],
   target:['<circle cx="12" cy="12" r="10"/>','<circle cx="12" cy="12" r="6"/>','<circle cx="12" cy="12" r="2"/>'],
   bulb:['M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5','M9 18h6','M10 22h4'],
   checkCircle:['<circle cx="12" cy="12" r="10"/>','m9 12 2 2 4-4'],
@@ -1002,7 +1022,7 @@ const GRUPOS={
     ['missoes','Missões diárias',2,'Cumprir as rotinas do dia']]}
 };
 const ORDEM_G=['coz','ofc','lim'];
-const QUIZ_PART=3, QUIZ_BONUS=[5,3,1];
+const QUIZ_PART=3, QUIZ_BONUS=[5,3,1], TREINO_PTS=1;
 /* Escala 12x36: trabalha dia sim, dia não, então é avaliada cerca de metade dos dias. A avaliação diária vale em dobro. */
 const PESO_ESCALA={'5x2':1,'12x36':2};
 function pesoDe(c){return PESO_ESCALA[c&&c.escala]||1}
@@ -1050,7 +1070,7 @@ const MOCK=(()=>{
   [['e1',3],['e2',2],['e3',3],['e5',1],['e6',2]].forEach(([c,a],i)=>db.respostas.push({id:c+'_q1',colabId:c,quizId:'q1',mes:m,acertos:a,total:3,em:new Date(Date.now()-9e6+i*6e5).toISOString()}));
   const chk=p=>{if(String(p)!==db.pin)throw new Error('PIN da gestão incorreto.')};
   const byPin=p=>{const c=db.equipe.find(x=>x.pin===String(p)&&x.ativo);if(!c)throw new Error('PIN não encontrado ou inativo. Confira com a gestão.');return c};
-  const base=s=>({equipe:s?db.equipe:db.equipe.map(({pin,...c})=>c),quizzes:s?db.quizzes:db.quizzes.map(q=>({...q,perguntas:q.perguntas.map(x=>({p:x.p,ops:x.ops}))})),respostas:db.respostas,avaliacoes:db.avaliacoes,premios:db.premios,destaques:db.destaques,gestoras:db.gestoras||(db.gestoras=[{nome:'Ianne Tamara',cargo:'Gerente da Unidade',foto:''},{nome:'Jessyca Almeida',cargo:'Gerente Adjunta',foto:''}]),temGestao:true,lembreteDias:db.lembreteDias||2});
+  const base=s=>({equipe:s?db.equipe:db.equipe.map(({pin,...c})=>c),quizzes:s?db.quizzes:db.quizzes.map(q=>({...q,perguntas:q.perguntas.map(x=>({p:x.p,ops:x.ops}))})),respostas:db.respostas,avaliacoes:db.avaliacoes,premios:db.premios,destaques:db.destaques,gestoras:db.gestoras||(db.gestoras=[{nome:'Ianne Tamara',cargo:'Gerente da Unidade',foto:''},{nome:'Jessyca Almeida',cargo:'Gerente Adjunta',foto:''}]),temGestao:true,lembreteDias:db.lembreteDias||2,treinosFeitos:db.treinosFeitos||(db.treinosFeitos=[{colabId:'e0',treinoId:'t1',mes:mesKey(),titulo:'Exemplo'}])});
   return{
     colegasStatus:pin=>{const c=byPin(pin);db.ac=db.ac||[];return {aberto:true,data:isoDia(),colegas:db.equipe.filter(x=>x.ativo&&x.grupo===c.grupo&&x.id!==c.id).map(({pin,...x})=>x),feitas:db.ac.filter(a=>a.autorId===c.id&&a.data===isoDia()).map(a=>a.alvoId)}},
     avaliarColega:(pin,alvo,n,com)=>{const c=byPin(pin);db.ac=(db.ac||[]).filter(a=>!(a.autorId===c.id&&a.alvoId===alvo&&a.data===isoDia()));db.ac.push({id:Date.now(),autorId:c.id,alvoId:alvo,data:isoDia(),notas:n,comentario:com||'',em:new Date().toISOString()});return {ok:true}},
@@ -1059,11 +1079,11 @@ const MOCK=(()=>{
     definirDestaque:(p,dia,g,cid,mot)=>{chk(p);db.destaques=db.destaques.filter(x=>!(x.data===dia&&x.grupo===g));if(cid)db.destaques.push({data:dia,grupo:g,colabId:cid,mes:dia.slice(0,7),pontos:3,motivo:mot||''});return{ok:true}},
     dadosPublicos:()=>base(false),
     entrar:p=>{const c=byPin(p);return{id:c.id,nome:c.nome}},
-    dadosColab:p=>{const c=byPin(p);return{...base(false),meusChecks:db.checks.filter(x=>x.colabId===c.id)}},
+    dadosColab:p=>{const c=byPin(p);return{...base(false),meusChecks:db.checks.filter(x=>x.colabId===c.id),meusRecados:(db.recados||[]).filter(r=>r.colabId===c.id)}},
     salvarChecklist:(p,data,itens)=>{const c=byPin(p);db.checks=db.checks.filter(x=>!(x.colabId===c.id&&x.data===data));db.checks.push({colabId:c.id,data,itens});return true},
     responderQuiz:(p,qid,es)=>{const c=byPin(p);const q=db.quizzes.find(x=>x.id===qid);if(!q||!q.ativo)throw new Error('Este quiz não está mais disponível.');if(db.respostas.some(r=>r.id===c.id+'_'+q.id))throw new Error('Você já respondeu este quiz.');let a=0;q.perguntas.forEach((x,i)=>{if(es[i]===x.c)a++});db.respostas.push({id:c.id+'_'+q.id,colabId:c.id,quizId:q.id,mes:q.mes,acertos:a,total:q.perguntas.length,em:new Date().toISOString()});return{acertos:a,total:q.perguntas.length,corretas:q.perguntas.map(x=>x.c),explicacoes:q.perguntas.map(x=>x.e||'')}},
     entrarGestao:p=>{chk(p);return true},
-    dadosGestao:p=>{chk(p);return{...base(true),checks:db.checks,planilhaUrl:'',eu:'Ianne Tamara'}},
+    dadosGestao:p=>{chk(p);return{...base(true),checks:db.checks,planilhaUrl:'',eu:'Ianne Tamara',recados:db.recados||(db.recados=[{id:'r1',colabId:'e0',data:isoDia(),tipo:'melhorar',texto:'Ana, hoje você não pontuou em Amostras porque as amostras do almoço não foram coletadas. Lembre de tirar logo que a preparação ficar pronta.',autor:'Ianne Tamara',criado:new Date().toISOString(),lido:null}])}},
     salvarPerfilGestora:(p,foto,cargo)=>{chk(p);const g=db.gestoras.find(x=>x.nome==='Ianne Tamara');if(foto!=null)g.foto=foto;if(cargo!=null)g.cargo=cargo;return{ok:true}},
     salvarColab:(p,x)=>{chk(p);if(db.equipe.some(c=>c.pin===x.pin&&c.id!==x.id))throw new Error('Esse PIN já é de outra pessoa. Toque em Gerar outro.');const o=db.equipe.find(c=>c.id===x.id);if(o)Object.assign(o,x);else db.equipe.push({...x,id:'e'+Date.now()});return true},
     removerColab:(p,id)=>{chk(p);db.equipe=db.equipe.filter(c=>c.id!==id);return true},
@@ -1074,11 +1094,14 @@ const MOCK=(()=>{
     salvarPremios:(p,x)=>{chk(p);db.premios=db.premios.filter(y=>!(y.mes===x.mes&&y.grupo===x.grupo));db.premios.push(x);return true},
     trocarPinGestao:(p,n)=>{chk(p);db.pin=n;return true},
     salvarLembreteQuiz:(p,n)=>{chk(p);db.lembreteDias=n;return{ok:true}},
+    salvarRecado:(p,x)=>{chk(p);db.recados=db.recados||[];const o=db.recados.find(r=>r.id===x.id);if(o)Object.assign(o,x);else db.recados.unshift({...x,id:'r'+Date.now(),autor:'Ianne (exemplo)',criado:new Date().toISOString(),lido:null});return{ok:true}},
+    removerRecado:(p,id)=>{chk(p);db.recados=(db.recados||[]).filter(r=>r.id!==id);return{ok:true}},
+    lerRecados:()=>({ok:true}),
   };
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261116135312';
+const APP_VERSION='20261116143443';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -1116,18 +1139,19 @@ const perLabel=p=>String(p).length===4?'ano de '+p:mesLabel(p);
 function anos(d){return [...new Set(meses(d).map(m=>m.slice(0,4)))].sort().reverse()}
 function placar(d,mes){
   const t={},qp=quizPontos(d);
-  const get=id=>t[id]||(t[id]={aval:0,quiz:0,dias:0,nq:0,dest:0,nd:0});
+  const get=id=>t[id]||(t[id]={aval:0,quiz:0,dias:0,nq:0,dest:0,nd:0,trein:0,nt:0});
   const peso={};d.equipe.forEach(c=>peso[c.id]=pesoDe(c));
   d.avaliacoes.forEach(a=>{if(noPeriodo(mes,a.mes)){const o=get(a.colabId);o.aval+=(Number(a.pontos)||0)*(peso[a.colabId]||1);o.dias++}});
   d.respostas.forEach(r=>{if(noPeriodo(mes,r.mes)&&qp[r.id]){const o=get(r.colabId);o.quiz+=qp[r.id].pts;o.nq++}});
   (d.destaques||[]).forEach(x=>{if(noPeriodo(mes,x.mes)){const o=get(x.colabId);o.dest+=Number(x.pontos)||0;o.nd++}});
-  Object.values(t).forEach(o=>o.total=o.aval+o.quiz+o.dest);
+  (d.treinosFeitos||[]).forEach(x=>{if(noPeriodo(mes,x.mes)){const o=get(x.colabId);o.trein+=TREINO_PTS;o.nt++}});
+  Object.values(t).forEach(o=>o.total=o.aval+o.quiz+o.dest+o.trein);
   return t;
 }
 function ranking(d,mes,g){
   if(!d)return[];
   const t=placar(d,mes);
-  const list=d.equipe.filter(c=>c.grupo===g&&(c.ativo||t[c.id])).map(c=>Object.assign({c},t[c.id]||{aval:0,quiz:0,dias:0,nq:0,dest:0,nd:0,total:0}));
+  const list=d.equipe.filter(c=>c.grupo===g&&(c.ativo||t[c.id])).map(c=>Object.assign({c},t[c.id]||{aval:0,quiz:0,dias:0,nq:0,dest:0,nd:0,trein:0,nt:0,total:0}));
   list.sort((a,b)=>b.total-a.total||b.aval-a.aval||String(a.c.nome).localeCompare(String(b.c.nome),'pt-BR'));
   let pos=0,prev=null;list.forEach((x,i)=>{if(prev===null||x.total!==prev){pos=i+1;prev=x.total}x.pos=pos});
   return list;
@@ -1217,7 +1241,7 @@ function vHome(){
   if(!GRUPOS[me.grupo])return topbar('Unidade Natura',sair)+`<main class="wrap"><div class="empty">Olá, ${esc(me.nome)}! Seu cadastro ainda está sem grupo. Peça para a gestão escolher seu grupo na aba Equipe.</div></main>`;
   let body;
   if(S.play)return vPlay();
-  if(S.ctab==='tarefas'&&me.grupo==='lim')body=cTarefas(me);else if(S.ctab==='colegas')body=cColegas(me);else if(S.ctab==='cursos')body=cCursos(me);else if(S.ctab==='escala')body=cEscala(me);else if(S.ctab==='quiz')body=cQuiz(me);else if(S.ctab==='ranking')body=cRanking(me);else if(S.ctab==='hist')body=`<div style="display:flex;justify-content:space-between;align-items:center"><button class="link" data-act="ctab" data-k="ranking" style="padding:0">${ic('chevL')} Ranking</button></div>`+cHist(me);else if(S.ctab==='desemp')body=cDesemp(me);else body=cHoje(me);
+  if(S.ctab==='tarefas'&&me.grupo==='lim')body=cTarefas(me);else if(S.ctab==='colegas')body=cColegas(me);else if(S.ctab==='cursos')body=cCursos(me);else if(S.ctab==='escala')body=cEscala(me);else if(S.ctab==='quiz')body=cQuiz(me);else if(S.ctab==='ranking')body=cRanking(me);else if(S.ctab==='hist')body=`<div style="display:flex;justify-content:space-between;align-items:center"><button class="link" data-act="ctab" data-k="ranking" style="padding:0">${ic('chevL')} Ranking</button></div>`+cHist(me);else if(S.ctab==='desemp'){body=cDesemp(me);marcarRecadosLidos()}else body=cHoje(me);
   return topbar(GRUPOS[me.grupo]?GRUPOS[me.grupo].nome:'Unidade Natura',sair)+`<main class="wrap stack">${body}</main>`+footer()+bnav();
 }
 function scoreCard(me){
@@ -1227,7 +1251,7 @@ function scoreCard(me){
     <div class="lbl">Seus pontos acumulados em ${ano}</div>
     <div class="pts num">${mine.total}<span>pts</span></div>
     <div class="pos"><b class="num">${MED[mine.pos]||mine.pos+'º'}</b><small>no ano</small></div>
-    <div class="meta num">Este mês: ${mm.total} pts (${mm.pos}º) · Avaliações ${mine.aval} · Quiz ${mine.quiz}</div>
+    <div class="meta num">Este mês: ${mm.total} pts (${mm.pos}º) · Avaliações ${mine.aval} · Quiz ${mine.quiz}${mine.trein?` · Treinamentos ${mine.trein}`:''}</div>
   </section>`;
 }
 function cHoje(me){
@@ -1244,6 +1268,7 @@ function cHoje(me){
   return `<div style="display:flex;align-items:center;gap:12px">${avatar(me,52)}<div style="flex:1;min-width:0"><div class="eyebrow">Olá,</div><h1 style="font-size:24px">${esc(String(me.nome).split(' ')[0])}</h1></div><span class="gchip">${esc(GRUPOS[me.grupo].um)}</span></div>
     ${destaqueHojeCard(me)}
     ${colegasCard()}
+    ${recadosCard()}
     ${scoreCard(me)}
     ${fbCard(me)}
     ${me.grupo==='lim'&&minhasTarefas(hoje).length?(()=>{let a=0,b=0;minhasTarefas(hoje).forEach(t=>{const[x,y]=progTarefa(t);a+=x;b+=y});return `<button class="cta" data-act="ctab" data-k="tarefas"><span class="ic">${ic('sparkles')}</span><span style="flex:1">${a>=b?'Tarefas de hoje concluídas!':`Você tem ${minhasTarefas(hoje).length} tarefa${minhasTarefas(hoje).length>1?'s':''} hoje`}<br><small style="font-weight:600">${a} de ${b} itens feitos · toque para abrir o checklist</small></span><span>›</span></button>`})():''}
@@ -1313,7 +1338,7 @@ function cHist(me){
 /* ---------- Telas: gestão ---------- */
 function vAdmin(){
   const grp=grupoDaAba(S.tab);
-  const body=!S.adm?(S.status==='err'?`<div class="notice">Sem conexão com o servidor agora. Você continua logada. ${esc(S.errMsg)} <button class="link" data-act="reloadAdm">Tentar de novo</button></div>`:carregando('Abrindo a gestão…')):S.tab==='avaliar'?aAvaliar():S.tab==='colegas'?aColegas():S.tab==='tv'?aTv():S.tab==='limpeza'?aLimpeza():S.tab==='cardapio'?aCardapio():S.tab==='ranking'?aRanking():S.tab==='quiz'?aQuiz():S.tab==='treinos'?aTreinos():S.tab==='escala'?aEscala():S.tab==='acessos'?aAcessos():S.tab==='equipe'?aEquipe():S.tab==='premios'?aPremios():aAjustes();
+  const body=!S.adm?(S.status==='err'?`<div class="notice">Sem conexão com o servidor agora. Você continua logada. ${esc(S.errMsg)} <button class="link" data-act="reloadAdm">Tentar de novo</button></div>`:carregando('Abrindo a gestão…')):S.tab==='avaliar'?aAvaliar():S.tab==='recados'?aRecados():S.tab==='colegas'?aColegas():S.tab==='tv'?aTv():S.tab==='limpeza'?aLimpeza():S.tab==='cardapio'?aCardapio():S.tab==='ranking'?aRanking():S.tab==='quiz'?aQuiz():S.tab==='treinos'?aTreinos():S.tab==='escala'?aEscala():S.tab==='acessos'?aAcessos():S.tab==='equipe'?aEquipe():S.tab==='premios'?aPremios():aAjustes();
   const quem=S.adm&&S.adm.eu&&S.adm.eu!=='Gestão'?'Gestão · '+String(S.adm.eu).split(' ')[0]:'Gestão · Natura';
   return topbar(esc(quem),`<span class="topr">${minhaGestora()?`<button class="ghost icob perfb" data-act="meuPerfil" aria-label="Minha foto e cargo" title="Minha foto e cargo">${avatar(minhaGestora(),40)}</button>`:''}<button class="ghost icob ${S.tab==='ajustes'?'on':''}" data-act="tab" data-k="ajustes" aria-label="Ajustes" title="Ajustes">${ic('cog')}</button><button class="ghost" data-act="adminOut">Sair</button></span>`)+
    `<nav class="mnav"><div class="wrap wide">${MENU.map(([g,l,icn,subs])=>`<button class="${grp&&grp[0]===g?'on':''}" data-act="mgrp" data-k="${g}">${ic(icn)}<span>${l}</span></button>`).join('')}</div></nav>
@@ -1340,7 +1365,7 @@ function pcard(c,dia){
   const st=PEND[c.id+'_'+dia]?'<span class="saved">Salvando…</span>':a?`<span class="saved ok">${ic('check')} Salvo</span>`:'<span class="saved">Não avaliado</span>';
   return `<div class="pcard ${a?'done':''}"><div class="hd">${avatar(c,42)}<div class="nm"><b>${esc(c.nome)}</b><small>${ck?`Checklist dele(a): ${ck.itens.length}/${its.length}`:'Sem checklist hoje'}${c.grupo==='lim'?(()=>{const l=(S.adm.tarefas||[]).filter(t=>t.colabId===c.id&&t.data===dia);if(!l.length)return '';let a=0,b=0;l.forEach(t=>{const[x,y]=progTarefa(t);a+=x;b+=y});return ` · Tarefas: ${a}/${b} itens`})():''}</small></div><div class="sc num">${a?a.pontos:'–'}<small>de ${maxDia(c)}</small></div></div>
     <div class="crits">${its.map(i=>`<button class="crit ${set.has(i[0])?'on':''}" data-act="crit" data-id="${esc(c.id)}" data-k="${i[0]}" aria-pressed="${set.has(i[0])}">${set.has(i[0])?ic('check'):''}${esc(i[1])} <span class="v">${i[2]}</span></button>`).join('')}</div>
-    <div class="acts"><button class="btn sm alt" data-act="allOn" data-id="${esc(c.id)}">Tudo certo</button><button class="btn sm alt" data-act="allOff" data-id="${esc(c.id)}">Nada cumprido</button>${a?`<button class="link" style="padding:4px" data-act="clearAval" data-id="${esc(c.id)}">Desfazer</button>`:''}${st}</div></div>`;
+    <div class="acts"><button class="btn sm alt" data-act="allOn" data-id="${esc(c.id)}">Tudo certo</button><button class="btn sm alt" data-act="allOff" data-id="${esc(c.id)}">Nada cumprido</button><button class="btn sm alt" data-act="recAval" data-id="${esc(c.id)}" title="Explicar para a pessoa (privado)">${ic('message')} Recado${(()=>{const n=(S.adm.recados||[]).filter(r=>r.colabId===c.id&&r.data===dia).length;return n?` <span class="chip ok num">${n}</span>`:''})()}</button>${a?`<button class="link" style="padding:4px" data-act="clearAval" data-id="${esc(c.id)}">Desfazer</button>`:''}${st}</div></div>`;
 }
 function anoSelect(id,val,extra){const l=[...new Set([...anos(S.adm),...(extra||[])])].sort().reverse();return `<select id="${id}" aria-label="Ano">${l.map(a=>`<option value="${a}" ${a===val?'selected':''}>${a}</option>`).join('')}</select>`}
 function aRanking(){
@@ -1351,7 +1376,7 @@ function aRanking(){
     const pd=(x,cls)=>x?`<div class="pd ${cls}"><span class="medal-e">${MED[x.pos]||x.pos+'º'}</span>${avatar(x.c,cls==='p1'?64:52)}<span class="nm">${esc(x.c.nome)}</span><span class="pt num">${x.total}</span>${p['p'+x.pos]?`<span class="prz">${esc(p['p'+x.pos])}</span>`:''}</div>`:'<div></div>';
     return `<section class="stack" style="gap:12px"><h2 style="font-size:20px">${esc(GRUPOS[g].nome)}</h2>
       ${top.length?`<div class="podium">${pd(top[1],'p2')}${pd(top[0],'p1')}${pd(top[2],'p3')}</div>`:'<div class="empty">Sem pontos ainda.</div>'}
-      <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Nome</th><th class="r">Aval.</th><th class="r">Quiz</th><th class="r">Dest.</th><th class="r">Total</th></tr></thead><tbody>${rk.map(x=>`<tr><td class="num">${x.pos}º</td><td><button class="whobtn" data-act="fbVer" data-id="${esc(x.c.id)}" title="Ver desempenho"><span class="who">${avatar(x.c,28)}${esc(x.c.nome)}${pesoDe(x.c)>1?' <small class="chip gold" title="Escala 12x36: avaliação vale em dobro">x2</small>':''}</span></button></td><td class="r num">${x.aval}</td><td class="r num">${x.quiz}</td><td class="r num">${x.dest||0}</td><td class="r num"><b>${x.total}</b></td></tr>`).join('')}</tbody></table></div></section>`};
+      <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Nome</th><th class="r">Aval.</th><th class="r">Quiz</th><th class="r">Dest.</th><th class="r" title="+1 ponto por treinamento concluído">Trein.</th><th class="r">Total</th></tr></thead><tbody>${rk.map(x=>`<tr><td class="num">${x.pos}º</td><td><button class="whobtn" data-act="fbVer" data-id="${esc(x.c.id)}" title="Ver desempenho"><span class="who">${avatar(x.c,28)}${esc(x.c.nome)}${pesoDe(x.c)>1?' <small class="chip gold" title="Escala 12x36: avaliação vale em dobro">x2</small>':''}</span></button></td><td class="r num">${x.aval}</td><td class="r num">${x.quiz}</td><td class="r num">${x.dest||0}</td><td class="r num">${x.trein||0}</td><td class="r num"><b>${x.total}</b></td></tr>`).join('')}</tbody></table></div></section>`};
   return `<div class="seg" style="grid-template-columns:repeat(2,1fr);max-width:420px"><button class="${ano?'':'on'}" data-act="admModo" data-k="mes">${ic('calendar')} Do mês</button><button class="${ano?'on':''}" data-act="admModo" data-k="ano">${ic('trophy')} Do ano (acumulado)</button></div>
     <div class="toolbar"><div class="grp"><h2 style="font-size:22px">Ranking ${ano?'de':'de'}</h2>${ano?anoSelect('selAnoRk',mes):mesSelect('selMesRk',mes)}</div><div class="grp"><button class="btn sm alt" data-act="reloadAdm">Atualizar</button>${d.planilhaUrl?`<a class="btn sm alt" href="${esc(d.planilhaUrl)}" target="_blank" rel="noopener">Abrir planilha</a>`:''}</div></div>
     <div class="stats"><div class="stat"><b class="num">${nAval}</b><span>avaliações no ${ano?'ano':'mês'}</span></div><div class="stat"><b class="num">${nQ}</b><span>quizzes no ${ano?'ano':'mês'}</span></div><div class="stat"><b class="num">${nPr}/9</b><span>prêmios ${ano?'do ano':'do mês'}</span></div></div>
@@ -1369,7 +1394,7 @@ function telFmt(t){const d=String(t||'').replace(/\D/g,'').replace(/^55(?=\d{10,
 function msgPin(c){return `Oi, ${String(c.nome).split(' ')[0]}!\n\nSeu PIN do Quiz da Unidade Natura é: *${c.pin}*\n\nLink: ${SITE}\n\nGuarde o seu PIN e não passe para ninguém, ele é só seu. Qualquer dúvida, me chama!`}
 function msgGrupo(){
   const q=S.adm?S.adm.quizzes.filter(x=>x.ativo&&x.mes===mesKey()):[];
-  return `Bom dia, equipe!\n\nA partir de agora temos o nosso *Quiz da Unidade Natura*!\n\n*Como entrar:*\n1. Abra o link: ${SITE}\n2. Digite o seu PIN de 4 números (vou mandar no seu privado)\n3. Dica: salve o link na tela inicial do celular para abrir como aplicativo\n\n*Como funciona:*\n• Todo dia (segunda a sexta) a gestão avalia as boas práticas de cada um: EPI, apresentação pessoal, organização, processos e mais\n• No portal você tem um *checklist do dia* para se organizar\n• Toda segunda-feira sai um *quiz* novo (prazo até domingo às 23h59): quem participa ganha 3 pontos, e os 3 que mais acertarem no seu grupo ganham bônus\n\n*Os pontos acumulam o ano todo!* No fim do ano, o top 3 de cada ranking ganha prêmios especiais:\n• Cozinheiros\n• Oficiais de cozinha\n• Oficiais de limpeza\n\nNo portal você acompanha o ranking do mês e o do ano. Cada dia conta!${q.length?`\n\n*Quiz liberado:* ${q[q.length-1].titulo}. Bora participar!`:''}\n\n*Atenção:* o PIN é pessoal. Não passe para ninguém.`;
+  return `Bom dia, equipe!\n\nA partir de agora temos o nosso *Quiz da Unidade Natura*!\n\n*Como entrar:*\n1. Abra o link: ${SITE}\n2. Digite o seu PIN de 4 números (vou mandar no seu privado)\n3. Dica: salve o link na tela inicial do celular para abrir como aplicativo\n\n*Como funciona:*\n• Todo dia (segunda a sexta) a gestão avalia as boas práticas de cada um: EPI, apresentação pessoal, organização, processos e mais\n• No portal você tem um *checklist do dia* para se organizar\n• Toda segunda-feira sai um *quiz* novo (prazo até domingo às 23h59): quem participa ganha 3 pontos, e os 3 que mais acertarem no seu grupo ganham bônus\n• Cada *treinamento online* concluído no app vale *+1 ponto*\n\n*Os pontos acumulam o ano todo!* No fim do ano, o top 3 de cada ranking ganha prêmios especiais:\n• Cozinheiros\n• Oficiais de cozinha\n• Oficiais de limpeza\n\nNo portal você acompanha o ranking do mês e o do ano. Cada dia conta!${q.length?`\n\n*Quiz liberado:* ${q[q.length-1].titulo}. Bora participar!`:''}\n\n*Atenção:* o PIN é pessoal. Não passe para ninguém.`;
 }
 function aEquipe(){
   const d=S.adm;
@@ -3000,7 +3025,7 @@ document.addEventListener('change',async e=>{if(e.target.id!=='gp-foto')return;c
 (function(){if(!ICO.cog)ICO.cog=['M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z','M12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z'];
   if(!ICO.users)ICO.users=['M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2','M9 3a4 4 0 1 1 0 8 4 4 0 0 1 0-8z','M22 21v-2a4 4 0 0 0-3-3.87','M16 3.13a4 4 0 0 1 0 7.75'];
   if(!ICO.grad)ICO.grad=['M22 10 12 5 2 10l10 5 10-5z','M6 12v5c3 3 9 3 12 0v-5'];})();
-const MENU=[['dia','Dia a dia','listCheck',[['avaliar','Avaliar'],['colegas','Colegas avaliam'],['limpeza','Limpeza']]],
+const MENU=[['dia','Dia a dia','listCheck',[['avaliar','Avaliar'],['recados','Recados'],['colegas','Colegas avaliam'],['limpeza','Limpeza']]],
   ['equipe','Equipe','users',[['equipe','Pessoas e PINs'],['escala','Escala e férias'],['acessos','Acessos']]],
   ['aprend','Treinamentos','grad',[['treinos','Treinamentos'],['quiz','Quizzes']]],
   ['recon','Ranking','trophy',[['ranking','Ranking'],['premios','Prêmios']]],
@@ -3422,7 +3447,7 @@ function cCursos(me){
   const card=t=>{const m=meuTr(t.id)||{};return `<button class="trcard" data-act="cuAbrir" data-id="${esc(t.id)}">${trThumb(t,m.concluido?100:m.progresso||0)}
     <div class="trbody"><div class="trmeta"><span class="chip cat">${esc(t.categoria)}</span>${m.concluido?`<span class="chip ok">${ic('check')} Concluído</span>`:m.progresso?`<span class="chip warn num">${m.progresso}% assistido</span>`:`<span class="chip" style="background:var(--accent);color:#fff">Novo</span>`}</div>
     <h3>${esc(t.titulo)}</h3>${t.descricao?`<span class="muted" style="font-size:13.5px;line-height:1.4">${esc(t.descricao)}</span>`:''}</div></button>`};
-  return `<section class="trhero"><div class="ring" style="--p:${pct}"><span class="num">${pct}%</span></div><div><h2>Seus treinamentos</h2><p>Você concluiu <b style="color:#fff">${feitos} de ${ts.length}</b>. Assista ao vídeo, leia o resumo e faça o teste rápido no fim.</p></div></section>
+  return `<section class="trhero"><div class="ring" style="--p:${pct}"><span class="num">${pct}%</span></div><div><h2>Seus treinamentos</h2><p>Você concluiu <b style="color:#fff">${feitos} de ${ts.length}</b>. Assista ao vídeo, leia o resumo e faça o teste rápido no fim. <b style="color:#fff">Cada treinamento concluído vale +${TREINO_PTS} ponto no ranking.</b></p></div></section>
    ${andamento.length?`<section><div class="sec-h"><h2>Continue de onde parou</h2></div><div class="trgrid">${andamento.slice(0,2).map(card).join('')}</div></section>`:''}
    <section class="stack" style="gap:12px"><div class="sec-h" style="margin:0"><h2>Todos os treinamentos</h2><span class="muted num">${ts.length}</span></div>
    ${cats.length>1?`<div class="filtros"><button class="${!S.trcCat?'on':''}" data-act="cuCat" data-k="">Todos</button>${cats.map(c=>`<button class="${S.trcCat===c?'on':''}" data-act="cuCat" data-k="${esc(c)}">${esc(c)}</button>`).join('')}</div>`:''}
@@ -3475,7 +3500,7 @@ Object.assign(A,{
     const ac=qs.filter((q,i)=>R.esc[i]===q.c).length;R.fim=true;busyBtn(b,true,'Enviando…');
     try{await call('marcarTreino',S.me.pin,t.id,100,true,qs.length?ac:null,qs.length?qs.length:null);let m=meuTr(t.id);if(!m){m={treinoId:t.id};S.trc.meus.push(m)}Object.assign(m,{progresso:100,concluido:new Date().toISOString(),acertos:qs.length?ac:null,total:qs.length||null});
       if(typeof confete==='function')try{confete()}catch(e){}
-      render();toast(qs.length?`Concluído! Você acertou ${ac} de ${qs.length}.`:'Treinamento concluído!');}
+      render();toast((qs.length?`Concluído! Você acertou ${ac} de ${qs.length}.`:'Treinamento concluído!')+` +${TREINO_PTS} ponto no ranking.`);carregar(true);}
     catch(e){R.fim=false;toast(msg(e));busyBtn(b,false,'Tentar de novo')}}
 });
 
@@ -3702,7 +3727,7 @@ function feedbackDe(d,c,per){
   const colegas=d.equipe.filter(x=>x.grupo===c.grupo&&x.ativo);
   const taxas=colegas.map(x=>{const a=d.avaliacoes.filter(y=>y.colabId===x.id&&noPeriodo(per,y.mes));return a.length?pct(a.reduce((s,y)=>s+(Number(y.pontos)||0),0),a.length*maxDia(x)):null}).filter(v=>v!=null);
   const mediaGrupo=taxas.length?Math.round(taxas.reduce((s,v)=>s+v,0)/taxas.length):null;
-  const mediaItem={};its.forEach(([id])=>{let ok=0,n=0;colegas.forEach(x=>d.avaliacoes.forEach(y=>{if(y.colabId===x.id&&noPeriodo(per,y.mes)&&itensDe(x).some(i=>i[0]===id)){n++;if((y.itens||[]).includes(id))ok++}}));mediaItem[id]=n?pct(ok,n):null});
+  const mediaItem={};its.forEach(([id])=>{let ok=0,n=0;colegas.forEach(x=>d.avaliacoes.forEach(y=>{if(y.colabId===x.id&&Array.isArray(y.itens)&&noPeriodo(per,y.mes)&&itensDe(x).some(i=>i[0]===id)){n++;if((y.itens||[]).includes(id))ok++}}));mediaItem[id]=n?pct(ok,n):null});
   /* quiz */
   const qp=quizPontos(d);
   const qs=d.quizzes.filter(q=>q.ativo&&noPeriodo(per,q.mes)&&qAbre(q)<=t&&(!c.criado||qFecha(q)>Date.parse(c.criado)));
@@ -3711,7 +3736,7 @@ function feedbackDe(d,c,per){
   const abertos=qs.filter(q=>qFecha(q)>t&&!resp.some(r=>r.quizId===q.id));
   const acertos=resp.reduce((s,r)=>s+r.acertos,0),total=resp.reduce((s,r)=>s+r.total,0);
   /* pontos */
-  const pl=placar(d,per)[c.id]||{aval:0,quiz:0,dest:0,total:0,nd:0};
+  const pl=placar(d,per)[c.id]||{aval:0,quiz:0,dest:0,trein:0,nt:0,total:0,nd:0};
   const rk=ranking(d,per,c.grupo),eu=rk.find(x=>x.c.id===c.id);
   /* tendência: mês atual x mês anterior */
   let tend=null;if(per.length===7){const ant=d.avaliacoes.filter(a=>a.colabId===c.id&&a.mes===mesAnterior(per));if(ant.length)tend=aprove-pct(ant.reduce((s,a)=>s+(Number(a.pontos)||0),0),ant.length*max)}
@@ -3747,6 +3772,7 @@ function feedbackHtml(d,c,per,voce){
   f.atencao.slice(0,2).forEach(i=>acoes.push(`<li>${ic('target')}<span><b>${esc(i.nome)}:</b> ${esc(DICAS[i.id]||i.desc)}${i.pts?` <small class="muted">Cada dia completo vale +${i.pts*f.peso} pt${i.pts*f.peso>1?'s':''}.</small>`:''}</span></li>`));
   if(f.abertos.length)acoes.push(`<li>${ic('quiz')}<span><b>Responda o quiz da semana</b> até domingo às 23h59: +${QUIZ_PART} pts garantidos, e mais bônus se ficar no top 3.</span></li>`);
   else if(f.perdidos.length)acoes.push(`<li>${ic('bell')}<span><b>Não perca o próximo quiz.</b> Ele abre toda segunda. Ative as notificações para receber o lembrete.</span></li>`);
+  if(!f.pl.nt&&voce)acoes.push(`<li>${ic('grad')}<span><b>Conclua os treinamentos online</b> na aba Treinamentos: cada um vale <b>+${TREINO_PTS} ponto</b>.</span></li>`);
   if(f.eu&&f.eu.pos>3&&f.rk.length>=3&&f.rk[2].total>0)acoes.push(`<li>${ic('trophy')}<span>Faltam <b>${Math.max(1,f.rk[2].total-f.eu.total+1)} pts</b> para ${voce?'você entrar':'entrar'} no top 3 ${anoP?'do ano':'do mês'}.</span></li>`);
   if(!acoes.length&&f.dias)acoes.push(`<li>${ic('star')}<span>Mantenha o ritmo: dias perfeitos (todos os itens) são o caminho mais rápido para o topo e para o <b>destaque do dia</b> (+3 pts).</span></li>`);
   return `
@@ -3768,11 +3794,12 @@ function feedbackHtml(d,c,per,voce){
 
   <section><div class="sec-h"><h2>De onde vêm ${voce?'seus':'os'} pontos</h2><span class="chip gold num">${f.pl.total} pts ${esc(perTxt)}</span></div>
     <div class="panel">
-      <div class="fbstack"><i class="s1" style="width:${pct(f.pl.aval,tot)}%"></i><i class="s2" style="width:${pct(f.pl.quiz,tot)}%"></i><i class="s3" style="width:${pct(f.pl.dest||0,tot)}%"></i></div>
+      <div class="fbstack"><i class="s1" style="width:${pct(f.pl.aval,tot)}%"></i><i class="s2" style="width:${pct(f.pl.quiz,tot)}%"></i><i class="s3" style="width:${pct(f.pl.dest||0,tot)}%"></i><i class="s4" style="width:${pct(f.pl.trein||0,tot)}%"></i></div>
       <div class="fbsrc">
         <div><span class="sw s1"></span><b class="num">${f.pl.aval}</b><span>Avaliações diárias</span><small>${f.obt} pts nos dias avaliados${f.peso>1?' × 2 (escala 12x36)':''}</small></div>
         <div><span class="sw s2"></span><b class="num">${f.pl.quiz}</b><span>Quiz</span><small>${f.resp.length} de ${f.qs.length} respondido${f.qs.length===1?'':'s'}${f.total?` · ${pct(f.acertos,f.total)}% de acertos`:''}</small></div>
         <div><span class="sw s3"></span><b class="num">${f.pl.dest||0}</b><span>Destaque do dia</span><small>${f.pl.nd||0} vez${(f.pl.nd||0)===1?'':'es'} · +3 pts cada</small></div>
+        <div><span class="sw s4"></span><b class="num">${f.pl.trein||0}</b><span>Treinamentos</span><small>${f.pl.nt||0} concluído${(f.pl.nt||0)===1?'':'s'} · +${TREINO_PTS} pt cada</small></div>
       </div>
       ${f.eu?`<p class="muted" style="font-size:14px;margin:12px 0 0">${ic('trophy')} ${voce?'Você está':'Está'} em <b>${f.eu.pos}º lugar</b> ${anoP?'no ano':'no mês'} entre ${f.rk.length} ${esc(GRUPOS[c.grupo].nome.toLowerCase())}.</p>`:''}
     </div></section>
@@ -3788,6 +3815,7 @@ function cDesemp(me){
   return `<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><button class="link" data-act="ctab" data-k="hoje" style="padding:0">${ic('chevL')} Voltar</button></div>
     <div><h1 style="font-size:24px">Meu desempenho</h1><p class="muted" style="margin:4px 0 0">Seu feedback automático: o que está indo bem, o que melhorar e de onde vêm seus pontos. Atualiza sozinho a cada avaliação.</p></div>
     <div class="seg" style="grid-template-columns:repeat(2,1fr)"><button class="${ano?'':'on'}" data-act="fbModo" data-k="mes">${ic('calendar')} Este mês</button><button class="${ano?'on':''}" data-act="fbModo" data-k="ano">${ic('trophy')} Ano ${anoKey()}</button></div>
+    ${recadosSecao()}
     ${feedbackHtml(S.pub,me,per,true)}`;
 }
 /* Cartão resumido na aba Hoje */
@@ -3859,6 +3887,99 @@ Object.assign(A,{
   iaN:d=>{iaLer();M.ia.n=+d.k;iaModal()},
   iaNivel:d=>{iaLer();M.ia.nivel=d.k;iaModal()},
   iaGerar:(d,b)=>iaGerar(b),
+});
+
+
+/* =====================================================================
+   RECADOS DA GESTÃO (privados) — a gestão explica por que a pessoa
+   perdeu pontos ou por que está indo bem. Só a própria pessoa vê, com o PIN.
+   ===================================================================== */
+const TIPO_REC={elogio:['Elogio','star','ok'],melhorar:['Ponto a melhorar','target','bad'],orientacao:['Orientação','message','gold']};
+Object.assign(RPC,{salvarRecado:['salvar_recado',['p_pin','p']],removerRecado:['remover_recado',['p_pin','p_id']],lerRecados:['ler_recados',['p_pin']]});
+function quandoRec(r){const d=r.data?diaLabel(r.data):'';const c=new Date(r.criado);return (d?'Sobre '+d+' · ':'')+'enviado '+pad2(c.getDate())+'/'+pad2(c.getMonth()+1)}
+function recadoHtml(r,gestao){
+  const t=TIPO_REC[r.tipo]||TIPO_REC.orientacao,c=gestao?S.adm.equipe.find(x=>x.id===r.colabId):null;
+  return `<div class="rec ${t[2]}">
+    <div class="rec-h">${gestao&&c?avatar(c,32):''}<span class="chip ${t[2]}">${ic(t[1])} ${t[0]}</span>${gestao&&c?`<b class="rec-n">${esc(c.nome)}</b>`:''}${!gestao&&!r.lido?'<span class="chip" style="background:var(--accent);color:#fff">Novo</span>':''}</div>
+    <p>${esc(r.texto).replace(/\n/g,'<br>')}</p>
+    <small class="muted">${esc(quandoRec(r))} · ${esc(r.autor||'Gestão')}${gestao?` · ${r.lido?ic('eye')+' lido':'ainda não leu'}`:''}</small>
+    ${gestao?`<div class="acts" style="margin-top:6px"><button class="btn sm alt" data-act="recEd" data-id="${esc(r.id)}">Editar</button><button class="btn sm alt" data-act="recDel" data-id="${esc(r.id)}">Apagar</button></div>`:''}</div>`;
+}
+/* ---------- equipe ---------- */
+function meusRecados(){return (S.pub&&S.pub.meusRecados)||[]}
+function recadosNovos(){return meusRecados().filter(r=>!r.lido).length}
+function recadosCard(){
+  const n=recadosNovos();if(!n)return '';
+  return `<button class="cta rec-cta" data-act="ctab" data-k="desemp"><span class="ic">${ic('message')}</span><span style="flex:1;min-width:0"><b style="display:block">Você tem ${n} recado${n>1?'s':''} da gestão</b><small style="display:block;font-weight:600">${ic('lock')} Privado: só você vê · toque para ler</small></span><span>›</span></button>`;
+}
+function recadosSecao(){
+  const l=meusRecados();
+  if(!l.length)return `<section><div class="sec-h"><h2>Recados da gestão</h2><span class="chip off">${ic('lock')} Só você vê</span></div><div class="empty" style="font-size:14px">Quando a gestão escrever um elogio ou uma orientação para você, aparece aqui. Ninguém mais vê.</div></section>`;
+  const ver=S.recTodos?l:l.slice(0,3);
+  return `<section><div class="sec-h"><h2>Recados da gestão</h2><span class="chip off">${ic('lock')} Só você vê</span></div>
+    <div class="stack" style="gap:10px">${ver.map(r=>recadoHtml(r,false)).join('')}</div>
+    ${l.length>3?`<button class="link" data-act="recTodos" style="padding:8px 0">${S.recTodos?'Ver menos':`Ver todos (${l.length})`}</button>`:''}</section>`;
+}
+function marcarRecadosLidos(){
+  if(!S.me||!recadosNovos()||DEMO&&!S.pub)return;
+  setTimeout(()=>{meusRecados().forEach(r=>{if(!r.lido)r.lido=new Date().toISOString()})},4000);
+  if(!DEMO)call('lerRecados',S.me.pin).catch(()=>{});
+}
+/* ---------- gestão ---------- */
+function aRecados(){
+  const d=S.adm,l=(d.recados||[]).filter(r=>(!S.recG||((d.equipe.find(c=>c.id===r.colabId)||{}).grupo===S.recG))&&(!S.recC||r.colabId===S.recC));
+  const ativos=d.equipe.filter(c=>c.ativo&&GRUPOS[c.grupo]).sort((a,b)=>String(a.nome).localeCompare(String(b.nome),'pt-BR'));
+  const naoLidos=(d.recados||[]).filter(r=>!r.lido).length;
+  return `<div class="toolbar"><div class="grp"><h2 style="font-size:22px">Recados para a equipe</h2></div><button class="btn sm" data-act="recNovo">${ic('plus')} Novo recado</button></div>
+   <div class="panel rec-info">${ic('lock')}<span>Explique para cada pessoa <b>por que não pontuou</b> em algum item ou <b>por que está indo bem</b>. O recado é <b>privado</b>: só aparece no app da própria pessoa, em <b>Meu desempenho</b>, com o PIN dela. Dica: na aba <b>Avaliar</b>, o botão <b>Recado</b> já preenche o que faltou no dia.</span></div>
+   <div class="toolbar"><div class="grp"><select id="recG" aria-label="Grupo"><option value="">Todos os grupos</option>${ORDEM_G.map(g=>`<option value="${g}" ${S.recG===g?'selected':''}>${esc(GRUPOS[g].nome)}</option>`).join('')}</select>
+     <select id="recC" aria-label="Pessoa"><option value="">Todas as pessoas</option>${ativos.filter(c=>!S.recG||c.grupo===S.recG).map(c=>`<option value="${esc(c.id)}" ${S.recC===c.id?'selected':''}>${esc(c.nome)}</option>`).join('')}</select></div>
+     <span class="muted" style="font-size:14px">${(d.recados||[]).length} recado${(d.recados||[]).length===1?'':'s'} · ${naoLidos} ainda não lido${naoLidos===1?'':'s'}</span></div>
+   ${l.length?`<div class="cards">${l.map(r=>`<div class="card" style="padding:0;border:0;background:none">${recadoHtml(r,true)}</div>`).join('')}</div>`
+   :`<div class="empty">Nenhum recado ${S.recC||S.recG?'com esse filtro':'ainda'}. Toque em “Novo recado”.</div>`}`;
+}
+function recadoForm(pre){
+  const d=S.adm,r=pre&&pre.id?(d.recados||[]).find(x=>x.id===pre.id):null,v=r||pre||{};
+  const ativos=d.equipe.filter(c=>c.ativo&&GRUPOS[c.grupo]);
+  M={rec:{id:r?r.id:'',tipo:v.tipo||'orientacao'}};
+  openModal(`<h2>${r?'Editar recado':'Novo recado'}</h2>
+   <div class="fld"><label for="rc-c">Para quem</label><select id="rc-c"><option value="">Escolha o colaborador</option>${ORDEM_G.map(g=>`<optgroup label="${esc(GRUPOS[g].nome)}">${ativos.filter(c=>c.grupo===g).sort((a,b)=>String(a.nome).localeCompare(String(b.nome),'pt-BR')).map(c=>`<option value="${esc(c.id)}" ${v.colabId===c.id?'selected':''}>${esc(c.nome)}</option>`).join('')}</optgroup>`).join('')}</select></div>
+   <div class="fld"><label>Tipo</label><div class="seg rc-tipos" style="grid-template-columns:repeat(3,1fr)">${Object.entries(TIPO_REC).map(([k,t])=>`<button class="${M.rec.tipo===k?'on':''}" data-act="rcTipo" data-k="${k}">${ic(t[1])} ${t[0]}</button>`).join('')}</div></div>
+   <div class="fld"><label for="rc-d">Sobre qual dia <small class="muted">(opcional)</small></label><input id="rc-d" type="date" value="${esc(v.data||'')}"></div>
+   <div class="fld"><label for="rc-t">Recado</label><textarea id="rc-t" rows="5" maxlength="1500" placeholder="Ex.: Hoje você não pontuou em Amostras porque as amostras do almoço não foram coletadas. Lembre de tirar logo que a preparação ficar pronta.">${esc(v.texto||'')}</textarea></div>
+   <div class="notice" style="font-size:14px">${ic('lock')} Privado: só a pessoa vê, no app dela, com o PIN. A equipe não vê os recados dos colegas.</div>
+   <p class="ferr"></p>
+   <div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="rcSalvar">Enviar recado</button></div>`);
+}
+/* Recado a partir da avaliação do dia: já escreve o que faltou ou o elogio */
+function recadoDaAval(c,dia){
+  const a=avalDe(S.adm,c.id,dia),its=itensDe(c),nome=String(c.nome).split(' ')[0],dl=diaLabel(dia);
+  if(!a)return recadoForm({colabId:c.id,data:dia,tipo:'orientacao',texto:''});
+  const set=new Set(a.itens||[]),falt=its.filter(i=>!set.has(i[0])),ok=its.filter(i=>set.has(i[0]));
+  if(!falt.length)return recadoForm({colabId:c.id,data:dia,tipo:'elogio',texto:`${nome}, parabéns! Na ${dl} você cumpriu todos os itens e fez ${a.pontos} de ${maxDia(c)} pontos. Continue assim!`});
+  const pts=falt.reduce((s,i)=>s+i[2],0);
+  return recadoForm({colabId:c.id,data:dia,tipo:'melhorar',texto:`${nome}, na ${dl} você fez ${a.pontos} de ${maxDia(c)} pontos.\n\nNão pontuou em: ${falt.map(i=>i[1]).join(', ')} (−${pts} pts).\nMotivo: \n\n${ok.length?`Mandou bem em: ${ok.map(i=>i[1]).join(', ')}.`:''}`});
+}
+Object.assign(A,{
+  recNovo:()=>recadoForm({}),
+  recEd:d=>recadoForm({id:d.id}),
+  recDel:d=>confirmModal('Apagar este recado?','O recado some do app da pessoa.','Apagar',async()=>{await acao('removerRecado',d.id);toast('Recado apagado')}),
+  recAval:d=>{const c=S.adm.equipe.find(x=>x.id===d.id);if(c)recadoDaAval(c,S.dia)},
+  rcTipo:d=>{M.rec.tipo=d.k;document.querySelectorAll('.rc-tipos button').forEach(b=>b.classList.toggle('on',b.dataset.k===d.k))},
+  rcSalvar:async(d,b)=>{
+    const p={id:M.rec.id,colabId:$('#rc-c').value,tipo:M.rec.tipo,data:$('#rc-d').value,texto:$('#rc-t').value.trim()};
+    if(!p.colabId)return ferr('Escolha para quem é o recado.');
+    if(!p.texto)return ferr('Escreva o recado.');
+    if(/Motivo:\s*$/m.test(p.texto))return ferr('Complete o “Motivo:” ou apague essa linha.');
+    const ed=!!p.id;busyBtn(b,true,'Enviando…');
+    try{await acao('salvarRecado',p);closeModal();toast(ed?'Recado atualizado':'Recado enviado. Só a pessoa vê.')}
+    catch(e){busyBtn(b,false,'Enviar recado');ferr(msg(e))}
+  },
+  recTodos:()=>{S.recTodos=!S.recTodos;render()},
+});
+document.addEventListener('change',e=>{
+  if(e.target.id==='recG'){S.recG=e.target.value;S.recC='';render()}
+  if(e.target.id==='recC'){S.recC=e.target.value;render()}
 });
 
 let TV_MODE=false;try{TV_MODE=new URLSearchParams(location.search).has('tv')}catch(e){}
