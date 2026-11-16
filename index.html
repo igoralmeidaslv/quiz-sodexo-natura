@@ -1101,7 +1101,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261116143443';
+const APP_VERSION='20261116143620';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -2998,7 +2998,7 @@ Object.assign(A,{
   lembDias:async d=>{try{await acao('salvarLembreteQuiz',+d.k);toast(`Lembrete a cada ${d.k} dias`)}catch(e){toast(msg(e))}},
   avisarQuiz:(d,b)=>{confirmModal('Avisar quem ainda não respondeu?','Quem ativou as notificações recebe agora um lembrete no celular. Quem já respondeu não recebe nada.','Enviar agora',async()=>{await avisarQuizAgora(b)})},
 });
-addEventListener('hashchange',()=>{if(S.me&&S.view==='home'&&(location.hash==='#quiz'||location.hash==='#tarefas')){S.play=null;S.ctab=location.hash.slice(1);render()}});
+addEventListener('hashchange',()=>{if(S.me&&S.view==='home'&&(location.hash==='#quiz'||location.hash==='#tarefas'||location.hash==='#desemp')){S.play=null;S.ctab=location.hash.slice(1);render()}});
 
 
 
@@ -3972,7 +3972,12 @@ Object.assign(A,{
     if(!p.texto)return ferr('Escreva o recado.');
     if(/Motivo:\s*$/m.test(p.texto))return ferr('Complete o “Motivo:” ou apague essa linha.');
     const ed=!!p.id;busyBtn(b,true,'Enviando…');
-    try{await acao('salvarRecado',p);closeModal();toast(ed?'Recado atualizado':'Recado enviado. Só a pessoa vê.')}
+    try{const r=await acao('salvarRecado',p);closeModal();
+      if(ed){toast('Recado atualizado');return}
+      if(DEMO||!r||!r.id){toast('Recado enviado. Só a pessoa vê.');return}
+      try{const x=await fetch(SUPA_URL.replace(/\/$/,'')+'/functions/v1/avisar-recado',{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPA_KEY},body:JSON.stringify({pin:adminPin,id:r.id})});const j=await x.json().catch(()=>null);
+        toast(j&&j.enviados?'Recado enviado e avisado no celular. Só a pessoa vê.':'Recado enviado. A pessoa não ativou as notificações: ela vê quando abrir o app.')}
+      catch(e){toast('Recado enviado. Só a pessoa vê.')}}
     catch(e){busyBtn(b,false,'Enviar recado');ferr(msg(e))}
   },
   recTodos:()=>{S.recTodos=!S.recTodos;render()},
@@ -3987,6 +3992,7 @@ if(TV_MODE){S.view='tv';iniciarTv();tvPintar(true)}
 else{
 if(S.me&&location.hash==='#tarefas')S.ctab='tarefas';
 if(S.me&&location.hash==='#quiz')S.ctab='quiz';
+if(S.me&&location.hash==='#desemp')S.ctab='desemp';
 if(S.me&&S.view==='home')registrar('abriu');
 render();
 if(S.view==='admin')carregarGestao();
