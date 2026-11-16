@@ -755,7 +755,7 @@ body.tvmode.nocur{cursor:none}
 @keyframes tvf{from{opacity:0}to{opacity:1}}
 @media (max-width:420px){.seg button{font-size:12px}.crit{font-size:13px;padding:7px 10px}}
 
-/* Quiz quinzenal: contagem, calendário, como funciona, notificações */
+/* Quiz semanal: contagem, calendário, como funciona, notificações */
 .qhero{background:var(--brand);color:var(--brand-ink);border-radius:20px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden}
 .qhero::after{content:"";position:absolute;right:-30px;top:-30px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.08)}
 .qhero.urg{background:linear-gradient(135deg,#B3261E,#DA2020)}
@@ -783,7 +783,8 @@ body.tvmode.nocur{cursor:none}
 .cqh{display:flex;justify-content:space-between;gap:8px;font-size:13px;margin-bottom:6px}
 .cqh b{font-family:var(--display);font-size:15px}
 .cqdays{display:grid;gap:2px}
-.dc{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:42px;border-radius:7px;background:var(--surface);border:1px solid var(--line);font-size:11px;padding-bottom:3px;min-width:0}
+.dc{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:58px;border-radius:7px;background:var(--surface);border:1px solid var(--line);font-size:13px;padding-bottom:3px;min-width:0}
+.dc small{font-size:10px;font-weight:800;opacity:.7;line-height:1}
 .dc b{font-weight:800}
 .dc.pass{opacity:.45}
 .dc.hoje{background:var(--brand);color:var(--brand-ink);border-color:var(--brand);opacity:1}
@@ -800,14 +801,14 @@ body.tvmode.nocur{cursor:none}
 .how summary span{display:inline-flex;align-items:center;gap:8px}
 .how .chv{transition:transform .2s}
 .how[open] .chv{transform:rotate(90deg)}
-.steps{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:0}
-.steps li{display:flex;gap:12px;position:relative;padding-bottom:14px}
-.steps li:not(:last-child)::before{content:"";position:absolute;left:21px;top:44px;bottom:2px;width:2px;background:var(--line)}
-.steps .si{position:relative;flex:none;width:44px;height:44px;border-radius:14px;background:var(--accent-soft);color:var(--accent-ink);display:grid;place-items:center}
-.steps .si .i{width:22px;height:22px}
-.steps .si i{position:absolute;right:-5px;top:-5px;width:20px;height:20px;border-radius:50%;background:var(--brand);color:var(--brand-ink);font-style:normal;font-size:11px;font-weight:900;display:grid;place-items:center}
-.steps p{margin:2px 0 0;font-size:14px;color:var(--muted);line-height:1.45}
-.steps b{color:var(--ink)}
+.qsteps{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-direction:column;gap:0}
+.qsteps li{display:flex;gap:12px;position:relative;padding-bottom:14px}
+.qsteps li:not(:last-child)::before{content:"";position:absolute;left:21px;top:44px;bottom:2px;width:2px;background:var(--line)}
+.qsteps .si{position:relative;flex:none;width:44px;height:44px;border-radius:14px;background:var(--accent-soft);color:var(--accent-ink);display:grid;place-items:center}
+.qsteps .si .i{width:22px;height:22px}
+.qsteps .si i{position:absolute;right:-5px;top:-5px;width:20px;height:20px;border-radius:50%;background:var(--brand);color:var(--brand-ink);font-style:normal;font-size:11px;font-weight:900;display:grid;place-items:center}
+.qsteps p{margin:2px 0 0;font-size:14px;color:var(--muted);line-height:1.45}
+.qsteps b{color:var(--ink)}
 .avbox{background:var(--surface);border:1.5px solid var(--brand);border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:12px}
 .avbox.bloq{border-color:var(--bad)}
 .avh{display:flex;gap:12px;align-items:center}
@@ -841,6 +842,64 @@ body.tvmode.nocur{cursor:none}
 .pendl summary{cursor:pointer;font-weight:700;color:var(--brand);font-size:14px}
 .pendn{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .pendn .i{width:14px;height:14px}
+
+/* Feedback individual */
+.fbhero{display:flex;gap:16px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:16px}
+.fbring{position:relative;flex:none;width:92px;height:92px;display:grid;place-items:center}
+.fbring.sm{width:58px;height:58px}
+.fbring .anel{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.anel circle{fill:none;stroke-width:8}
+.anel .tr{stroke:var(--sunk)}
+.anel .br{stroke-linecap:round;transition:stroke-dashoffset .6s}
+.anel.ok .br{stroke:var(--ok)}.anel.gold .br{stroke:var(--brand)}.anel.bad .br{stroke:var(--bad)}
+.fbring b{position:relative;font-family:var(--display);font-weight:900;font-size:22px}
+.fbring.sm b{font-size:15px}
+.fbh-t{display:flex;flex-direction:column;gap:2px;min-width:0}
+.fbh-t > b{font-family:var(--display);font-size:24px;line-height:1.1}
+.fbhero.ok .fbh-t > b{color:var(--ok)}.fbhero.bad .fbh-t > b{color:var(--bad)}
+.fbh-t small{color:var(--muted);font-size:13px}
+.tend{font-weight:800}.tend.up{color:var(--ok)}.tend.down{color:var(--bad)}
+.fbres{display:flex;gap:12px;align-items:flex-start}
+.fbres p{margin:0;font-size:15px;line-height:1.5}
+.fbitens{display:flex;flex-direction:column;gap:14px}
+.fbi{display:flex;flex-direction:column;gap:5px}
+.fbi-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.fbi-h b{flex:1;min-width:0}
+.fbi-h .chip .i{width:13px;height:13px}
+.fbi-p{font-family:var(--display);font-weight:900;font-size:17px}
+.fbar{display:block;height:10px;border-radius:999px;background:var(--sunk);overflow:hidden}
+.fbar i{display:block;height:100%;border-radius:999px}
+.fbar .ok{background:var(--ok)}.fbar .mid{background:var(--brand)}.fbar .bad{background:var(--bad)}
+.fbdica{display:flex;gap:8px;align-items:flex-start;background:var(--accent-soft);color:var(--accent-ink);border-radius:12px;padding:10px 12px;font-size:14px;margin-top:4px}
+.fbdica .i{flex:none;width:18px;height:18px;margin-top:2px}
+.fbstack{display:flex;height:14px;border-radius:999px;overflow:hidden;background:var(--sunk);margin-bottom:14px}
+.fbstack i{display:block;height:100%}
+.s1{background:var(--brand)}.s2{background:#E8A33D}.s3{background:var(--ok)}
+.fbsrc{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.fbsrc > div{display:flex;flex-direction:column;gap:1px;min-width:0}
+.fbsrc .sw{width:12px;height:12px;border-radius:4px;margin-bottom:4px}
+.fbsrc b{font-family:var(--display);font-size:24px;line-height:1.1}
+.fbsrc span:not(.sw){font-weight:800;font-size:14px}
+.fbsrc small{color:var(--muted);font-size:12px;line-height:1.35}
+@media (max-width:420px){.fbsrc{grid-template-columns:1fr}.fbsrc > div{display:grid;grid-template-columns:16px auto 1fr;column-gap:8px;align-items:baseline}.fbsrc small{grid-column:2/4}}
+.fbacoes{list-style:none;margin:0;display:flex;flex-direction:column;gap:12px;font-size:15px}
+.fbacoes li{display:flex;gap:10px;align-items:flex-start}
+.fbacoes li > .i{flex:none;width:22px;height:22px;color:var(--brand);margin-top:1px}
+.fbacoes small{display:block;margin-top:2px}
+.fbcard{display:flex;gap:14px;align-items:center;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 14px;color:var(--ink)}
+.fbcard b{display:block;font-family:var(--display);font-size:19px}
+.fbcard small{display:block;color:var(--muted);font-size:13px;line-height:1.35}
+.fbcard .chev .i{width:20px;height:20px;color:var(--muted)}
+.whobtn{background:none;border:0;padding:0;text-align:left;color:inherit;cursor:pointer}
+.whobtn:hover .who{text-decoration:underline}
+
+/* Gerar com IA */
+.iahd{display:flex;gap:14px;align-items:center;margin-bottom:16px}
+.iahd .avbig{margin:0;flex:none;width:52px;height:52px;border-radius:16px}
+.iahd .avbig .i{width:26px;height:26px}
+.iachips{display:flex;flex-wrap:wrap;gap:6px;margin:-6px 0 14px}
+.iachips .chip{border:0;cursor:pointer;font:inherit;font-size:13px;font-weight:700}
+.iachips .chip:hover{background:var(--accent-soft);color:var(--accent-ink)}
 </style>
 
 <div id="app"></div>
@@ -904,6 +963,7 @@ const ICO={film:['<rect x="2" y="6" width="14" height="12" rx="2"/>','M16 13l5.2
   utensils:['M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2','M7 2v20','M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7'],
   refresh:['M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8','M21 3v5h-5','M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16','M8 16H3v5'],
   maximize:['M8 3H5a2 2 0 0 0-2 2v3','M21 8V5a2 2 0 0 0-2-2h-3','M3 16v3a2 2 0 0 0 2 2h3','M16 21h3a2 2 0 0 0 2-2v-3'],
+  target:['<circle cx="12" cy="12" r="10"/>','<circle cx="12" cy="12" r="6"/>','<circle cx="12" cy="12" r="2"/>'],
   bulb:['M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5','M9 18h6','M10 22h4'],
   checkCircle:['<circle cx="12" cy="12" r="10"/>','m9 12 2 2 4-4'],
   award:['<circle cx="12" cy="8" r="6"/>','M15.48 12.89 17 22l-5-3-5 3 1.52-9.11'],
@@ -980,7 +1040,7 @@ const MOCK=(()=>{
   const m=mesKey();
   const nomes=[['Ana (exemplo)','coz','1111',true],['Bia (exemplo)','coz','1112',false],['Caio (exemplo)','coz','1113',false],['Davi (exemplo)','ofc','2221',false],['Eva (exemplo)','ofc','2222',false],['Fábio (exemplo)','lim','3331',false],['Gil (exemplo)','lim','3332',false]];
   const db={pin:'123456',equipe:nomes.map(([nome,grupo,pin,extra],i)=>({id:'e'+i,nome,grupo,pin,extra,escala:i===1?'12x36':'5x2',ativo:true,foto:'',criado:''})),
-    quizzes:[{id:'q1',titulo:'Boas práticas: semana 1',mes:m,quinzena:new Date().getDate()<=15?1:2,ativo:true,criado:'1',perguntas:[
+    quizzes:[{id:'q1',titulo:'Boas práticas: semana 1',mes:m,semana:(()=>{const d=new Date();d.setDate(d.getDate()-((d.getDay()+6)%7));return isoDia(d)})(),ativo:true,criado:'1',perguntas:[
       {p:'Qual a temperatura mínima para manter alimentos quentes no balcão térmico?',ops:['40 °C','50 °C','60 °C','75 °C'],c:2},
       {p:'Na lavagem das mãos, por quanto tempo esfregamos com sabão, no mínimo?',ops:['5 segundos','10 segundos','20 segundos','Não importa'],c:2},
       {p:'Onde guardar os produtos de limpeza?',ops:['Junto dos alimentos secos','Em área separada dos alimentos','Na câmara fria','Embaixo da pia da cozinha'],c:1}]}],
@@ -1018,7 +1078,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261112200822';
+const APP_VERSION='20261116135312';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -1148,7 +1208,7 @@ function bnav(){
   const me=eu(),lim=me&&me.grupo==='lim';
   const t=[['hoje','listCheck','Hoje'],...(lim?[['tarefas','sparkles','Tarefas']]:[]),['cursos','grad','Treinamentos'],['quiz','quiz','Quiz'],['ranking','trophy','Ranking'],['escala','calendar','Escala']];
   const dot=k=>(k==='quiz'&&pend)||(k==='tarefas'&&tarefasPendentesHoje())||(k==='cursos'&&cursosNovos()>0);
-  return `<nav class="bnav" aria-label="Menu"><div class="in" style="grid-template-columns:repeat(${t.length},1fr)">${t.map(([k,icn,l])=>`<button class="${S.ctab===k||(k==='ranking'&&S.ctab==='hist')||(k==='hoje'&&S.ctab==='colegas')?'on':''}" data-act="ctab" data-k="${k}"><span class="ic" aria-hidden="true">${ic(icn)}</span>${l}${dot(k)?'<span class="dotn" aria-label="pendente"></span>':''}</button>`).join('')}</div></nav>`;
+  return `<nav class="bnav" aria-label="Menu"><div class="in" style="grid-template-columns:repeat(${t.length},1fr)">${t.map(([k,icn,l])=>`<button class="${S.ctab===k||(k==='ranking'&&S.ctab==='hist')||(k==='hoje'&&(S.ctab==='colegas'||S.ctab==='desemp'))?'on':''}" data-act="ctab" data-k="${k}"><span class="ic" aria-hidden="true">${ic(icn)}</span>${l}${dot(k)?'<span class="dotn" aria-label="pendente"></span>':''}</button>`).join('')}</div></nav>`;
 }
 function vHome(){
   const sair=`<button class="ghost" data-act="logout">Sair</button>`;
@@ -1157,7 +1217,7 @@ function vHome(){
   if(!GRUPOS[me.grupo])return topbar('Unidade Natura',sair)+`<main class="wrap"><div class="empty">Olá, ${esc(me.nome)}! Seu cadastro ainda está sem grupo. Peça para a gestão escolher seu grupo na aba Equipe.</div></main>`;
   let body;
   if(S.play)return vPlay();
-  if(S.ctab==='tarefas'&&me.grupo==='lim')body=cTarefas(me);else if(S.ctab==='colegas')body=cColegas(me);else if(S.ctab==='cursos')body=cCursos(me);else if(S.ctab==='escala')body=cEscala(me);else if(S.ctab==='quiz')body=cQuiz(me);else if(S.ctab==='ranking')body=cRanking(me);else if(S.ctab==='hist')body=`<div style="display:flex;justify-content:space-between;align-items:center"><button class="link" data-act="ctab" data-k="ranking" style="padding:0">${ic('chevL')} Ranking</button></div>`+cHist(me);else body=cHoje(me);
+  if(S.ctab==='tarefas'&&me.grupo==='lim')body=cTarefas(me);else if(S.ctab==='colegas')body=cColegas(me);else if(S.ctab==='cursos')body=cCursos(me);else if(S.ctab==='escala')body=cEscala(me);else if(S.ctab==='quiz')body=cQuiz(me);else if(S.ctab==='ranking')body=cRanking(me);else if(S.ctab==='hist')body=`<div style="display:flex;justify-content:space-between;align-items:center"><button class="link" data-act="ctab" data-k="ranking" style="padding:0">${ic('chevL')} Ranking</button></div>`+cHist(me);else if(S.ctab==='desemp')body=cDesemp(me);else body=cHoje(me);
   return topbar(GRUPOS[me.grupo]?GRUPOS[me.grupo].nome:'Unidade Natura',sair)+`<main class="wrap stack">${body}</main>`+footer()+bnav();
 }
 function scoreCard(me){
@@ -1185,6 +1245,7 @@ function cHoje(me){
     ${destaqueHojeCard(me)}
     ${colegasCard()}
     ${scoreCard(me)}
+    ${fbCard(me)}
     ${me.grupo==='lim'&&minhasTarefas(hoje).length?(()=>{let a=0,b=0;minhasTarefas(hoje).forEach(t=>{const[x,y]=progTarefa(t);a+=x;b+=y});return `<button class="cta" data-act="ctab" data-k="tarefas"><span class="ic">${ic('sparkles')}</span><span style="flex:1">${a>=b?'Tarefas de hoje concluídas!':`Você tem ${minhasTarefas(hoje).length} tarefa${minhasTarefas(hoje).length>1?'s':''} hoje`}<br><small style="font-weight:600">${a} de ${b} itens feitos · toque para abrir o checklist</small></span><span>›</span></button>`})():''}
     ${hojeQuizCard()}
     ${avisoCard(true)}
@@ -1225,7 +1286,7 @@ function vPlay(){
 function cRanking(me){
   const ano=S.rkModo==='ano',per=ano?anoKey():mesKey(),rk=ranking(S.pub,per,me.grupo),p=premioDe(S.pub,per,me.grupo);
   const mine=rk.find(x=>x.c.id===me.id);
-  return `<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h1 style="font-size:24px">Ranking · ${esc(GRUPOS[me.grupo].nome)}</h1><button class="btn sm alt" data-act="ctab" data-k="hist">${ic('calendar')} Meu histórico</button></div>
+  return `<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h1 style="font-size:24px">Ranking · ${esc(GRUPOS[me.grupo].nome)}</h1><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" data-act="ctab" data-k="desemp">${ic('target')} Meu desempenho</button><button class="btn sm alt" data-act="ctab" data-k="hist">${ic('calendar')} Meu histórico</button></div></div>
     <div class="seg" style="grid-template-columns:repeat(2,1fr)"><button class="${ano?'':'on'}" data-act="rkModo" data-k="mes">${ic('calendar')} Este mês<small style="text-transform:capitalize">${esc(mesCurto(mesKey()))}</small></button><button class="${ano?'on':''}" data-act="rkModo" data-k="ano">${ic('trophy')} Ano ${anoKey()}<small>acumulado</small></button></div>
     <p class="muted" style="margin:0;font-size:14px">${ano?'Os pontos acumulam de janeiro a dezembro e não zeram. No fim do ano, o top 3 do seu grupo ganha os prêmios do ano da sua categoria.':'Aqui você vê só os pontos feitos neste mês. Todos eles também somam no ranking do ano, que é o que vale para os prêmios e não zera.'}</p>
     ${prizesHtml(p)?`<section><div class="sec-h"><h2>${ano?'Prêmios do fim do ano':'Prêmios do mês'}</h2></div>${prizesHtml(p)}</section>`:''}
@@ -1290,7 +1351,7 @@ function aRanking(){
     const pd=(x,cls)=>x?`<div class="pd ${cls}"><span class="medal-e">${MED[x.pos]||x.pos+'º'}</span>${avatar(x.c,cls==='p1'?64:52)}<span class="nm">${esc(x.c.nome)}</span><span class="pt num">${x.total}</span>${p['p'+x.pos]?`<span class="prz">${esc(p['p'+x.pos])}</span>`:''}</div>`:'<div></div>';
     return `<section class="stack" style="gap:12px"><h2 style="font-size:20px">${esc(GRUPOS[g].nome)}</h2>
       ${top.length?`<div class="podium">${pd(top[1],'p2')}${pd(top[0],'p1')}${pd(top[2],'p3')}</div>`:'<div class="empty">Sem pontos ainda.</div>'}
-      <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Nome</th><th class="r">Aval.</th><th class="r">Quiz</th><th class="r">Dest.</th><th class="r">Total</th></tr></thead><tbody>${rk.map(x=>`<tr><td class="num">${x.pos}º</td><td><span class="who">${avatar(x.c,28)}${esc(x.c.nome)}${pesoDe(x.c)>1?' <small class="chip gold" title="Escala 12x36: avaliação vale em dobro">x2</small>':''}</span></td><td class="r num">${x.aval}</td><td class="r num">${x.quiz}</td><td class="r num">${x.dest||0}</td><td class="r num"><b>${x.total}</b></td></tr>`).join('')}</tbody></table></div></section>`};
+      <div class="tbl-wrap"><table><thead><tr><th>#</th><th>Nome</th><th class="r">Aval.</th><th class="r">Quiz</th><th class="r">Dest.</th><th class="r">Total</th></tr></thead><tbody>${rk.map(x=>`<tr><td class="num">${x.pos}º</td><td><button class="whobtn" data-act="fbVer" data-id="${esc(x.c.id)}" title="Ver desempenho"><span class="who">${avatar(x.c,28)}${esc(x.c.nome)}${pesoDe(x.c)>1?' <small class="chip gold" title="Escala 12x36: avaliação vale em dobro">x2</small>':''}</span></button></td><td class="r num">${x.aval}</td><td class="r num">${x.quiz}</td><td class="r num">${x.dest||0}</td><td class="r num"><b>${x.total}</b></td></tr>`).join('')}</tbody></table></div></section>`};
   return `<div class="seg" style="grid-template-columns:repeat(2,1fr);max-width:420px"><button class="${ano?'':'on'}" data-act="admModo" data-k="mes">${ic('calendar')} Do mês</button><button class="${ano?'on':''}" data-act="admModo" data-k="ano">${ic('trophy')} Do ano (acumulado)</button></div>
     <div class="toolbar"><div class="grp"><h2 style="font-size:22px">Ranking ${ano?'de':'de'}</h2>${ano?anoSelect('selAnoRk',mes):mesSelect('selMesRk',mes)}</div><div class="grp"><button class="btn sm alt" data-act="reloadAdm">Atualizar</button>${d.planilhaUrl?`<a class="btn sm alt" href="${esc(d.planilhaUrl)}" target="_blank" rel="noopener">Abrir planilha</a>`:''}</div></div>
     <div class="stats"><div class="stat"><b class="num">${nAval}</b><span>avaliações no ${ano?'ano':'mês'}</span></div><div class="stat"><b class="num">${nQ}</b><span>quizzes no ${ano?'ano':'mês'}</span></div><div class="stat"><b class="num">${nPr}/9</b><span>prêmios ${ano?'do ano':'do mês'}</span></div></div>
@@ -1308,7 +1369,7 @@ function telFmt(t){const d=String(t||'').replace(/\D/g,'').replace(/^55(?=\d{10,
 function msgPin(c){return `Oi, ${String(c.nome).split(' ')[0]}!\n\nSeu PIN do Quiz da Unidade Natura é: *${c.pin}*\n\nLink: ${SITE}\n\nGuarde o seu PIN e não passe para ninguém, ele é só seu. Qualquer dúvida, me chama!`}
 function msgGrupo(){
   const q=S.adm?S.adm.quizzes.filter(x=>x.ativo&&x.mes===mesKey()):[];
-  return `Bom dia, equipe!\n\nA partir de agora temos o nosso *Quiz da Unidade Natura*!\n\n*Como entrar:*\n1. Abra o link: ${SITE}\n2. Digite o seu PIN de 4 números (vou mandar no seu privado)\n3. Dica: salve o link na tela inicial do celular para abrir como aplicativo\n\n*Como funciona:*\n• Todo dia (segunda a sexta) a gestão avalia as boas práticas de cada um: EPI, apresentação pessoal, organização, processos e mais\n• No portal você tem um *checklist do dia* para se organizar\n• A cada 15 dias tem um *quiz*: quem participa ganha 3 pontos, e os 3 que mais acertarem no seu grupo ganham bônus\n\n*Os pontos acumulam o ano todo!* No fim do ano, o top 3 de cada ranking ganha prêmios especiais:\n• Cozinheiros\n• Oficiais de cozinha\n• Oficiais de limpeza\n\nNo portal você acompanha o ranking do mês e o do ano. Cada dia conta!${q.length?`\n\n*Quiz liberado:* ${q[q.length-1].titulo}. Bora participar!`:''}\n\n*Atenção:* o PIN é pessoal. Não passe para ninguém.`;
+  return `Bom dia, equipe!\n\nA partir de agora temos o nosso *Quiz da Unidade Natura*!\n\n*Como entrar:*\n1. Abra o link: ${SITE}\n2. Digite o seu PIN de 4 números (vou mandar no seu privado)\n3. Dica: salve o link na tela inicial do celular para abrir como aplicativo\n\n*Como funciona:*\n• Todo dia (segunda a sexta) a gestão avalia as boas práticas de cada um: EPI, apresentação pessoal, organização, processos e mais\n• No portal você tem um *checklist do dia* para se organizar\n• Toda segunda-feira sai um *quiz* novo (prazo até domingo às 23h59): quem participa ganha 3 pontos, e os 3 que mais acertarem no seu grupo ganham bônus\n\n*Os pontos acumulam o ano todo!* No fim do ano, o top 3 de cada ranking ganha prêmios especiais:\n• Cozinheiros\n• Oficiais de cozinha\n• Oficiais de limpeza\n\nNo portal você acompanha o ranking do mês e o do ano. Cada dia conta!${q.length?`\n\n*Quiz liberado:* ${q[q.length-1].titulo}. Bora participar!`:''}\n\n*Atenção:* o PIN é pessoal. Não passe para ninguém.`;
 }
 function aEquipe(){
   const d=S.adm;
@@ -1316,7 +1377,7 @@ function aEquipe(){
   const card=c=>`<div class="card"><div class="row">${avatar(c,48)}<div style="min-width:0;flex:1"><b style="display:block">${esc(c.nome)}</b><span class="muted" style="font-size:13px">${GRUPOS[c.grupo]?esc(GRUPOS[c.grupo].um):'Sem grupo'}${c.extra?' · +2 incentivo':''}${c.escala==='12x36'?' · 12x36 (avaliação x2)':' · 5x2'}</span></div></div>
      <div class="row" style="justify-content:space-between"><span>PIN <span class="pinv num">${esc(c.pin)}</span></span>${c.ativo?'':'<span class="chip off">Inativo</span>'}</div>
      ${c.telefone?`<span class="muted num" style="font-size:13px">${ic('phone')} ${esc(telFmt(c.telefone))}</span>`:''}
-     <div class="acts"><a class="btn sm" href="${esc(waLink(c.telefone,msgPin(c)))}" target="_blank" rel="noopener">${ic('message')} Enviar PIN</a><button class="btn sm alt" data-act="editColab" data-id="${esc(c.id)}">Editar</button><button class="btn sm alt" data-act="delColab" data-id="${esc(c.id)}">Remover</button></div></div>`;
+     <div class="acts"><a class="btn sm" href="${esc(waLink(c.telefone,msgPin(c)))}" target="_blank" rel="noopener">${ic('message')} Enviar PIN</a><button class="btn sm alt" data-act="fbVer" data-id="${esc(c.id)}">${ic('target')} Desempenho</button><button class="btn sm alt" data-act="editColab" data-id="${esc(c.id)}">Editar</button><button class="btn sm alt" data-act="delColab" data-id="${esc(c.id)}">Remover</button></div></div>`;
   const ord=l=>[...l].sort((a,b)=>String(a.nome).localeCompare(String(b.nome),'pt-BR'));
   return `<div class="toolbar"><h2 style="font-size:22px">Equipe <span class="muted num" style="font-size:16px">(${d.equipe.length})</span></h2><div class="grp"><a class="btn sm alt" href="${esc(waLink('',msgGrupo()))}" target="_blank" rel="noopener">${ic('megaphone')} Mensagem para o grupo</a><button class="btn sm" data-act="newColab">Adicionar colaborador</button></div></div>
    <p class="muted" style="margin:0;font-size:14px"><b>Enviar PIN</b> abre o WhatsApp com a mensagem pronta. Com o WhatsApp da pessoa cadastrado (Editar), abre direto na conversa dela.</p>
@@ -1350,7 +1411,7 @@ function aAjustes(){
       ${(S.adm&&S.adm.gestores||[]).map(g=>`<div class="done"><span class="t"><b>${esc(g.nome)}</b>${g.ativo?'':' <span class="chip off">Inativa</span>'}<br><small class="muted">PIN <span class="pinv num">${esc(g.pin)}</span></small></span><button class="btn sm alt" data-act="gEdit" data-id="${esc(g.id)}">${ic('pencil')} Editar</button><button class="btn sm alt" data-act="gDel" data-id="${esc(g.id)}">${ic('trash')} Remover</button></div>`).join('')||'<p class="muted" style="margin:0">Nenhuma gestora cadastrada.</p>'}
     </div>
     <div class="card"><b>PIN geral da gestão</b><p class="muted" style="margin:0;font-size:14px">O PIN antigo, de uso geral. Continua valendo. Troque se mais alguém souber.</p><div class="acts"><button class="btn sm" data-act="changeAdminPin">Trocar PIN geral</button></div></div>
-    <div class="card"><b>Rotina sugerida</b><ol style="color:inherit;font-size:14px;line-height:1.6;margin:0;padding-left:20px"><li>Todo dia útil, aba Avaliar: marque o que cada um cumpriu.</li><li>A cada 15 dias, crie um quiz.</li><li>No começo do ano, cadastre os prêmios do ano.</li><li>Em dezembro, veja o top 3 do ano de cada ranking.</li></ol></div>
+    <div class="card"><b>Rotina sugerida</b><ol style="color:inherit;font-size:14px;line-height:1.6;margin:0;padding-left:20px"><li>Todo dia útil, aba Avaliar: marque o que cada um cumpriu.</li><li>Toda semana, crie o quiz (ele abre sozinho na segunda).</li><li>No começo do ano, cadastre os prêmios do ano.</li><li>Em dezembro, veja o top 3 do ano de cada ranking.</li></ol></div>
     <div class="card"><b>Dados</b><p class="muted" style="margin:0;font-size:14px">Tudo fica guardado no Supabase, um banco de dados gratuito. Os PINs ficam protegidos: a equipe nunca vê o PIN dos colegas.</p>${S.adm&&S.adm.planilhaUrl?`<div class="acts"><a class="btn sm alt" href="${esc(S.adm.planilhaUrl)}" target="_blank" rel="noopener">Abrir planilha</a></div>`:''}</div>
    </div>`;
 }
@@ -1447,15 +1508,20 @@ function colabForm(id){
   $('#f-foto').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{M.foto=await resizeImg(f);$('#fprev').innerHTML=avatar({foto:M.foto},72)}catch(err){ferr('Não foi possível ler essa imagem. Tente outra.')}});
   $('#f-grupo').addEventListener('change',e=>{$('#f-extra-w').hidden=e.target.value!=='coz'});
 }
-function quizForm(id){
-  const q=id?S.adm.quizzes.find(x=>x.id===id):null;
+function semPadrao(){const d=S.adm,c=cicloAgora();let w=c.semana;for(let i=0;i<10;i++){if(!d.quizzes.some(q=>q.semana===w))return w;w=isoBel(janelaSem(w).abre+7*DIA)}return c.semana}
+function semOpcoes(q){if(q&&q.novo)q=null;const cur=q&&q.semana?q.semana:semPadrao(),c=cicloAgora(),l=[];
+  for(let i=-2;i<=10;i++)l.push(isoBel(c.abre+i*7*DIA));if(!l.includes(cur))l.unshift(cur);
+  return l.map(w=>{const tem=S.adm.quizzes.filter(x=>x.semana===w&&(!q||x.id!==q.id)).length,nm=semNome(w);return `<option value="${w}" ${w===cur?'selected':''}>${esc(semLabel(w))}${nm?' · '+nm:''}${tem?' · já tem quiz':''}</option>`}).join('')}
+function quizForm(id,pre){
+  const q=id?S.adm.quizzes.find(x=>x.id===id):pre?{titulo:pre.titulo,perguntas:pre.perguntas,ativo:true,novo:1}:null;
   M={id,perg:q?JSON.parse(JSON.stringify(q.perguntas)):[{p:'',ops:['','','',''],c:-1,e:''}]};
   const nr=q?S.adm.respostas.filter(r=>r.quizId===id).length:0;
-  openModal(`<h2>${q?'Editar quiz':'Novo quiz'}</h2>
+  openModal(`<h2>${q&&!q.novo?'Editar quiz':'Novo quiz'}</h2>
+   ${pre?`<div class="notice" style="margin-bottom:14px">${ic('sparkles')} <b>Gerado pela IA.</b> Leia cada pergunta, confira a bolinha da resposta certa e ajuste o que precisar. Só vai para a equipe depois de salvar.</div>`:''}
    ${nr?`<div class="notice" style="margin-bottom:14px">${nr} pessoa${nr>1?'s já responderam':' já respondeu'}. Mudar as respostas certas não recalcula quem já respondeu.</div>`:''}
    <div class="fld"><label for="q-tit">Nome do quiz</label><input id="q-tit" type="text" value="${esc(q?q.titulo:'')}" placeholder="Ex.: Boas práticas · semana 1"></div>
-   <div class="two"><div class="fld"><label for="q-mes">Mês</label><input id="q-mes" type="month" value="${esc(q?q.mes:S.mesQuiz)}"></div><div class="fld"><label for="q-qz">Quinzena</label><select id="q-qz">${(()=>{const qn=q?(q.quinzena||1):(()=>{const c=cicloAgora();if(S.mesQuiz!==c.mes)return 1;const tem=S.adm.quizzes.some(x=>x.mes===c.mes&&(x.quinzena||1)===c.q);return tem&&c.q===1?2:c.q})();return `<option value="1" ${qn===1?'selected':''}>1ª · dia 1 a 15</option><option value="2" ${qn===2?'selected':''}>2ª · dia 16 ao fim do mês</option>`})()}</select></div></div>
-   <p class="muted" style="font-size:13px;margin:-6px 0 12px">Abre sozinho à meia-noite do 1º dia da quinzena e encerra às 23h49 do último dia.</p>
+   <div class="fld"><label for="q-sem">Semana</label><select id="q-sem">${semOpcoes(q)}</select></div>
+   <p class="muted" style="font-size:13px;margin:-6px 0 12px">Abre sozinho na segunda à meia-noite e encerra no domingo às 23h59.</p>
    <label class="check" style="margin-bottom:16px"><input id="q-ativo" type="checkbox" ${!q||q.ativo?'checked':''}> Liberado (desmarque para pausar)</label>
    <div id="q-list"></div>
    <button class="btn sm alt" data-act="addPerg" style="margin-bottom:14px">+ Adicionar pergunta</button>
@@ -1539,11 +1605,11 @@ const A={
   rmPerg:d=>{lerPergs();M.perg.splice(+d.i,1);renderPergs()},
   saveQuiz:async(d,b)=>{
     lerPergs();
-    const data={id:M.id||'',titulo:$('#q-tit').value.trim(),mes:$('#q-mes').value,quinzena:+$('#q-qz').value,ativo:$('#q-ativo').checked,perguntas:M.perg.filter(x=>x.p.trim())};
+    const sv=$('#q-sem').value,data={id:M.id||'',titulo:$('#q-tit').value.trim(),semana:sv,mes:String(sv).slice(0,7),ativo:$('#q-ativo').checked,perguntas:M.perg.filter(x=>x.p.trim())};
     if(!data.titulo)return ferr('Dê um nome ao quiz.');
     if(!data.perguntas.length)return ferr('Escreva pelo menos 1 pergunta.');
     for(let i=0;i<data.perguntas.length;i++){const x=data.perguntas[i];if(x.ops.filter(o=>o.trim()).length<2)return ferr(`Pergunta ${i+1}: preencha pelo menos 2 alternativas.`);if(x.c<0||!x.ops[x.c].trim())return ferr(`Pergunta ${i+1}: marque a bolinha da alternativa certa.`)}
-    if(!/^\d{4}-\d{2}$/.test(data.mes))return ferr('Escolha o mês do quiz.');
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(data.semana))return ferr('Escolha a semana do quiz.');
     busyBtn(b,true,'Salvando…');
     try{await acao('salvarQuiz',data);S.mesQuiz=data.mes;closeModal();render();toast(M.id?'Quiz atualizado':'Quiz criado')}
     catch(e){busyBtn(b,false,'Salvar quiz');ferr(msg(e))}
@@ -2689,7 +2755,8 @@ Object.assign(MOCK,{
 /* ---------- Início ---------- */
 
 /* =====================================================================
-   QUIZ QUINZENAL: janela (dia 1 a 15 · dia 16 ao fim do mês, até 23h49),
+   QUIZ SEMANAL: abre toda segunda 00h e encerra domingo 23h59 (Belém).
+   Quizzes antigos (sem semana) seguem a regra das quinzenas.
    contagem regressiva, como funciona e pedido de notificações
    ===================================================================== */
 let QSKEW=0;
@@ -2701,22 +2768,30 @@ function belMs(y,m,d,h,mi){return Date.UTC(y,m-1,d,h||0,mi||0)+BEL}
 function fimMes(y,m){return new Date(Date.UTC(y,m,0)).getUTCDate()}
 function janela(mes,q){const[y,m]=String(mes).split('-').map(Number);const f=fimMes(y,m);
   return +q===2?{mes,q:2,ini:16,fim:f,abre:belMs(y,m,16),fecha:belMs(y,m,f,23,50)}:{mes,q:1,ini:1,fim:15,abre:belMs(y,m,1),fecha:belMs(y,m,15,23,50)}}
-function cicloAgora(){const p=belParts(agoraMs());return janela(p.y+'-'+pad2(p.m),p.d<=15?1:2)}
-function cicloSeguinte(c){if(c.q===1)return janela(c.mes,2);const[y,m]=c.mes.split('-').map(Number);return janela(m===12?(y+1)+'-01':y+'-'+pad2(m+1),1)}
-const qAbre=q=>q.abre?Date.parse(q.abre):janela(q.mes,q.quinzena||1).abre;
-const qFecha=q=>q.fecha?Date.parse(q.fecha):janela(q.mes,q.quinzena||1).fecha;
+const DIA=864e5;
+function isoBel(ms){const p=belParts(ms);return p.y+'-'+pad2(p.m)+'-'+pad2(p.d)}
+function segundaDe(ms){const p=belParts(ms);return isoBel(belMs(p.y,p.m,p.d)-((p.w+6)%7)*DIA)}
+function janelaSem(iso){const[y,m,d]=String(iso).split('-').map(Number);const abre=belMs(y,m,d);return {semana:iso,mes:iso.slice(0,7),abre,fecha:abre+7*DIA,ini:abre,fim:abre+6*DIA}}
+function cicloAgora(){return janelaSem(segundaDe(agoraMs()))}
+function cicloSeguinte(c){return janelaSem(isoBel(c.abre+7*DIA))}
+const qJan=q=>q.semana?janelaSem(q.semana):null;
+const qAbre=q=>q.abre?Date.parse(q.abre):q.semana?janelaSem(q.semana).abre:janela(q.mes,q.quinzena||1).abre;
+const qFecha=q=>q.fecha?Date.parse(q.fecha):q.semana?janelaSem(q.semana).fecha:janela(q.mes,q.quinzena||1).fecha;
 const qNPerg=q=>q.nPerg||(q.perguntas||[]).length;
-const qzLabel=q=>(+q===2?'2ª':'1ª')+' quinzena';
+const qHora=q=>q&&!q.semana&&q.quinzena?'23h49':'23h59';
+function semLabel(iso){const j=janelaSem(iso);return dataBel(j.ini)+' a '+dataBel(j.fim)}
+function semNome(iso){const c=cicloAgora().semana;if(iso===c)return 'esta semana';if(iso===isoBel(janelaSem(c).abre+7*DIA))return 'próxima semana';if(iso===isoBel(janelaSem(c).abre-7*DIA))return 'semana passada';return ''}
+const qzLabel=q=>q&&q.semana?'Semana '+semLabel(q.semana):q&&q.quinzena?((+q.quinzena===2?'2ª':'1ª')+' quinzena'):'';
 function quizzesAbertos(){const t=agoraMs();return S.pub?S.pub.quizzes.filter(q=>q.ativo&&t>=qAbre(q)&&t<qFecha(q)):[]}
 function proximaAbertura(){
-  /* Próximo quiz agendado (se a gestão já criou); senão, o início da próxima quinzena */
+  /* Próximo quiz agendado (se a gestão já criou); senão, a próxima segunda-feira */
   const t=agoraMs(),ag=S.pub?S.pub.quizzes.filter(q=>q.ativo&&qAbre(q)>t).sort((a,b)=>qAbre(a)-qAbre(b))[0]:null;
-  if(ag)return {ms:qAbre(ag),quiz:ag,c:janela(ag.mes,ag.quinzena||1)};
+  if(ag)return {ms:qAbre(ag),quiz:ag,c:janelaSem(segundaDe(qAbre(ag)))};
   const c=cicloAgora(),n=t<c.abre?c:cicloSeguinte(c);return {ms:n.abre,quiz:null,c:n};
 }
 const DSEM=['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
 function dataBel(ms,comSemana){const p=belParts(ms);return (comSemana?DSEM[p.w]+', ':'')+pad2(p.d)+'/'+pad2(p.m)}
-function prazoTxt(q){return dataBel(qFecha(q)-60000,true)+' às 23h49'}
+function prazoTxt(q){return dataBel(qFecha(q)-60000,true)+' às '+qHora(q)}
 
 /* ---------- Contagem regressiva (atualiza sozinha a cada segundo) ---------- */
 function cdPartes(alvo){let s=Math.max(0,Math.floor((alvo-agoraMs())/1000));const d=Math.floor(s/86400);s%=86400;const h=Math.floor(s/3600);s%=3600;return {d,h,m:Math.floor(s/60),s:s%60}}
@@ -2755,7 +2830,7 @@ function avisoCard(compacto){
 }
 function notifPrev(){
   const me=eu(),nome=me?String(me.nome).split(' ')[0]:'Ana';
-  return `<div class="nprev" aria-hidden="true"><img src="./icon-192.png" alt=""><div><div class="nph"><b>soDEXo</b><small>agora</small></div><b>Falta você no quiz</b><span>${esc(nome)}, você ainda não respondeu. Encerra dia 15 às 23h49.</span></div></div>`;
+  return `<div class="nprev" aria-hidden="true"><img src="./icon-192.png" alt=""><div><div class="nph"><b>soDEXo</b><small>agora</small></div><b>Falta você no quiz</b><span>${esc(nome)}, você ainda não respondeu. Encerra domingo às 23h59.</span></div></div>`;
 }
 function pedirAvisosModal(){
   if(!S.me||S.view!=='home'||S.play||$('#modal').innerHTML)return;
@@ -2764,56 +2839,57 @@ function pedirAvisosModal(){
   LS.set('qsn_pedaviso',String(Date.now()));
   M={};
   openModal(`<div class="avmodal"><span class="avbig">${ic('bell')}</span><h2>Ative as notificações do quiz</h2>
-    <p class="muted" style="margin:6px 0 14px">O quiz abre a cada 15 dias e tem prazo. Com as notificações, o app te avisa no celular.</p>
+    <p class="muted" style="margin:6px 0 14px">Toda segunda-feira sai um quiz novo, com prazo até domingo. Com as notificações, o app te avisa no celular.</p>
     ${notifPrev()}
-    <ul class="avlist"><li>${ic('quiz')}<span>Aviso quando o quiz <b>abrir</b> (dia 1 e dia 16)</span></li><li>${ic('bell')}<span>Lembrete <b>a cada ${lembDias()} dias</b> se ainda não respondeu</span></li><li>${ic('clock')}<span>Alerta no <b>último dia</b>, antes das 23h49</span></li></ul>
+    <ul class="avlist"><li>${ic('quiz')}<span>Aviso quando o quiz <b>abrir</b> (toda segunda)</span></li><li>${ic('bell')}<span>Lembrete <b>a cada ${lembDias()} dias</b> se ainda não respondeu</span></li><li>${ic('clock')}<span>Alerta no <b>domingo</b>, último dia, antes das 23h59</span></li></ul>
     ${e==='ios'?`<div class="notice" style="margin-top:12px"><b>No iPhone:</b> toque em Compartilhar e depois em <b>Adicionar à Tela de Início</b>. Abra o app pelo ícone novo e ative por lá.</div>
       <div class="acts" style="margin-top:14px"><button class="btn block" data-act="close">Entendi</button></div>`
     :`<div class="acts" style="margin-top:16px"><button class="btn alt" data-act="close">Agora não</button><button class="btn" data-act="qAvisosModal">${ic('bell')} Ativar</button></div>
       <p class="muted" style="font-size:13px;margin:10px 0 0;text-align:center">O celular vai perguntar se pode enviar notificações. Toque em <b>Permitir</b>.</p>`}</div>`);
 }
 
-/* ---------- Ilustração do ciclo (calendário das duas quinzenas) ---------- */
+/* ---------- Ilustração do ciclo (esta semana e a próxima) ---------- */
+const DSIG=['D','S','T','Q','Q','S','S'];
 function cicloIlustrado(){
-  const c=cicloAgora(),[y,m]=c.mes.split('-').map(Number),p=belParts(agoraMs()),n=lembDias();
-  const qs=S.pub?S.pub.quizzes.filter(q=>q.ativo&&q.mes===c.mes):[];
-  const linha=(qn)=>{const j=janela(c.mes,qn),tem=qs.some(q=>(q.quinzena||1)===qn),cel=[];
-    for(let d=j.ini;d<=j.fim;d++){const off=d-j.ini,cls=['dc'];
-      if(d<p.d||(qn===1&&c.q===2))cls.push('pass');if(d===p.d&&qn===c.q)cls.push('hoje');
-      let mk='';if(off===0)mk=`<i class="mk ab" title="Abre">${ic('quiz')}</i>`;else if(d===j.fim)mk=`<i class="mk fe" title="Encerra 23h49">${ic('clock')}</i>`;else if(off%n===0)mk=`<i class="mk lb" title="Lembrete">${ic('bell')}</i>`;
-      cel.push(`<span class="${cls.join(' ')}">${mk}<b class="num">${d}</b></span>`)}
-    return `<div class="cqrow ${qn===c.q?'cur':''}"><div class="cqh"><b>${qzLabel(qn)}</b><span class="muted num">dia ${j.ini} a ${j.fim}${tem?'':' · sem quiz ainda'}</span></div><div class="cqdays" style="grid-template-columns:repeat(${j.fim-j.ini+1},1fr)">${cel.join('')}</div></div>`};
-  return `<div class="panel cqcal"><div class="sec-h" style="margin-bottom:8px"><h2 style="text-transform:capitalize">${esc(MESES[m-1])}</h2><span class="muted" style="font-size:13px">calendário do quiz</span></div>
-    ${linha(1)}${linha(2)}
-    <div class="cqleg"><span><i class="mk ab">${ic('quiz')}</i> Abre 00h</span><span><i class="mk lb">${ic('bell')}</i> Lembrete</span><span><i class="mk fe">${ic('clock')}</i> Encerra 23h49</span><span><i class="dc hoje sw"></i> Hoje</span></div></div>`;
+  const c=cicloAgora(),n=lembDias(),hoje=isoBel(agoraMs()),t=agoraMs();
+  const qs=S.pub?S.pub.quizzes.filter(q=>q.ativo&&q.semana):[];
+  const linha=(j,titulo,cur)=>{const tem=qs.some(q=>q.semana===j.semana),cel=[];
+    for(let k=0;k<7;k++){const ms=j.abre+k*DIA,iso=isoBel(ms),p=belParts(ms),cls=['dc'];
+      if(iso<hoje)cls.push('pass');if(iso===hoje)cls.push('hoje');
+      let mk='';if(k===0)mk=`<i class="mk ab" title="Abre 00h">${ic('quiz')}</i>`;else if(k===6)mk=`<i class="mk fe" title="Encerra 23h59">${ic('clock')}</i>`;else if(k%n===0)mk=`<i class="mk lb" title="Lembrete">${ic('bell')}</i>`;
+      cel.push(`<span class="${cls.join(' ')}">${mk}<small>${DSIG[p.w]}</small><b class="num">${p.d}</b></span>`)}
+    return `<div class="cqrow ${cur?'cur':''}"><div class="cqh"><b>${titulo}</b><span class="muted num">${esc(semLabel(j.semana))}${tem?'':' · sem quiz ainda'}</span></div><div class="cqdays" style="grid-template-columns:repeat(7,1fr)">${cel.join('')}</div></div>`};
+  return `<div class="panel cqcal"><div class="sec-h" style="margin-bottom:8px"><h2>Calendário do quiz</h2><span class="muted" style="font-size:13px">um por semana</span></div>
+    ${linha(c,'Esta semana',true)}${linha(cicloSeguinte(c),'Próxima semana',false)}
+    <div class="cqleg"><span><i class="mk ab">${ic('quiz')}</i> Abre segunda 00h</span><span><i class="mk lb">${ic('bell')}</i> Lembrete</span><span><i class="mk fe">${ic('clock')}</i> Encerra domingo 23h59</span><span><i class="dc hoje sw"></i> Hoje</span></div></div>`;
 }
 function comoFunciona(aberto){
   const n=lembDias();
-  const st=[['quiz','Abre','No <b>dia 1</b> e no <b>dia 16</b> de cada mês, à meia-noite, o quiz novo aparece aqui.'],
+  const st=[['quiz','Abre','Toda <b>segunda-feira</b>, à meia-noite, o quiz novo da semana aparece aqui.'],
     ['bell','Avisa no celular','Você recebe uma notificação quando abre e um lembrete <b>a cada '+n+' dias</b> até responder.'],
     ['listCheck','Você responde','Uma vez só, com calma. Leva poucos minutos. Depois aparece a correção.'],
-    ['clock','Encerra','No <b>dia 15</b> e no <b>último dia do mês</b>, às <b>23h49</b>. Depois disso não dá mais para responder.'],
+    ['clock','Encerra','No <b>domingo</b>, às <b>23h59</b>. Depois disso não dá mais para responder.'],
     ['trophy','Soma pontos','<b>+'+QUIZ_PART+' pts</b> por participar. Os 3 que mais acertarem no seu grupo ganham <b>+5, +3 e +1</b>.']];
   return `<details class="panel how" ${aberto?'open':''}><summary><span>${ic('info')} Como funciona o quiz</span>${ic('chevR','chv')}</summary>
-    <ol class="steps">${st.map(([i,t,d],k)=>`<li><span class="si">${ic(i)}<i class="num">${k+1}</i></span><div><b>${t}</b><p>${d}</p></div></li>`).join('')}</ol></details>`;
+    <ol class="qsteps">${st.map(([i,t,d],k)=>`<li><span class="si">${ic(i)}<i class="num">${k+1}</i></span><div><b>${t}</b><p>${d}</p></div></li>`).join('')}</ol></details>`;
 }
 
 /* ---------- Tela do colaborador: aba Quiz ---------- */
 function quizHero(){
   const ab=quizzesAbertos(),pend=ab.filter(q=>!minhaResp(q.id));
   if(pend.length){const q=pend.slice().sort((a,b)=>qFecha(a)-qFecha(b))[0],f=qFecha(q),urg=f-agoraMs()<864e5;
-    return `<section class="qhero ${urg?'urg':''}"><div class="qh-top"><span class="pill">${ic('quiz')} Quiz aberto · ${qzLabel(q.quinzena||1)}</span></div>
+    return `<section class="qhero ${urg?'urg':''}"><div class="qh-top"><span class="pill">${ic('quiz')} Quiz da semana · ${esc(q.semana?semLabel(q.semana):'aberto')}</span></div>
       <div class="qh-l">${urg?'Último dia! Encerra em':'Encerra em'}</div>${cdHtml(f)}
       <div class="qh-p">${ic('clock')} Prazo: ${esc(prazoTxt(q))}</div>
       ${pend.length===1?`<button class="btn block qh-b" data-act="startQuiz" data-id="${esc(q.id)}">Responder agora ›</button>`:`<div class="qh-p" style="font-weight:800">${pend.length} quizzes esperando você</div>`}</section>`}
   const prox=proximaAbertura();
   if(ab.length)return `<section class="qhero ok"><div class="qh-top"><span class="pill">${ic('checkCircle')} Você já respondeu</span></div>
       <div class="qh-l">Próximo quiz abre em</div>${cdHtml(prox.ms)}
-      <div class="qh-p">${ic('calendar')} ${esc(dataBel(prox.ms,true))} à meia-noite · ${qzLabel(prox.c.q)}</div></section>`;
-  const c=cicloAgora(),encerrouAgora=agoraMs()>=c.fecha;
+      <div class="qh-p">${ic('calendar')} ${esc(dataBel(prox.ms,true))} à meia-noite</div></section>`;
+  const ult=S.pub.quizzes.filter(q=>q.ativo&&qFecha(q)<=agoraMs()).sort((a,b)=>qFecha(b)-qFecha(a))[0],encerrouAgora=ult&&agoraMs()-qFecha(ult)<3*DIA;
   return `<section class="qhero off"><div class="qh-top"><span class="pill">${ic('clock')} ${encerrouAgora?'Quiz encerrado':'Sem quiz aberto agora'}</span></div>
       <div class="qh-l">Próximo quiz abre em</div>${cdHtml(prox.ms)}
-      <div class="qh-p">${ic('calendar')} ${esc(dataBel(prox.ms,true))} à meia-noite · ${qzLabel(prox.c.q)}${prox.quiz?'':' (a gestão ainda vai publicar)'}</div></section>`;
+      <div class="qh-p">${ic('calendar')} ${esc(dataBel(prox.ms,true))} à meia-noite${prox.quiz?'':' (a gestão ainda vai publicar)'}</div></section>`;
 }
 function cQuiz(me){
   const t=agoraMs(),qp=quizPontos(S.pub),ab=quizzesAbertos();
@@ -2821,13 +2897,13 @@ function cQuiz(me){
   const recentes=S.pub.quizzes.filter(q=>q.ativo&&qAbre(q)<=t&&qFecha(q)>t-75*864e5).sort((a,b)=>qAbre(b)-qAbre(a));
   const feitos=recentes.filter(q=>minhaResp(q.id)),perdidos=recentes.filter(q=>!minhaResp(q.id)&&qFecha(q)<=t);
   const nunca=!S.pub.respostas.some(r=>r.colabId===me.id);
-  return `<div><h1 style="font-size:24px">Quiz</h1><p class="muted" style="margin:4px 0 0">Um quiz a cada 15 dias. Fique de olho no prazo.</p></div>
+  return `<div><h1 style="font-size:24px">Quiz</h1><p class="muted" style="margin:4px 0 0">Um quiz novo toda segunda-feira. Prazo até domingo às 23h59.</p></div>
     ${quizHero()}
     ${avisoCard(true)}
-    ${pend.length?`<section><div class="sec-h"><h2>Para responder</h2><span class="chip gold num">${pend.length}</span></div><div class="list">${pend.map(q=>`<button class="qitem" data-act="startQuiz" data-id="${esc(q.id)}"><span class="t">${esc(q.titulo)}<br><small class="muted" style="font-weight:600">${qNPerg(q)} pergunta${qNPerg(q)>1?'s':''} · até ${esc(dataBel(qFecha(q)-60000))} 23h49</small></span><span class="chip gold">Começar ›</span></button>`).join('')}</div></section>`:''}
+    ${pend.length?`<section><div class="sec-h"><h2>Para responder</h2><span class="chip gold num">${pend.length}</span></div><div class="list">${pend.map(q=>`<button class="qitem" data-act="startQuiz" data-id="${esc(q.id)}"><span class="t">${esc(q.titulo)}<br><small class="muted" style="font-weight:600">${qNPerg(q)} pergunta${qNPerg(q)>1?'s':''} · até ${esc(dataBel(qFecha(q)-60000,true))} ${qHora(q)}</small></span><span class="chip gold">Começar ›</span></button>`).join('')}</div></section>`:''}
     ${cicloIlustrado()}
     ${comoFunciona(nunca)}
-    ${feitos.length||perdidos.length?`<section><div class="sec-h"><h2>Seus últimos quizzes</h2></div><div class="panel" style="padding-block:6px">${feitos.map(q=>{const r=minhaResp(q.id),p=qp[r.id]||{pts:QUIZ_PART,pos:'-'};return `<div class="done"><span class="t">${esc(q.titulo)}<br><small class="muted num">${r.acertos}/${r.total} acertos · ${p.pos}º no grupo</small></span><span class="chip ok num">+${p.pts}</span></div>`}).join('')}${perdidos.map(q=>`<div class="done"><span class="t">${esc(q.titulo)}<br><small class="muted">Encerrou ${esc(dataBel(qFecha(q)-60000))} às 23h49</small></span><span class="chip bad">Não respondeu</span></div>`).join('')}</div></section>`:''}`;
+    ${feitos.length||perdidos.length?`<section><div class="sec-h"><h2>Seus últimos quizzes</h2></div><div class="panel" style="padding-block:6px">${feitos.map(q=>{const r=minhaResp(q.id),p=qp[r.id]||{pts:QUIZ_PART,pos:'-'};return `<div class="done"><span class="t">${esc(q.titulo)}<br><small class="muted num">${r.acertos}/${r.total} acertos · ${p.pos}º no grupo</small></span><span class="chip ok num">+${p.pts}</span></div>`}).join('')}${perdidos.map(q=>`<div class="done"><span class="t">${esc(q.titulo)}<br><small class="muted">Encerrou ${esc(dataBel(qFecha(q)-60000))} às ${qHora(q)}</small></span><span class="chip bad">Não respondeu</span></div>`).join('')}</div></section>`:''}`;
 }
 /* Cartão do quiz na aba Hoje */
 function hojeQuizCard(){
@@ -2843,7 +2919,7 @@ function statusQuiz(q){
   const t=agoraMs();
   if(!q.ativo)return '<span class="chip off">Pausado</span>';
   if(t<qAbre(q))return `<span class="chip gold">${ic('calendar')} Abre ${esc(dataBel(qAbre(q)))} 00h</span>`;
-  if(t<qFecha(q))return `<span class="chip ok">${ic('clock')} Aberto até ${esc(dataBel(qFecha(q)-60000))} 23h49</span>`;
+  if(t<qFecha(q))return `<span class="chip ok">${ic('clock')} Aberto até ${esc(dataBel(qFecha(q)-60000,true))} ${qHora(q)}</span>`;
   return `<span class="chip off">Encerrado ${esc(dataBel(qFecha(q)-60000))}</span>`;
 }
 function painelLembretes(){
@@ -2856,25 +2932,26 @@ function painelLembretes(){
   return `<div class="panel lemb">
     <div class="lemb-h"><span class="avi">${ic('bell')}</span><div style="flex:1"><b>Lembretes no celular</b><small class="muted">Saem sozinhos, só para quem ainda não respondeu.</small></div></div>
     <div class="seg" style="grid-template-columns:repeat(2,1fr)"><button class="${n===2?'on':''}" data-act="lembDias" data-k="2">A cada 2 dias</button><button class="${n===3?'on':''}" data-act="lembDias" data-k="3">A cada 3 dias</button></div>
-    <ul class="lemb-l"><li>${ic('quiz')}<span><b>Dia que abre</b> (1 e 16), às 9h: aviso para todos</span></li><li>${ic('bell')}<span><b>A cada ${n} dias</b>, às 9h: lembrete para quem não respondeu</span></li><li>${ic('clock')}<span><b>Último dia</b> (15 e fim do mês): às 9h e às 18h</span></li></ul>
+    <ul class="lemb-l"><li>${ic('quiz')}<span><b>Segunda</b> (dia que abre), às 9h: aviso para todos</span></li><li>${ic('bell')}<span><b>A cada ${n} dias</b>, às 9h: lembrete para quem não respondeu (${n===2?'quarta e sexta':'quinta'})</span></li><li>${ic('clock')}<span><b>Domingo</b> (último dia): às 9h e às 18h</span></li></ul>
     <div class="lemb-s"><span><b class="num">${comAviso}</b> de <b class="num">${ativos.length}</b> com notificações ativadas</span>${ab.length?`<span><b class="num">${pend.length}</b> ainda não responderam · encerra em ${cdHtml(f,'c')}</span>`:'<span>Nenhum quiz aberto agora</span>'}</div>
     ${pend.length?`<details class="pendl"><summary>Ver quem falta (${pend.length})</summary><div class="pendn">${pend.map(c=>`<span class="chip ${push.has(c.id)?'gold':'off'}">${push.has(c.id)?ic('bell'):ic('bellOff')} ${esc(String(c.nome).split(' ')[0])}</span>`).join('')}</div><p class="muted" style="font-size:13px;margin:8px 0 0">Quem está com o sino cortado não ativou as notificações. Para essas pessoas, avise pelo WhatsApp.</p></details>`:''}
     <div class="acts"><button class="btn sm" data-act="avisarQuiz" ${pend.length?'':'disabled'}>${ic('megaphone')} Avisar quem falta agora</button></div></div>`;
 }
+function semanasDoMes(mes){const[y,m]=mes.split('-').map(Number),l=[];let ms=belMs(y,m,1);const p=belParts(ms);ms+=((8-p.w)%7)*DIA;while(isoBel(ms).slice(0,7)===mes){l.push(isoBel(ms));ms+=7*DIA}return l}
 function aQuizLista(){
-  const d=S.adm,mes=S.mesQuiz,qs=d.quizzes.filter(q=>q.mes===mes).sort((a,b)=>(a.quinzena||1)-(b.quinzena||1)||String(a.criado).localeCompare(String(b.criado)));
-  const nAt=d.equipe.filter(c=>c.ativo).length;
-  const sem=[1,2].filter(qn=>!qs.some(q=>(q.quinzena||1)===qn)&&janela(mes,qn).fecha>agoraMs());
-  return `<div class="toolbar"><div class="grp"><h2 style="font-size:22px">Quizzes de</h2>${mesSelect('selMesQz',mes)}</div><button class="btn sm" data-act="newQuiz">Novo quiz</button></div>
-   <p class="muted" style="margin:0">Cada quiz vale para uma quinzena: <b>1ª</b> (dia 1 a 15) ou <b>2ª</b> (dia 16 ao fim do mês). Ele abre sozinho à meia-noite do primeiro dia e encerra às <b>23h49</b> do último. Participar vale ${QUIZ_PART} pts; o top 3 de cada grupo ganha +5, +3 e +1.</p>
+  const d=S.adm,mes=S.mesQuiz,qs=d.quizzes.filter(q=>q.mes===mes).sort((a,b)=>qAbre(a)-qAbre(b)||String(a.criado).localeCompare(String(b.criado)));
+  const nAt=d.equipe.filter(c=>c.ativo).length,t=agoraMs();
+  const sem=semanasDoMes(mes).filter(w=>!d.quizzes.some(q=>q.semana===w)&&janelaSem(w).fecha>t);
+  return `<div class="toolbar"><div class="grp"><h2 style="font-size:22px">Quizzes de</h2>${mesSelect('selMesQz',mes)}</div><div class="grp"><button class="btn sm alt" data-act="iaQuiz">${ic('sparkles')} Gerar com IA</button><button class="btn sm" data-act="newQuiz">Novo quiz</button></div></div>
+   <p class="muted" style="margin:0">Um quiz por semana. Ele abre sozinho na <b>segunda à meia-noite</b> e encerra no <b>domingo às 23h59</b>. Participar vale ${QUIZ_PART} pts; o top 3 de cada grupo ganha +5, +3 e +1.</p>
    ${painelLembretes()}
-   ${sem.length?`<div class="notice">${ic('info')} Ainda sem quiz na ${sem.map(qn=>`<b>${qzLabel(qn)}</b> (dia ${janela(mes,qn).ini} a ${janela(mes,qn).fim})`).join(' e na ')}. Crie antes para ele abrir sozinho no dia certo.</div>`:''}
-   ${qs.length?`<div class="cards">${qs.map(q=>{const rs=d.respostas.filter(r=>r.quizId===q.id),j=janela(q.mes,q.quinzena||1);
+   ${sem.length?`<div class="notice">${ic('info')} Semana${sem.length>1?'s':''} ainda sem quiz: ${sem.map(w=>`<b>${esc(semLabel(w))}</b>${semNome(w)?' ('+semNome(w)+')':''}`).join(', ')}. Crie antes para ele abrir sozinho na segunda.</div>`:''}
+   ${qs.length?`<div class="cards">${qs.map(q=>{const rs=d.respostas.filter(r=>r.quizId===q.id);
      return `<div class="card"><div class="row">${statusQuiz(q)}<span class="chip gold num">${qNPerg(q)} pergunta${qNPerg(q)>1?'s':''}</span></div>
      <div class="qq">${esc(q.titulo)}</div>
-     <div class="muted num" style="font-size:14px">${qzLabel(q.quinzena||1)} · dia ${j.ini} a ${j.fim} · ${rs.length}/${nAt} responderam</div>
+     <div class="muted num" style="font-size:14px">${esc(qzLabel(q))}${q.semana&&semNome(q.semana)?' · '+semNome(q.semana):''} · ${rs.length}/${nAt} responderam</div>
      <div class="acts"><button class="btn sm alt" data-act="editQuiz" data-id="${esc(q.id)}">Editar</button><button class="btn sm alt" data-act="toggleQuiz" data-id="${esc(q.id)}">${q.ativo?'Pausar':'Liberar'}</button><button class="btn sm alt" data-act="delQuiz" data-id="${esc(q.id)}">Excluir</button></div></div>`}).join('')}</div>`
-   :`<div class="empty">Nenhum quiz em ${esc(mesLabel(mes))}. Toque em “Novo quiz”.</div>`}`;
+   :`<div class="empty">Nenhum quiz em ${esc(mesLabel(mes))}. Toque em “Novo quiz” ou “Gerar com IA”.</div>`}`;
 }
 async function avisarQuizAgora(b){
   busyBtn(b,true,'Enviando…');
@@ -3588,6 +3665,201 @@ function MOCK_TR(b){return new Promise(res=>setTimeout(()=>{
     removerFerias:(p,id)=>{qd.ferias=qd.ferias.filter(f=>f.id!==id);return {ok:true}},
     salvarHorario:(p,x)=>{qd.horarios=qd.horarios.filter(h=>h.colabId!==x.colabId);qd.horarios.push(x);return {ok:true}}});
 })();
+
+
+/* =====================================================================
+   FEEDBACK INDIVIDUAL: onde a pessoa vai bem, onde precisa melhorar,
+   de onde vêm os pontos e o que fazer para subir. Calculado sozinho
+   a partir das avaliações diárias, quizzes e destaques.
+   ===================================================================== */
+const DICAS={
+  epi:'Antes de entrar na área, faça o check: touca, avental, sapato fechado (e luvas ou máscara quando pedir). EPI completo do começo ao fim do turno.',
+  apres:'Chegue com o uniforme limpo e completo. Deixe um uniforme reserva no armário para imprevistos.',
+  balanca:'Pese cada preparação antes de servir e anote. Se tiver dúvida do peso certo, pergunte para a liderança.',
+  amostras:'Tire as amostras logo que a preparação ficar pronta, identifique e guarde no lugar certo. Coloque um lembrete no início do turno.',
+  etiquetas:'Tudo que for guardado leva etiqueta com nome, data e validade. Etiquete na hora, não deixe para depois.',
+  organiz:'Reserve 5 minutos no fim de cada tarefa para guardar utensílios e deixar a bancada em ordem.',
+  processos:'Siga o passo a passo dos processos de qualidade, sem pular etapas. Na dúvida, consulte o POP ou a liderança.',
+  fogao:'No fim do turno, deixe fogão e pass-through limpos antes de entregar para a próxima equipe.',
+  incentivo:'Lembre os colegas de pesar e tirar amostras. Um lembrete gentil no início do turno já conta.',
+  area:'Antes de entregar a área, faça uma última volta conferindo piso, cantos e lixeiras.',
+  missoes:'Confira as missões do dia logo no começo do turno e vá marcando no app conforme termina.'
+};
+const NIVEIS=[[90,'Excelente','ok'],[75,'Muito bom','ok'],[60,'Bom','gold'],[0,'Precisa de atenção','bad']];
+const nivelDe=p=>NIVEIS.find(n=>p>=n[0]);
+function pct(a,b){return b?Math.round(a/b*100):0}
+function mesAnterior(m){const[y,mm]=m.split('-').map(Number);return mm===1?(y-1)+'-12':y+'-'+pad2(mm-1)}
+
+/* Calcula tudo do feedback de uma pessoa num período ('AAAA-MM' ou 'AAAA') */
+function feedbackDe(d,c,per){
+  const its=itensDe(c),peso=pesoDe(c),t=agoraMs();
+  const av=d.avaliacoes.filter(a=>a.colabId===c.id&&noPeriodo(per,a.mes));
+  const dias=av.length,max=maxDia(c);
+  const obt=av.reduce((s,a)=>s+(Number(a.pontos)||0),0),aprove=pct(obt,dias*max);
+  const porItem=its.map(([id,nome,pts,desc])=>{const ok=av.filter(a=>(a.itens||[]).includes(id)).length,falt=dias-ok;
+    return {id,nome,pts,desc,ok,falt,taxa:pct(ok,dias),perdeu:falt*pts*peso}});
+  /* média do grupo (anônima), só de quem foi avaliado no período */
+  const colegas=d.equipe.filter(x=>x.grupo===c.grupo&&x.ativo);
+  const taxas=colegas.map(x=>{const a=d.avaliacoes.filter(y=>y.colabId===x.id&&noPeriodo(per,y.mes));return a.length?pct(a.reduce((s,y)=>s+(Number(y.pontos)||0),0),a.length*maxDia(x)):null}).filter(v=>v!=null);
+  const mediaGrupo=taxas.length?Math.round(taxas.reduce((s,v)=>s+v,0)/taxas.length):null;
+  const mediaItem={};its.forEach(([id])=>{let ok=0,n=0;colegas.forEach(x=>d.avaliacoes.forEach(y=>{if(y.colabId===x.id&&noPeriodo(per,y.mes)&&itensDe(x).some(i=>i[0]===id)){n++;if((y.itens||[]).includes(id))ok++}}));mediaItem[id]=n?pct(ok,n):null});
+  /* quiz */
+  const qp=quizPontos(d);
+  const qs=d.quizzes.filter(q=>q.ativo&&noPeriodo(per,q.mes)&&qAbre(q)<=t&&(!c.criado||qFecha(q)>Date.parse(c.criado)));
+  const resp=d.respostas.filter(r=>r.colabId===c.id&&qs.some(q=>q.id===r.quizId));
+  const perdidos=qs.filter(q=>qFecha(q)<=t&&!resp.some(r=>r.quizId===q.id));
+  const abertos=qs.filter(q=>qFecha(q)>t&&!resp.some(r=>r.quizId===q.id));
+  const acertos=resp.reduce((s,r)=>s+r.acertos,0),total=resp.reduce((s,r)=>s+r.total,0);
+  /* pontos */
+  const pl=placar(d,per)[c.id]||{aval:0,quiz:0,dest:0,total:0,nd:0};
+  const rk=ranking(d,per,c.grupo),eu=rk.find(x=>x.c.id===c.id);
+  /* tendência: mês atual x mês anterior */
+  let tend=null;if(per.length===7){const ant=d.avaliacoes.filter(a=>a.colabId===c.id&&a.mes===mesAnterior(per));if(ant.length)tend=aprove-pct(ant.reduce((s,a)=>s+(Number(a.pontos)||0),0),ant.length*max)}
+  const fortes=porItem.filter(i=>dias&&i.taxa>=90).sort((a,b)=>b.taxa-a.taxa);
+  const atencao=porItem.filter(i=>dias&&i.taxa<75).sort((a,b)=>b.perdeu-a.perdeu||a.taxa-b.taxa);
+  return {c,per,dias,max,obt,aprove,peso,porItem,mediaGrupo,mediaItem,qs,resp,perdidos,abertos,acertos,total,pl,rk,eu,tend,fortes,atencao,
+    perfeitos:av.filter(a=>Number(a.pontos)>=max).length};
+}
+
+/* Frase-resumo escrita para a pessoa */
+function resumoFeedback(f,voce){
+  const nome=String(f.c.nome).split(' ')[0],L=[],lst=a=>a.length<=1?a.join(''):a.slice(0,-1).join(', ')+' e '+a[a.length-1];
+  if(!f.dias&&!f.resp.length)return voce?`${nome}, ainda não há avaliações suficientes neste período. Assim que a gestão avaliar seus dias, seu feedback aparece aqui.`:`Ainda não há avaliações de ${nome} neste período.`;
+  if(f.dias){const n=nivelDe(f.aprove);L.push(`${voce?nome+', seu':'O'} aproveitamento nas avaliações ${voce?'está':'de '+nome+' está'} em <b>${f.aprove}%</b> (${n[1].toLowerCase()}).`)}
+  if(f.fortes.length)L.push(`${voce?'Você está':'Está'} indo muito bem em <b>${esc(lst(f.fortes.slice(0,3).map(i=>i.nome)))}</b>.`);
+  if(f.atencao.length){const a=f.atencao[0];L.push(`O principal ponto de atenção é <b>${esc(a.nome)}</b>: ficou faltando em ${a.falt} de ${f.dias} dia${f.dias>1?'s':''} avaliado${f.dias>1?'s':''}${a.perdeu?`, o que tirou <b>${a.perdeu} pts</b>`:''}.`)}
+  else if(f.dias)L.push(`Nenhum item abaixo de 75%. Continue assim!`);
+  if(f.perdidos.length)L.push(`${f.perdidos.length===1?'Um quiz ficou':f.perdidos.length+' quizzes ficaram'} sem resposta (${f.perdidos.length*QUIZ_PART} pts a menos).`);
+  else if(f.resp.length&&f.total)L.push(`No quiz, ${voce?'você acertou':'acertou'} <b>${pct(f.acertos,f.total)}%</b> das perguntas.`);
+  return L.join(' ');
+}
+function anelHtml(p,cls){const r=34,c=2*Math.PI*r;return `<svg class="anel ${cls}" viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="${r}" class="tr"/><circle cx="40" cy="40" r="${r}" class="br" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-Math.min(100,p)/100)}"/></svg><b class="num">${p}%</b>`}
+
+/* Tela completa (usada no app do colaborador e no modal da gestão) */
+function feedbackHtml(d,c,per,voce){
+  const f=feedbackDe(d,c,per),n=f.dias?nivelDe(f.aprove):null,anoP=per.length===4;
+  const perTxt=anoP?'em '+per:'em '+mesCurto(per);
+  const barra=(v,cls)=>`<span class="fbar"><i class="${cls}" style="width:${Math.max(2,v)}%"></i></span>`;
+  const itens=f.porItem.slice().sort((a,b)=>a.taxa-b.taxa);
+  const tot=Math.max(1,f.pl.total);
+  /* o que fazer para subir */
+  const acoes=[];
+  f.atencao.slice(0,2).forEach(i=>acoes.push(`<li>${ic('target')}<span><b>${esc(i.nome)}:</b> ${esc(DICAS[i.id]||i.desc)}${i.pts?` <small class="muted">Cada dia completo vale +${i.pts*f.peso} pt${i.pts*f.peso>1?'s':''}.</small>`:''}</span></li>`));
+  if(f.abertos.length)acoes.push(`<li>${ic('quiz')}<span><b>Responda o quiz da semana</b> até domingo às 23h59: +${QUIZ_PART} pts garantidos, e mais bônus se ficar no top 3.</span></li>`);
+  else if(f.perdidos.length)acoes.push(`<li>${ic('bell')}<span><b>Não perca o próximo quiz.</b> Ele abre toda segunda. Ative as notificações para receber o lembrete.</span></li>`);
+  if(f.eu&&f.eu.pos>3&&f.rk.length>=3&&f.rk[2].total>0)acoes.push(`<li>${ic('trophy')}<span>Faltam <b>${Math.max(1,f.rk[2].total-f.eu.total+1)} pts</b> para ${voce?'você entrar':'entrar'} no top 3 ${anoP?'do ano':'do mês'}.</span></li>`);
+  if(!acoes.length&&f.dias)acoes.push(`<li>${ic('star')}<span>Mantenha o ritmo: dias perfeitos (todos os itens) são o caminho mais rápido para o topo e para o <b>destaque do dia</b> (+3 pts).</span></li>`);
+  return `
+  <section class="fbhero ${n?n[2]:'gold'}">
+    <div class="fbring">${anelHtml(f.dias?f.aprove:0,n?n[2]:'gold')}</div>
+    <div class="fbh-t"><span class="eyebrow">Avaliações ${esc(perTxt)}</span><b>${n?n[1]:'Sem avaliações'}</b>
+      <small>${f.dias?`${f.obt} de ${f.dias*f.max} pts possíveis · ${f.dias} dia${f.dias>1?'s':''} avaliado${f.dias>1?'s':''}`:'Ainda não há dias avaliados'}${f.tend!=null?` · <span class="tend ${f.tend>=0?'up':'down'}">${f.tend>=0?'▲':'▼'} ${Math.abs(f.tend)} p.p. vs mês passado</span>`:''}</small>
+      ${f.mediaGrupo!=null&&f.dias?`<small>Média do grupo: ${f.mediaGrupo}%</small>`:''}</div>
+  </section>
+  <div class="panel fbres"><span class="avi">${ic('message')}</span><p>${resumoFeedback(f,voce)}</p></div>
+
+  ${f.dias?`<section><div class="sec-h"><h2>Onde ${voce?'você vai':'vai'} bem e onde melhorar</h2></div>
+    <div class="panel fbitens">${itens.map(i=>{const cls=i.taxa>=90?'ok':i.taxa>=75?'mid':'bad',mg=f.mediaItem[i.id];
+      return `<div class="fbi"><div class="fbi-h"><b>${esc(i.nome)}</b>${i.taxa>=90?`<span class="chip ok">${ic('star')} Ponto forte</span>`:i.taxa<75?`<span class="chip bad">${ic('target')} Atenção</span>`:''}<span class="num fbi-p">${i.taxa}%</span></div>
+        ${barra(i.taxa,cls)}
+        <small class="muted">Cumpriu em ${i.ok} de ${f.dias} dia${f.dias>1?'s':''}${i.perdeu?` · deixou de ganhar ${i.perdeu} pts`:''}${mg!=null?` · grupo: ${mg}%`:''}</small>
+        ${i.taxa<75&&DICAS[i.id]?`<div class="fbdica">${ic('bulb')}<span>${esc(DICAS[i.id])}</span></div>`:''}</div>`}).join('')}</div>
+    <p class="muted" style="font-size:13px;margin:8px 0 0">${ic('info')} A porcentagem mostra em quantos dias avaliados o item foi cumprido. Verde: 90% ou mais. Vermelho: abaixo de 75%.</p></section>`:''}
+
+  <section><div class="sec-h"><h2>De onde vêm ${voce?'seus':'os'} pontos</h2><span class="chip gold num">${f.pl.total} pts ${esc(perTxt)}</span></div>
+    <div class="panel">
+      <div class="fbstack"><i class="s1" style="width:${pct(f.pl.aval,tot)}%"></i><i class="s2" style="width:${pct(f.pl.quiz,tot)}%"></i><i class="s3" style="width:${pct(f.pl.dest||0,tot)}%"></i></div>
+      <div class="fbsrc">
+        <div><span class="sw s1"></span><b class="num">${f.pl.aval}</b><span>Avaliações diárias</span><small>${f.obt} pts nos dias avaliados${f.peso>1?' × 2 (escala 12x36)':''}</small></div>
+        <div><span class="sw s2"></span><b class="num">${f.pl.quiz}</b><span>Quiz</span><small>${f.resp.length} de ${f.qs.length} respondido${f.qs.length===1?'':'s'}${f.total?` · ${pct(f.acertos,f.total)}% de acertos`:''}</small></div>
+        <div><span class="sw s3"></span><b class="num">${f.pl.dest||0}</b><span>Destaque do dia</span><small>${f.pl.nd||0} vez${(f.pl.nd||0)===1?'':'es'} · +3 pts cada</small></div>
+      </div>
+      ${f.eu?`<p class="muted" style="font-size:14px;margin:12px 0 0">${ic('trophy')} ${voce?'Você está':'Está'} em <b>${f.eu.pos}º lugar</b> ${anoP?'no ano':'no mês'} entre ${f.rk.length} ${esc(GRUPOS[c.grupo].nome.toLowerCase())}.</p>`:''}
+    </div></section>
+
+  ${f.perdidos.length?`<section><div class="sec-h"><h2>Quizzes sem resposta</h2></div><div class="panel" style="padding-block:6px">${f.perdidos.map(q=>`<div class="done"><span class="t">${esc(q.titulo)}<br><small class="muted">Encerrou ${esc(dataBel(qFecha(q)-60000))}</small></span><span class="chip bad num">−${QUIZ_PART} pts</span></div>`).join('')}</div></section>`:''}
+
+  ${acoes.length?`<section><div class="sec-h"><h2>${voce?'Como subir no ranking':'Sugestões para conversar'}</h2></div><ul class="panel fbacoes">${acoes.join('')}</ul></section>`:''}`;
+}
+
+/* Aba "Meu desempenho" do colaborador */
+function cDesemp(me){
+  const ano=S.fbModo==='ano',per=ano?anoKey():mesKey();
+  return `<div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><button class="link" data-act="ctab" data-k="hoje" style="padding:0">${ic('chevL')} Voltar</button></div>
+    <div><h1 style="font-size:24px">Meu desempenho</h1><p class="muted" style="margin:4px 0 0">Seu feedback automático: o que está indo bem, o que melhorar e de onde vêm seus pontos. Atualiza sozinho a cada avaliação.</p></div>
+    <div class="seg" style="grid-template-columns:repeat(2,1fr)"><button class="${ano?'':'on'}" data-act="fbModo" data-k="mes">${ic('calendar')} Este mês</button><button class="${ano?'on':''}" data-act="fbModo" data-k="ano">${ic('trophy')} Ano ${anoKey()}</button></div>
+    ${feedbackHtml(S.pub,me,per,true)}`;
+}
+/* Cartão resumido na aba Hoje */
+function fbCard(me){
+  const f=feedbackDe(S.pub,me,mesKey());
+  if(!f.dias)return '';
+  const n=nivelDe(f.aprove),a=f.atencao[0],b=f.fortes[0];
+  return `<button class="fbcard" data-act="ctab" data-k="desemp"><span class="fbring sm">${anelHtml(f.aprove,n[2])}</span><span style="flex:1;min-width:0"><span class="eyebrow">Seu desempenho no mês</span><b>${n[1]}</b><small>${b?`Vai bem: ${esc(b.nome)}`:''}${a?`${b?' · ':''}Melhorar: ${esc(a.nome)}`:''}${!a&&!b?'Toque para ver seu feedback':''}</small></span><span class="chev">${ic('chevR')}</span></button>`;
+}
+/* Gestão: abre o feedback de uma pessoa */
+function fbModal(id){
+  const c=S.adm.equipe.find(x=>x.id===id);if(!c)return;
+  const per=S.fbAdm==='ano'?anoKey():mesKey();
+  M={fb:id};
+  openModal(`<div class="sec-h" style="align-items:center"><div style="display:flex;gap:10px;align-items:center">${avatar(c,44)}<div><h2 style="font-size:20px">${esc(c.nome)}</h2><small class="muted">${GRUPOS[c.grupo]?esc(GRUPOS[c.grupo].um):''}${pesoDe(c)>1?' · 12x36':''}</small></div></div><button class="ghost" data-act="close">Fechar</button></div>
+    <div class="seg" style="grid-template-columns:repeat(2,1fr);margin-bottom:14px"><button class="${per.length===7?'on':''}" data-act="fbAdm" data-k="mes">Este mês</button><button class="${per.length===4?'on':''}" data-act="fbAdm" data-k="ano">Ano ${anoKey()}</button></div>
+    <div class="stack">${feedbackHtml(S.adm,c,per,false)}</div>
+    <p class="muted" style="font-size:13px;margin:14px 0 0">${ic('eye')} ${esc(String(c.nome).split(' ')[0])} vê este mesmo feedback no app, em <b>Meu desempenho</b>, escrito para ela/ele.</p>`);
+}
+Object.assign(A,{
+  fbModo:d=>{S.fbModo=d.k;render()},
+  fbVer:d=>fbModal(d.id),
+  fbAdm:d=>{S.fbAdm=d.k;const id=M.fb;closeModal();fbModal(id)},
+});
+
+
+/* =====================================================================
+   GERAR QUIZ COM IA (Gemini): tema livre ou treinamento cadastrado.
+   O resultado abre no editor normal para a gestora revisar e salvar.
+   ===================================================================== */
+const IA_SUGESTOES=['Uso correto de EPI','Contaminação cruzada','Higienização das mãos','Controle de temperatura dos alimentos','Validade e etiquetagem','Limpeza e sanitização de bancadas','Coleta de amostras','Prevenção de quedas e cortes','Descarte correto de resíduos','Produtos químicos de limpeza'];
+function iaModal(){
+  if(!S.tr&&!DEMO&&!iaModal.tentou){iaModal.tentou=1;carregarTreinosG().then(()=>{if(M.ia&&!M.iaBusy)iaModal()})}
+  const trs=(S.tr&&S.tr.treinos||[]).filter(t=>t.status==='pronto');
+  const v=M.ia||{tema:'',treino:'',n:10,nivel:'medio'};
+  M={ia:v};
+  openModal(`<div class="iahd"><span class="avbig ia">${ic('sparkles')}</span><div><h2>Gerar quiz com IA</h2><p class="muted" style="margin:2px 0 0">O Gemini monta as perguntas. Você revisa tudo antes de salvar.</p></div></div>
+   <div class="fld"><label for="ia-tr">Usar um treinamento como base <small class="muted">(opcional)</small></label>
+     <select id="ia-tr"><option value="">Não, só o tema abaixo</option>${trs.map(t=>`<option value="${esc(t.id)}" ${v.treino===t.id?'selected':''}>${esc(t.titulo)}</option>`).join('')}</select>
+     <small class="muted">${trs.length?'Com um treinamento, as perguntas cobram só o que foi ensinado no vídeo.':S.tr?'Nenhum treinamento com resumo pronto ainda.':'Carregando treinamentos…'}</small></div>
+   <div class="fld"><label for="ia-tema">Tema</label><textarea id="ia-tema" rows="2" placeholder="Ex.: PREAXION, contaminação cruzada, uso de EPI">${esc(v.tema)}</textarea></div>
+   <div class="iachips">${IA_SUGESTOES.map(t=>`<button class="chip off" data-act="iaTema" data-t="${esc(t)}">${esc(t)}</button>`).join('')}</div>
+   <div class="two"><div class="fld"><label>Quantas perguntas</label><div class="seg" style="grid-template-columns:repeat(2,1fr)">${[5,10].map(n=>`<button class="${v.n===n?'on':''}" data-act="iaN" data-k="${n}">${n}</button>`).join('')}</div></div>
+     <div class="fld"><label>Nível</label><div class="seg" style="grid-template-columns:repeat(2,1fr)"><button class="${v.nivel==='facil'?'on':''}" data-act="iaNivel" data-k="facil">Fácil</button><button class="${v.nivel==='medio'?'on':''}" data-act="iaNivel" data-k="medio">Médio</button></div></div></div>
+   <div class="notice" style="font-size:14px">${ic('info')} A IA pode errar ou inventar detalhes. Confira cada pergunta e a resposta certa antes de salvar.</div>
+   <p class="ferr"></p>
+   <div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="iaGerar">${ic('sparkles')} Gerar perguntas</button></div>`);
+}
+function iaLer(){if(!M.ia)return;const a=$('#ia-tema'),b=$('#ia-tr');if(a)M.ia.tema=a.value;if(b)M.ia.treino=b.value}
+async function iaGerar(btn){
+  iaLer();const v=M.ia;
+  if(!v.tema.trim()&&!v.treino)return ferr('Escreva um tema ou escolha um treinamento.');
+  M.iaBusy=true;busyBtn(btn,true,'Gerando… pode levar até 2 minutos');
+  try{
+    let j;
+    if(DEMO){await new Promise(r=>setTimeout(r,900));j={ok:true,titulo:v.tema||'Quiz da semana',perguntas:[
+      {p:'Qual é o momento certo de lavar as mãos na cozinha?',ops:['Só no início do turno','Antes de manipular alimentos e sempre que trocar de tarefa','Só quando estiverem sujas','No fim do turno'],c:1,e:'Lavar as mãos a cada troca de tarefa evita levar sujeira e micróbios de um lugar para outro.'},
+      {p:'Por quanto tempo, no mínimo, devemos esfregar as mãos com sabão?',ops:['5 segundos','10 segundos','20 segundos','Não importa'],c:2,e:'São pelo menos 20 segundos esfregando palmas, dorso, entre os dedos e unhas.'}]}}
+    else{const r=await fetch(SUPA_URL.replace(/\/$/,'')+'/functions/v1/gerar-quiz',{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPA_KEY},body:JSON.stringify({pin:adminPin,tema:v.tema,treinoId:v.treino||null,n:v.n,nivel:v.nivel})});j=await r.json().catch(()=>null)}
+    if(!j||j.erro)throw new Error((j&&j.erro)||'Não foi possível gerar agora.');
+    M.iaBusy=false;closeModal();
+    quizForm(null,{titulo:j.titulo,perguntas:j.perguntas});
+    toast(`${j.perguntas.length} perguntas geradas. Revise antes de salvar.`);
+  }catch(e){M.iaBusy=false;busyBtn(btn,false,'Gerar perguntas');ferr(msg(e))}
+}
+Object.assign(A,{
+  iaQuiz:()=>{M={};iaModal()},
+  iaTema:d=>{iaLer();M.ia.tema=d.t;iaModal()},
+  iaN:d=>{iaLer();M.ia.n=+d.k;iaModal()},
+  iaNivel:d=>{iaLer();M.ia.nivel=d.k;iaModal()},
+  iaGerar:(d,b)=>iaGerar(b),
+});
 
 let TV_MODE=false;try{TV_MODE=new URLSearchParams(location.search).has('tv')}catch(e){}
 if(TV_MODE){S.view='tv';iniciarTv();tvPintar(true)}
