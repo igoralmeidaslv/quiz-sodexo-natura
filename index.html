@@ -918,6 +918,32 @@ body.tvmode.nocur{cursor:none}
 .sec-h .chip .i{width:13px;height:13px}
 .rc-tipos button{display:flex;align-items:center;justify-content:center;gap:5px}
 .rc-tipos .i{width:15px;height:15px}
+
+/* Resultado por quiz */
+.qr-head{display:flex;gap:16px;align-items:center;justify-content:space-between}
+.qr-t{display:flex;flex-direction:column;gap:6px;min-width:0}
+.qr-t h2{font-size:22px;margin:0}
+.qr-t .chip .i{width:13px;height:13px}
+.qr-nota{display:flex;flex-direction:column;align-items:center;gap:4px;flex:none}
+.qr-nota small{color:var(--muted);font-size:12px;font-weight:700}
+.qr-faixas{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.qr-faixas > div{display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.qr-faixas b{font-family:var(--display);font-size:26px;line-height:1}
+.qr-dest{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.qr-dest p{margin:6px 0 0;font-size:14px;line-height:1.4}
+.qr-dest .chip .i{width:13px;height:13px}
+.qr-tbl td,.qr-tbl th{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+.qr-tbl th{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.qr-tbl .r{text-align:right}
+.qr-tbl .who{display:flex;align-items:center;gap:8px}
+.qr-ops{display:grid;gap:4px;font-size:14px}
+.qr-ops > div{display:flex;justify-content:space-between;gap:10px;padding:6px 10px;border-radius:10px;background:var(--sunk)}
+.qr-ops > div.ok{background:var(--ok-soft);color:var(--ok);font-weight:700}
+.qr-ops > div.bad{background:var(--bad-soft);color:var(--bad);font-weight:700}
+.qr-rk .sec-h{flex-wrap:wrap;gap:8px}
+.qr-rk .seg{max-width:100%;overflow-x:auto}
+.qr-rk .seg button{white-space:nowrap;padding-inline:12px}
+@media (max-width:640px){.hide-sm{display:none}.qr-tbl td,.qr-tbl th{padding:8px 6px}.qr-tbl .who{font-size:14px}.qr-faixas{grid-template-columns:repeat(2,1fr)}.qr-dest{grid-template-columns:1fr}.qr-head{flex-direction:column-reverse;align-items:flex-start}}
 </style>
 
 <div id="app"></div>
@@ -1101,7 +1127,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261116143620';
+const APP_VERSION='20261117134528';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -1383,7 +1409,8 @@ function aRanking(){
     <div class="grid3">${ORDEM_G.map(bloco).join('')}</div>`;
 }
 function aQuiz(){
-  const seg=`<div class="seg" style="grid-template-columns:repeat(2,1fr);max-width:460px"><button class="${S.qmodo==='lista'?'on':''}" data-act="qModo" data-k="lista">${ic('quiz')} Quizzes</button><button class="${S.qmodo==='analise'?'on':''}" data-act="qModo" data-k="analise">${ic('award')} Erros e acertos</button></div>`;
+  const seg=`<div class="seg" style="grid-template-columns:repeat(3,1fr);max-width:640px"><button class="${S.qmodo==='lista'?'on':''}" data-act="qModo" data-k="lista">${ic('quiz')} Quizzes</button><button class="${S.qmodo==='res'?'on':''}" data-act="qModo" data-k="res">${ic('trophy')} Resultado por quiz</button><button class="${S.qmodo==='analise'?'on':''}" data-act="qModo" data-k="analise">${ic('award')} Erros e acertos</button></div>`;
+  if(S.qmodo==='res')return seg+aQuizResultado();
   if(S.qmodo==='analise')return seg+aQuizAnalise();
   return seg+aQuizLista();
 }
@@ -2730,7 +2757,7 @@ Object.assign(A,{
     const src=cardDe(S.cdia,S.cref),pronto=$('#rp-pronto').checked,its=JSON.stringify(src.itens);closeModal();
     alvos.forEach(k=>setCard(S.cdia,k,x=>{x.itens=JSON.parse(its);x.pronto=pronto}));
     toast('Repetido em '+alvos.map(k=>REF[k].nome).join(' e ')+'.')},
-  qModo:d=>{S.qmodo=d.k;render();if(d.k==='analise'&&!S.qa)carregarQA()},
+  qModo:d=>{S.qmodo=d.k;render();if((d.k==='analise'||d.k==='res')&&!S.qa)carregarQA()},
   qaReload:()=>{S.qa=null;S.qaErr='';render();carregarQA()},
   qaPer:d=>{S.qaPer=d.k;render()},
   qaCopiar:async()=>{const t=resumoTreinamento();try{await navigator.clipboard.writeText(t);toast('Resumo copiado. Cole no WhatsApp ou num documento.')}catch(e){openModal(`<h2>Resumo do treinamento</h2><textarea style="min-height:300px">${esc(t)}</textarea><div class="acts" style="margin-top:12px"><button class="btn" data-act="close">Fechar</button></div>`)}},
@@ -2975,7 +3002,8 @@ function aQuizLista(){
      return `<div class="card"><div class="row">${statusQuiz(q)}<span class="chip gold num">${qNPerg(q)} pergunta${qNPerg(q)>1?'s':''}</span></div>
      <div class="qq">${esc(q.titulo)}</div>
      <div class="muted num" style="font-size:14px">${esc(qzLabel(q))}${q.semana&&semNome(q.semana)?' · '+semNome(q.semana):''} · ${rs.length}/${nAt} responderam</div>
-     <div class="acts"><button class="btn sm alt" data-act="editQuiz" data-id="${esc(q.id)}">Editar</button><button class="btn sm alt" data-act="toggleQuiz" data-id="${esc(q.id)}">${q.ativo?'Pausar':'Liberar'}</button><button class="btn sm alt" data-act="delQuiz" data-id="${esc(q.id)}">Excluir</button></div></div>`}).join('')}</div>`
+     ${rs.length?(()=>{const sa=rs.reduce((x,r)=>x+r.acertos,0),st=rs.reduce((x,r)=>x+r.total,0),m=st?Math.round(sa/st*100):0;return `<div class="muted num" style="font-size:14px">Média de acertos: <b style="color:${m>=80?'var(--ok)':m>=60?'#B7791F':'var(--bad)'}">${m}%</b> · ${dificuldade(m)[0].toLowerCase()}</div>`})():''}
+     <div class="acts">${qAbre(q)<=agoraMs()?`<button class="btn sm" data-act="qrVer" data-id="${esc(q.id)}">${ic('trophy')} Ver resultado</button>`:''}<button class="btn sm alt" data-act="editQuiz" data-id="${esc(q.id)}">Editar</button><button class="btn sm alt" data-act="toggleQuiz" data-id="${esc(q.id)}">${q.ativo?'Pausar':'Liberar'}</button><button class="btn sm alt" data-act="delQuiz" data-id="${esc(q.id)}">Excluir</button></div></div>`}).join('')}</div>`
    :`<div class="empty">Nenhum quiz em ${esc(mesLabel(mes))}. Toque em “Novo quiz” ou “Gerar com IA”.</div>`}`;
 }
 async function avisarQuizAgora(b){
@@ -3986,6 +4014,109 @@ document.addEventListener('change',e=>{
   if(e.target.id==='recG'){S.recG=e.target.value;S.recC='';render()}
   if(e.target.id==='recC'){S.recC=e.target.value;render()}
 });
+
+
+/* =====================================================================
+   RESULTADO POR QUIZ: ranking de quem acertou mais e avaliação única
+   de cada quiz (participação, média, dificuldade, pergunta a pergunta).
+   ===================================================================== */
+function quizzesComecados(d){const t=agoraMs();return d.quizzes.filter(q=>qAbre(q)<=t).sort((a,b)=>qAbre(b)-qAbre(a)||String(b.criado).localeCompare(String(a.criado)))}
+function dificuldade(p){return p>=80?['Fácil','ok']:p>=60?['Médio','gold']:['Difícil','bad']}
+function resultadoQuiz(d,q){
+  const em=equipeMap(d),qp=quizPontos(d),t=agoraMs();
+  const rs=d.respostas.filter(r=>r.quizId===q.id&&em[r.colabId]);
+  const lin=rs.map(r=>({r,c:em[r.colabId],pct:r.total?Math.round(r.acertos/r.total*100):0,pts:(qp[r.id]||{}).pts||QUIZ_PART,posG:(qp[r.id]||{}).pos||'-',bonus:(qp[r.id]||{}).bonus||0}))
+    .sort((a,b)=>b.r.acertos-a.r.acertos||String(a.r.em).localeCompare(String(b.r.em)));
+  lin.forEach((x,i)=>{x.pos=i+1});
+  /* quem devia responder: ativos que já existiam quando o quiz abriu */
+  const elegiveis=d.equipe.filter(c=>c.ativo&&GRUPOS[c.grupo]&&(!c.criado||Date.parse(c.criado)<qFecha(q)));
+  const faltam=elegiveis.filter(c=>!rs.some(r=>r.colabId===c.id));
+  const n=qNPerg(q),soma=rs.reduce((s,r)=>s+r.acertos,0),tot=rs.reduce((s,r)=>s+r.total,0);
+  const media=tot?Math.round(soma/tot*100):0;
+  const faixas=[['Gabaritou',x=>x.pct===100,'ok'],['8 a 9,9',x=>x.pct>=80&&x.pct<100,'ok'],['6 a 7,9',x=>x.pct>=60&&x.pct<80,'gold'],['Abaixo de 6',x=>x.pct<60,'bad']].map(([l,f,c])=>({l,c,n:lin.filter(f).length}));
+  /* pergunta a pergunta (precisa das escolhas, que vêm da análise) */
+  const esc_=(S.qa||[]).filter(r=>r.quizId===q.id&&Array.isArray(r.escolhas));
+  const pergs=(q.perguntas||[]).map((p,i)=>{const resp=esc_.filter(r=>r.escolhas[i]!=null),ok=resp.filter(r=>r.escolhas[i]===p.c).length,cont=[0,0,0,0];resp.forEach(r=>{const e=r.escolhas[i];if(e>=0&&e<4)cont[e]++});
+    let me=-1;cont.forEach((k,j)=>{if(j!==p.c&&k>0&&(me<0||k>cont[me]))me=j});
+    return {i,p,n:resp.length,ok,pct:resp.length?Math.round(ok/resp.length*100):null,cont,me}});
+  const porG=ORDEM_G.map(g=>{const l=lin.filter(x=>x.c.grupo===g),el=elegiveis.filter(c=>c.grupo===g),a=l.reduce((s,x)=>s+x.r.acertos,0),tt=l.reduce((s,x)=>s+x.r.total,0);
+    return {g,l,el:el.length,media:tt?Math.round(a/tt*100):null}}).filter(x=>x.el||x.l.length);
+  return {q,lin,elegiveis,faltam,n,media,faixas,pergs,porG,aberto:t<qFecha(q),part:elegiveis.length?Math.round(rs.length/elegiveis.length*100):0};
+}
+function aQuizResultado(){
+  const d=S.adm,qs=quizzesComecados(d);
+  if(!qs.length)return `<div class="empty">Nenhum quiz começou ainda. Quando o primeiro abrir, o resultado aparece aqui.</div>`;
+  if(!S.qrId||!qs.some(q=>q.id===S.qrId))S.qrId=qs[0].id;
+  if(!S.qa&&!S.qaErr)carregarQA();
+  const q=qs.find(x=>x.id===S.qrId),R=resultadoQuiz(d,q),dif=dificuldade(R.media),push=new Set(d.pushColabs||[]);
+  const fil=S.qrG||'',lin=fil?R.lin.filter(x=>x.c.grupo===fil):R.lin;
+  const cor=p=>p>=80?'var(--ok)':p>=60?'#E0A21B':'var(--bad)';
+  const barra=p=>`<div class="prog" style="height:8px"><i style="width:${Math.max(2,p)}%;background:${cor(p)}"></i></div>`;
+  const pergOrd=R.pergs.filter(x=>x.pct!=null).slice().sort((a,b)=>a.pct-b.pct);
+  const pior=pergOrd[0],melhor=pergOrd[pergOrd.length-1];
+  return `<div class="toolbar"><div class="grp"><h2 style="font-size:22px">Resultado do quiz</h2>
+      <select id="selQzR" aria-label="Escolher quiz" style="max-width:420px">${qs.map(x=>`<option value="${esc(x.id)}" ${x.id===q.id?'selected':''}>${esc(x.titulo)} · ${esc(x.semana?semLabel(x.semana):qzLabel(x))}</option>`).join('')}</select></div>
+      <div class="grp"><button class="btn sm alt" data-act="qaReload">${ic('refresh')} Atualizar</button><button class="btn sm" data-act="qrCopiar">${ic('copy')} Copiar resultado</button></div></div>
+
+    <section class="qr-head panel">
+      <div class="qr-t"><span class="eyebrow">${esc(q.semana?'Semana '+semLabel(q.semana):qzLabel(q))}</span><h2>${esc(q.titulo)}</h2>
+        <div class="row" style="gap:6px;flex-wrap:wrap">${statusQuiz(q)}<span class="chip ${dif[1]}">${ic('target')} ${dif[0]}${R.lin.length?'':' (sem respostas)'}</span><span class="chip gold num">${R.n} perguntas</span></div></div>
+      <div class="qr-nota"><div class="fbring">${anelHtml(R.media,R.media>=80?'ok':R.media>=60?'gold':'bad')}</div><small>média de acertos</small></div>
+    </section>
+
+    <div class="stats">
+      <div class="stat"><b class="num">${R.lin.length}/${R.elegiveis.length}</b><span>responderam (${R.part}%)</span></div>
+      <div class="stat"><b class="num">${R.lin.length?(R.lin.reduce((s,x)=>s+x.r.acertos,0)/R.lin.length).toFixed(1).replace('.',','):'0'}</b><span>acertos em média, de ${R.n}</span></div>
+      <div class="stat"><b class="num">${R.faixas[0].n}</b><span>gabaritaram</span></div>
+      <div class="stat"><b class="num">${R.faltam.length}</b><span>${R.aberto?'ainda não responderam':'não responderam'}</span></div>
+    </div>
+
+    ${R.lin.length?`<section class="panel"><div class="sec-h"><h2>Como a equipe foi</h2></div>
+      <div class="qr-faixas">${R.faixas.map(f=>`<div><b class="num">${f.n}</b><span class="chip ${f.c}">${f.l}</span><div class="prog" style="height:8px"><i style="width:${R.lin.length?Math.round(f.n/R.lin.length*100):0}%;background:var(--${f.c==='gold'?'brand':f.c})"></i></div></div>`).join('')}</div>
+      ${R.porG.length>1?`<div class="stack" style="gap:8px;margin-top:14px">${R.porG.map(x=>`<div><div class="qprog" style="margin-bottom:4px"><b>${esc(GRUPOS[x.g].nome)}</b><span class="num muted">${x.l.length}/${x.el} responderam${x.media!=null?` · ${x.media}% de acerto`:''}</span></div>${barra(x.media||0)}</div>`).join('')}</div>`:''}
+      ${pior&&melhor&&pior!==melhor?`<div class="qr-dest"><div><span class="chip bad">${ic('x')} Mais errada</span><p>P${pior.i+1}. ${esc(pior.p.p)} <b class="num">${pior.pct}%</b></p></div><div><span class="chip ok">${ic('check')} Mais acertada</span><p>P${melhor.i+1}. ${esc(melhor.p.p)} <b class="num">${melhor.pct}%</b></p></div></div>`:''}
+    </section>`:''}
+
+    <section class="qr-rk"><div class="sec-h"><h2>Ranking: quem acertou mais</h2>
+      <div class="seg" style="grid-template-columns:repeat(${R.porG.length+1},auto)"><button class="${!fil?'on':''}" data-act="qrG" data-k="">Todos</button>${R.porG.map(x=>`<button class="${fil===x.g?'on':''}" data-act="qrG" data-k="${x.g}">${esc(GRUPOS[x.g].nome)}</button>`).join('')}</div></div>
+      ${lin.length?`<div class="tbl-wrap"><table class="qr-tbl"><thead><tr><th>#</th><th>Nome</th><th class="r">Acertos</th><th class="hide-sm">Desempenho</th><th class="r">Pontos</th><th class="r hide-sm">Respondeu</th></tr></thead><tbody>
+        ${lin.map(x=>`<tr><td class="num">${MED[x.pos]||x.pos+'º'}</td>
+          <td><button class="whobtn" data-act="fbVer" data-id="${esc(x.c.id)}"><span class="who">${avatar(x.c,28)}<span>${esc(x.c.nome)}<small class="muted" style="display:block;font-size:12px">${esc(GRUPOS[x.c.grupo].nome)} · ${x.posG}º no grupo</small></span></span></button></td>
+          <td class="r num"><b>${x.r.acertos}</b>/${x.r.total}</td>
+          <td class="hide-sm" style="min-width:120px">${barra(x.pct)}<small class="num muted">${x.pct}%</small></td>
+          <td class="r num">${x.pts}${x.bonus?` <small class="chip ok">+${x.bonus} bônus</small>`:''}</td>
+          <td class="r hide-sm muted" style="font-size:13px">${esc(quando(x.r.em))}</td></tr>`).join('')}</tbody></table></div>
+        <p class="muted" style="font-size:13px;margin:8px 0 0">Empate em acertos: fica na frente quem respondeu primeiro. O bônus (+5, +3, +1) é dado para os 3 melhores de <b>cada grupo</b>.</p>`
+      :`<div class="empty">Ninguém ${fil?'deste grupo ':''}respondeu ainda.</div>`}
+    </section>
+
+    ${R.faltam.length?`<section class="panel"><div class="sec-h"><h2>${R.aberto?'Ainda não responderam':'Não responderam'} (${R.faltam.length})</h2>${R.aberto?`<button class="btn sm" data-act="avisarQuiz">${ic('megaphone')} Avisar quem falta</button>`:''}</div>
+      <div class="pendn">${R.faltam.filter(c=>!fil||c.grupo===fil).map(c=>`<span class="chip ${push.has(c.id)?'gold':'off'}">${push.has(c.id)?ic('bell'):ic('bellOff')} ${esc(c.nome)}</span>`).join('')}</div></section>`:''}
+
+    <section><div class="sec-h"><h2>Pergunta por pergunta</h2></div>
+      ${!S.qa?carregando('Calculando acertos por pergunta…'):`<div class="list">${R.pergs.map(x=>`<div class="panel stack" style="gap:6px">
+        <div class="qprog" style="margin:0"><span class="eyebrow">Pergunta ${x.i+1}</span>${x.pct!=null?`<span class="chip ${x.pct>=80?'ok':x.pct>=60?'gold':'bad'} num">${x.pct}% acertou</span>`:'<span class="chip off">sem respostas</span>'}</div>
+        <b style="font-size:15px">${esc(x.p.p)}</b>${x.pct!=null?barra(x.pct):''}
+        <div class="qr-ops">${x.p.ops.map((o,j)=>!String(o||'').trim()?'':`<div class="${j===x.p.c?'ok':j===x.me?'bad':''}"><span>${'ABCD'[j]}) ${esc(o)}</span><b class="num">${x.cont[j]}</b></div>`).join('')}</div>
+      </div>`).join('')}</div>`}
+    </section>`;
+}
+function textoResultado(){
+  const d=S.adm,q=d.quizzes.find(x=>x.id===S.qrId);if(!q)return '';
+  const R=resultadoQuiz(d,q),M3=['1º','2º','3º'];
+  let t=`*Resultado do quiz: ${q.titulo}*\n${q.semana?'Semana '+semLabel(q.semana):''}\n\nParticiparam: ${R.lin.length} de ${R.elegiveis.length}\nMédia de acertos: ${R.media}%\n`;
+  R.porG.forEach(x=>{if(!x.l.length)return;
+    const ord=x.l.slice().sort((a,b)=>b.r.acertos-a.r.acertos||String(a.r.em).localeCompare(String(b.r.em))).slice(0,3);
+    t+=`\n*${GRUPOS[x.g].nome}*\n`+ord.map((y,i)=>`${M3[i]} ${String(y.c.nome).split(' ')[0]}: ${y.r.acertos}/${y.r.total} acertos${y.bonus?` (+${y.bonus} bônus)`:''}`).join('\n')+'\n'});
+  t+=`\nParabéns a todos que participaram! Toda segunda tem quiz novo.`;
+  return t;
+}
+Object.assign(A,{
+  qrG:d=>{S.qrG=d.k;render()},
+  qrVer:d=>{S.qrId=d.id;S.qmodo='res';render();scrollTo(0,0)},
+  qrCopiar:async()=>{const t=textoResultado();try{await navigator.clipboard.writeText(t);toast('Resultado copiado. Cole no WhatsApp.')}catch(e){M={};openModal(`<h2>Copie o resultado</h2><textarea rows="14" style="width:100%">${esc(t)}</textarea><div class="acts"><button class="btn" data-act="close">Fechar</button></div>`)}},
+});
+document.addEventListener('change',e=>{if(e.target.id==='selQzR'){S.qrId=e.target.value;render()}});
 
 let TV_MODE=false;try{TV_MODE=new URLSearchParams(location.search).has('tv')}catch(e){}
 if(TV_MODE){S.view='tv';iniciarTv();tvPintar(true)}
