@@ -1098,7 +1098,7 @@ const MOCK=(()=>{
   const byPin=p=>{const c=db.equipe.find(x=>x.pin===String(p)&&x.ativo);if(!c)throw new Error('PIN não encontrado ou inativo. Confira com a gestão.');return c};
   const base=s=>({equipe:s?db.equipe:db.equipe.map(({pin,...c})=>c),quizzes:s?db.quizzes:db.quizzes.map(q=>({...q,perguntas:q.perguntas.map(x=>({p:x.p,ops:x.ops}))})),respostas:db.respostas,avaliacoes:db.avaliacoes,premios:db.premios,destaques:db.destaques,gestoras:db.gestoras||(db.gestoras=[{nome:'Ianne Tamara',cargo:'Gerente da Unidade',foto:''},{nome:'Jessyca Almeida',cargo:'Gerente Adjunta',foto:''}]),temGestao:true,lembreteDias:db.lembreteDias||2,treinosFeitos:db.treinosFeitos||(db.treinosFeitos=[{colabId:'e0',treinoId:'t1',mes:mesKey(),titulo:'Exemplo'}])});
   return{
-    colegasStatus:pin=>{const c=byPin(pin);db.ac=db.ac||[];return {aberto:true,data:isoDia(),colegas:db.equipe.filter(x=>x.ativo&&x.grupo===c.grupo&&x.id!==c.id).map(({pin,...x})=>x),feitas:db.ac.filter(a=>a.autorId===c.id&&a.data===isoDia()).map(a=>a.alvoId)}},
+    colegasStatus:pin=>{const c=byPin(pin);db.ac=db.ac||[];return {aberto:true,data:isoDia(),meuGrupo:c.grupo,colegas:db.equipe.filter(x=>x.ativo&&x.id!==c.id).map(({pin,...x})=>x),feitas:db.ac.filter(a=>a.autorId===c.id&&a.data===isoDia()).map(a=>a.alvoId)}},
     avaliarColega:(pin,alvo,n,com)=>{const c=byPin(pin);db.ac=(db.ac||[]).filter(a=>!(a.autorId===c.id&&a.alvoId===alvo&&a.data===isoDia()));db.ac.push({id:Date.now(),autorId:c.id,alvoId:alvo,data:isoDia(),notas:n,comentario:com||'',em:new Date().toISOString()});return {ok:true}},
     colegasGestao:p=>{chk(p);db.ac=db.ac||[{id:1,autorId:'e1',alvoId:'e0',data:isoDia(),notas:{epi:5,processos:5,educacao:4,cordialidade:5,equipe:4},comentario:'Sempre ajuda no almoço.'},{id:2,autorId:'e2',alvoId:'e0',data:isoDia(),notas:{epi:4,processos:5,educacao:5,cordialidade:5,equipe:5},comentario:''},{id:3,autorId:'e0',alvoId:'e2',data:isoDia(),notas:{epi:2,processos:3,educacao:4,cordialidade:4,equipe:3},comentario:'Esqueceu a touca.'}];return {hoje:isoDia(),abertoHoje:true,liberados:db.lib||[],avals:db.ac}},
     liberarColegas:(p,dia,on)=>{chk(p);db.lib=(db.lib||[]).filter(x=>x!==dia);if(on)db.lib.push(dia);return {ok:true}},
@@ -1127,7 +1127,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261117134528';
+const APP_VERSION='20261123152148';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -3086,8 +3086,13 @@ function cColegas(me){
      <p class="muted" style="font-size:13px;margin:0 0 12px">${ic('eye')} <b>Seus colegas não veem quem avaliou.</b> A gestão vê, para acompanhar a equipe. Seja justo e respeitoso.</p>
      <button class="btn" style="width:100%" data-act="colEnviar">Enviar avaliação</button></section>`}
   const f=new Set(c.feitas);
-  return volta+`<section class="stack" style="gap:6px"><h1 style="font-size:24px">Avalie seus colegas</h1><p class="muted" style="margin:0">Dê de 1 a 5 estrelas em EPI, processos, educação, cordialidade e trabalho em equipe. Leva 1 minuto por pessoa. Não vale pontos no ranking: serve para a gestão acompanhar a equipe.</p></section>
-   <div class="colgrid">${c.colegas.map(x=>`<button class="colrow" data-act="colAbrir" data-id="${esc(x.id)}">${avatar(x,44)}<span class="t"><b>${esc(x.nome)}</b><br><small>${f.has(x.id)?'Avaliado hoje · toque para mudar':'Ainda não avaliado'}</small></span>${f.has(x.id)?`<span class="chip ok">${ic('check')} Feito</span>`:ic('chevR')}</button>`).join('')}</div>`;
+  return volta+`<section class="stack" style="gap:6px"><h1 style="font-size:24px">Avalie seus colegas</h1><p class="muted" style="margin:0">Você pode avaliar <b>qualquer colega da equipe</b>, de todos os grupos. Dê de 1 a 5 estrelas em EPI, processos, educação, cordialidade e trabalho em equipe. Leva 1 minuto por pessoa. Não vale pontos no ranking: serve para a gestão acompanhar a equipe.</p></section>
+   ${c.colegas.length>8?`<div class="fld" style="margin:0"><input id="col-busca" type="search" placeholder="Buscar colega pelo nome" value="${esc(S.colBusca||'')}" autocomplete="off"></div>`:''}
+   ${(()=>{const meu=c.meuGrupo||me.grupo,b=String(S.colBusca||'').trim().toLowerCase(),ls=c.colegas.filter(x=>!b||String(x.nome).toLowerCase().includes(b));
+     const gs=[meu,...ORDEM_G.filter(g=>g!==meu)],outros=ls.filter(x=>!gs.includes(x.grupo));
+     const linha=x=>`<button class="colrow" data-act="colAbrir" data-id="${esc(x.id)}">${avatar(x,44)}<span class="t"><b>${esc(x.nome)}</b><br><small>${f.has(x.id)?'Avaliado hoje · toque para mudar':'Ainda não avaliado'}</small></span>${f.has(x.id)?`<span class="chip ok">${ic('check')} Feito</span>`:ic('chevR')}</button>`;
+     const bloco=(t,l)=>l.length?`<section class="stack" style="gap:8px"><h2 style="font-size:17px;margin:4px 0 0">${esc(t)} <span class="muted num" style="font-size:14px;font-weight:600">${l.filter(x=>f.has(x.id)).length}/${l.length}</span></h2><div class="colgrid">${l.map(linha).join('')}</div></section>`:'';
+     return (ls.length?'':`<div class="empty">Nenhum colega com esse nome.</div>`)+gs.map(g=>bloco((g===meu?'Seu grupo · ':'')+(GRUPOS[g]?GRUPOS[g].nome:'Equipe'),ls.filter(x=>x.grupo===g))).join('')+bloco('Outros',outros)})()}`;
 }
 Object.assign(A,{
   colAbrir:d=>{S.colAlvo=d.id;M={colNotas:{}};render();scrollTo(0,0)},
@@ -3096,6 +3101,7 @@ Object.assign(A,{
   colEnviar:async(d,b)=>{const n=M.colNotas||{};const falta=CRIT_COL.filter(([k])=>!n[k]);if(falta.length){toast('Dê estrelas em: '+falta.map(x=>x[1]).join(', '));return}
     busyBtn(b,true,'Enviando…');try{await call('avaliarColega',S.me.pin,S.colAlvo,n,$('#col-com').value.trim());S.col.feitas=[...new Set([...S.col.feitas,S.colAlvo])];S.colAlvo=null;M={};render();scrollTo(0,0);toast('Avaliação enviada. Obrigado!')}catch(e){toast(msg(e));busyBtn(b,false,'Tentar de novo')}}
 });
+document.addEventListener('input',e=>{if(e.target.id==='col-busca'){S.colBusca=e.target.value;const p=e.target.selectionStart;render();const i=$('#col-busca');if(i){i.focus();try{i.setSelectionRange(p,p)}catch(_){}}}});
 /* gestão */
 S.colDias=7;
 async function carregarColegasG(){const ate=isoDia(),de=somaDias(ate,-(S.colDias-1));try{S.colG=await call('colegasGestao',adminPin,de,ate);S.colGErr=''}catch(e){S.colGErr=msg(e)}if(S.view==='admin'&&S.tab==='colegas'&&!$('#modal').innerHTML)render()}
@@ -3110,8 +3116,8 @@ function aColegas(){
     return `<section class="stack" style="gap:10px"><h2 style="font-size:18px">${esc(GRUPOS[gr].nome)}</h2>${cs.map(c=>{const ls=porAlvo[c.id]||[];
       return `<div class="panel" style="padding:12px 14px"><div style="display:flex;align-items:center;gap:12px">${avatar(c,40)}<span style="flex:1;min-width:0"><b>${esc(c.nome)}</b><br><small class="muted">${ls.length?`${ls.length} avaliaç${ls.length>1?'ões':'ão'} de colegas`:'Nenhuma avaliação no período'}</small></span>${ls.length?`<span class="chip ${md(ls,'epi')+md(ls,'processos')+md(ls,'educacao')+md(ls,'cordialidade')+md(ls,'equipe')>=20?'ok':'gold'} num">${f1(CRIT_COL.reduce((s,[k])=>s+md(ls,k),0)/5)} / 5</span>`:''}</div>
        ${ls.length?`<div class="medias">${CRIT_COL.map(([k,l])=>`<div class="${md(ls,k)<3?'bx':''}"><b class="num">${f1(md(ls,k))}</b>${esc(l.split(' ')[0]==='Uso'?'EPI':l.split(' ')[0]==='Segue'?'Processos':l.split(' ')[0]==='Trabalho'?'Equipe':l.split(' ')[0])}</div>`).join('')}</div>
-       <details style="margin-top:8px"><summary class="link" style="cursor:pointer;font-weight:800">Ver quem avaliou</summary><div class="avlist">${ls.map(a=>`<div class="avc"><b>${esc(nome(a.autorId))}</b> · <span class="muted">${esc(diaLabel(a.data))}</span><br>${CRIT_COL.map(([k,l])=>`${esc(l.split(' ').slice(-1)[0]==='EPI'?'EPI':l)}: <b class="num">${a.notas[k]}</b>`).join(' · ')}${a.comentario?`<br><i>“${esc(a.comentario)}”</i>`:''}</div>`).join('')}</div></details>`:''}</div>`}).join('')}</section>`};
-  return `<section class="stack" style="gap:6px"><h2 style="font-size:20px">${ic('users')} Colegas avaliam</h2><p class="muted" style="margin:0">A equipe avalia os colegas do mesmo grupo com 1 a 5 estrelas. Entre eles é anônimo; aqui a gestão vê quem avaliou. Não vale pontos no ranking.</p></section>
+       <details style="margin-top:8px"><summary class="link" style="cursor:pointer;font-weight:800">Ver quem avaliou</summary><div class="avlist">${ls.map(a=>`<div class="avc"><b>${esc(nome(a.autorId))}</b>${(()=>{const au=eq.find(x=>x.id===a.autorId);return au&&GRUPOS[au.grupo]&&au.grupo!==c.grupo?` <small class="chip off">${esc(GRUPOS[au.grupo].nome)}</small>`:''})()} · <span class="muted">${esc(diaLabel(a.data))}</span><br>${CRIT_COL.map(([k,l])=>`${esc(l.split(' ').slice(-1)[0]==='EPI'?'EPI':l)}: <b class="num">${a.notas[k]}</b>`).join(' · ')}${a.comentario?`<br><i>“${esc(a.comentario)}”</i>`:''}</div>`).join('')}</div></details>`:''}</div>`}).join('')}</section>`};
+  return `<section class="stack" style="gap:6px"><h2 style="font-size:20px">${ic('users')} Colegas avaliam</h2><p class="muted" style="margin:0">A equipe avalia <b>qualquer colega</b>, de todos os grupos, com 1 a 5 estrelas. Entre eles é anônimo; aqui a gestão vê quem avaliou. Não vale pontos no ranking.</p></section>
    <section class="panel" style="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap"><div><b>${fds?'Hoje é fim de semana: a avaliação já está aberta.':lib?'Avaliação liberada hoje.':'Hoje a avaliação está fechada.'}</b><br><small class="muted">${fds?'Abre sozinha aos sábados e domingos.':'Vai ficar fora hoje? Libere para a equipe avaliar.'}</small></div>
      ${fds?'':`<button class="switch ${lib?'on':''}" data-act="colLiberar" role="switch" aria-checked="${lib}" aria-label="Liberar avaliação hoje"></button>`}</section>
    <div class="seg" style="grid-template-columns:repeat(3,1fr);max-width:420px">${[[7,'7 dias'],[30,'30 dias'],[90,'90 dias']].map(([n,l])=>`<button class="${S.colDias===n?'on':''}" data-act="colDias" data-k="${n}">${l}</button>`).join('')}</div>
