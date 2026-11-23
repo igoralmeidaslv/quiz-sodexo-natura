@@ -944,6 +944,41 @@ body.tvmode.nocur{cursor:none}
 .qr-rk .seg{max-width:100%;overflow-x:auto}
 .qr-rk .seg button{white-space:nowrap;padding-inline:12px}
 @media (max-width:640px){.hide-sm{display:none}.qr-tbl td,.qr-tbl th{padding:8px 6px}.qr-tbl .who{font-size:14px}.qr-faixas{grid-template-columns:repeat(2,1fr)}.qr-dest{grid-template-columns:1fr}.qr-head{flex-direction:column-reverse;align-items:flex-start}}
+
+/* Base de conhecimento */
+.toolbar input[type=search]{height:44px;border:1px solid var(--line);border-radius:12px;padding:0 12px;background:var(--surface);color:var(--ink);font:inherit;font-size:15px}
+.i.girar{animation:sp 1s linear infinite}
+.basedrop{border:2px dashed var(--line);border-radius:18px;padding:22px 16px;text-align:center;display:flex;flex-direction:column;gap:14px;background:var(--surface);transition:.15s}
+.basedrop.on{border-color:var(--brand);background:var(--accent-soft)}
+.basedrop > div:first-child{display:flex;flex-direction:column;align-items:center;gap:4px}
+.basedrop > div:first-child .i{width:32px;height:32px;color:var(--brand)}
+.basedrop small{color:var(--muted);font-size:13px}
+.basedrop label.btn{cursor:pointer}
+.bup{display:flex;gap:10px;align-items:center;font-size:14px}
+.bup > .i{flex:none;width:20px;height:20px;color:var(--brand)}
+.bup.ok > .i{color:var(--ok)}.bup.bad > .i{color:var(--bad)}
+.bup span{display:flex;flex-direction:column;min-width:0}
+.bup small{color:var(--muted)}.bup.bad small{color:var(--bad)}
+.bc-h{display:flex;gap:12px;align-items:center}
+.bc-h b{display:block}
+.bc-h small{display:block;font-size:13px}
+.bc-i{flex:none;width:42px;height:42px;border-radius:12px;background:var(--accent-soft);color:var(--accent-ink);display:grid;place-items:center}
+.bc-i .i{width:22px;height:22px}
+.bcard .chip .i{width:13px;height:13px}
+.bfatos{list-style:none;margin:10px 0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:14px}
+.bfatos li{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border-radius:10px;background:var(--sunk)}
+.bfatos li.ok{background:var(--ok-soft)}
+.bf-ck{flex:none;background:none;border:0;padding:0;cursor:pointer;color:var(--muted);display:grid}
+.bfatos li.ok .bf-ck{color:var(--ok)}
+.bf-ck .i{width:20px;height:20px}
+.iabase{background:var(--accent-soft);border-radius:14px;padding:12px 14px}
+.iabase .check .i{width:18px;height:18px;vertical-align:-3px;color:var(--brand)}
+.iadocs{display:flex;flex-direction:column;gap:6px;margin-top:10px;max-height:220px;overflow:auto;background:var(--surface);border-radius:10px;padding:10px}
+.iadocs .check{margin:0;font-size:14px;align-items:flex-start}
+.qfonte{display:flex;gap:8px;align-items:flex-start;margin-top:10px;padding:10px 12px;border-radius:10px;font-size:13px;line-height:1.45}
+.qfonte .i{flex:none;width:18px;height:18px;margin-top:1px}
+.qfonte.ok{background:var(--ok-soft);color:var(--ok)}
+.qfonte.warn{background:#FFF4D6;color:#8A5A00}
 </style>
 
 <div id="app"></div>
@@ -1008,6 +1043,9 @@ const ICO={film:['<rect x="2" y="6" width="14" height="12" rx="2"/>','M16 13l5.2
   refresh:['M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8','M21 3v5h-5','M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16','M8 16H3v5'],
   maximize:['M8 3H5a2 2 0 0 0-2 2v3','M21 8V5a2 2 0 0 0-2-2h-3','M3 16v3a2 2 0 0 0 2 2h3','M16 21h3a2 2 0 0 0 2-2v-3'],
   plus:['M12 5v14','M5 12h14'],
+  fileText:['M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z','M14 2v6h6','M8 13h8','M8 17h8','M8 9h2'],
+  present:['<rect x="2" y="3" width="20" height="13" rx="2"/>','M12 16v5','M8 21h8','M7 12l3-3 2 2 4-4'],
+  book:['M4 19.5V5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2.5','M6 21h14','M9 7h7','M9 11h5'],
   lock:['<rect x="3" y="11" width="18" height="11" rx="2"/>','M7 11V7a5 5 0 0 1 10 0v4'],
   target:['<circle cx="12" cy="12" r="10"/>','<circle cx="12" cy="12" r="6"/>','<circle cx="12" cy="12" r="2"/>'],
   bulb:['M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5','M9 18h6','M10 22h4'],
@@ -1127,7 +1165,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261123152148';
+const APP_VERSION='20261123200310';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -1364,7 +1402,7 @@ function cHist(me){
 /* ---------- Telas: gestão ---------- */
 function vAdmin(){
   const grp=grupoDaAba(S.tab);
-  const body=!S.adm?(S.status==='err'?`<div class="notice">Sem conexão com o servidor agora. Você continua logada. ${esc(S.errMsg)} <button class="link" data-act="reloadAdm">Tentar de novo</button></div>`:carregando('Abrindo a gestão…')):S.tab==='avaliar'?aAvaliar():S.tab==='recados'?aRecados():S.tab==='colegas'?aColegas():S.tab==='tv'?aTv():S.tab==='limpeza'?aLimpeza():S.tab==='cardapio'?aCardapio():S.tab==='ranking'?aRanking():S.tab==='quiz'?aQuiz():S.tab==='treinos'?aTreinos():S.tab==='escala'?aEscala():S.tab==='acessos'?aAcessos():S.tab==='equipe'?aEquipe():S.tab==='premios'?aPremios():aAjustes();
+  const body=!S.adm?(S.status==='err'?`<div class="notice">Sem conexão com o servidor agora. Você continua logada. ${esc(S.errMsg)} <button class="link" data-act="reloadAdm">Tentar de novo</button></div>`:carregando('Abrindo a gestão…')):S.tab==='avaliar'?aAvaliar():S.tab==='recados'?aRecados():S.tab==='colegas'?aColegas():S.tab==='tv'?aTv():S.tab==='limpeza'?aLimpeza():S.tab==='cardapio'?aCardapio():S.tab==='ranking'?aRanking():S.tab==='quiz'?aQuiz():S.tab==='base'?aBase():S.tab==='treinos'?aTreinos():S.tab==='escala'?aEscala():S.tab==='acessos'?aAcessos():S.tab==='equipe'?aEquipe():S.tab==='premios'?aPremios():aAjustes();
   const quem=S.adm&&S.adm.eu&&S.adm.eu!=='Gestão'?'Gestão · '+String(S.adm.eu).split(' ')[0]:'Gestão · Natura';
   return topbar(esc(quem),`<span class="topr">${minhaGestora()?`<button class="ghost icob perfb" data-act="meuPerfil" aria-label="Minha foto e cargo" title="Minha foto e cargo">${avatar(minhaGestora(),40)}</button>`:''}<button class="ghost icob ${S.tab==='ajustes'?'on':''}" data-act="tab" data-k="ajustes" aria-label="Ajustes" title="Ajustes">${ic('cog')}</button><button class="ghost" data-act="adminOut">Sair</button></span>`)+
    `<nav class="mnav"><div class="wrap wide">${MENU.map(([g,l,icn,subs])=>`<button class="${grp&&grp[0]===g?'on':''}" data-act="mgrp" data-k="${g}">${ic(icn)}<span>${l}</span></button>`).join('')}</div></nav>
@@ -1569,7 +1607,7 @@ function quizForm(id,pre){
   M={id,perg:q?JSON.parse(JSON.stringify(q.perguntas)):[{p:'',ops:['','','',''],c:-1,e:''}]};
   const nr=q?S.adm.respostas.filter(r=>r.quizId===id).length:0;
   openModal(`<h2>${q&&!q.novo?'Editar quiz':'Novo quiz'}</h2>
-   ${pre?`<div class="notice" style="margin-bottom:14px">${ic('sparkles')} <b>Gerado pela IA.</b> Leia cada pergunta, confira a bolinha da resposta certa e ajuste o que precisar. Só vai para a equipe depois de salvar.</div>`:''}
+   ${pre?`<div class="notice" style="margin-bottom:14px">${ic('sparkles')} <b>Gerado pela IA${pre.comBase?' a partir da Base de conhecimento Sodexo':''}.</b> Leia cada pergunta, confira a bolinha da resposta certa e ajuste o que precisar. ${pre.comBase?'Cada pergunta mostra de onde a resposta foi tirada: <b>verde</b> = trecho encontrado no material; <b>amarelo</b> = confira com atenção. ':''}Só vai para a equipe depois de salvar.</div>`:''}
    ${nr?`<div class="notice" style="margin-bottom:14px">${nr} pessoa${nr>1?'s já responderam':' já respondeu'}. Mudar as respostas certas não recalcula quem já respondeu.</div>`:''}
    <div class="fld"><label for="q-tit">Nome do quiz</label><input id="q-tit" type="text" value="${esc(q?q.titulo:'')}" placeholder="Ex.: Boas práticas · semana 1"></div>
    <div class="fld"><label for="q-sem">Semana</label><select id="q-sem">${semOpcoes(q)}</select></div>
@@ -1581,13 +1619,14 @@ function quizForm(id,pre){
    <div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="saveQuiz">Salvar quiz</button></div>`);
   renderPergs();
 }
-function lerPergs(){M.perg=M.perg.map((x,i)=>({p:($('#qp'+i)||{}).value||'',e:($('#qe'+i)||{}).value||'',ops:[0,1,2,3].map(j=>($('#qo'+i+'_'+j)||{}).value||''),c:(()=>{const s=document.querySelector(`input[name=qc${i}]:checked`);return s?+s.value:-1})()}))}
+function lerPergs(){M.perg=M.perg.map((x,i)=>({...(x.f?{f:x.f,t:x.t,v:x.v}:{}),p:($('#qp'+i)||{}).value||'',e:($('#qe'+i)||{}).value||'',ops:[0,1,2,3].map(j=>($('#qo'+i+'_'+j)||{}).value||''),c:(()=>{const s=document.querySelector(`input[name=qc${i}]:checked`);return s?+s.value:-1})()}))}
 function renderPergs(){
   $('#q-list').innerHTML=M.perg.map((x,i)=>`<div class="qblock"><div class="qh"><span>Pergunta ${i+1}</span>${M.perg.length>1?`<button class="link" style="padding:0" data-act="rmPerg" data-i="${i}">Remover</button>`:''}</div>
     <div class="fld"><textarea id="qp${i}" placeholder="Escreva a pergunta" aria-label="Pergunta ${i+1}">${esc(x.p)}</textarea></div>
     <span class="hint muted" style="font-size:13px">Marque a bolinha da alternativa certa.</span>
     ${[0,1,2,3].map(j=>`<div class="optrow" style="margin-top:6px"><input type="radio" name="qc${i}" value="${j}" ${x.c===j?'checked':''} aria-label="Alternativa ${LETRAS[j]} é a certa"><input id="qo${i}_${j}" type="text" placeholder="Alternativa ${LETRAS[j]}" value="${esc(x.ops[j]||'')}"></div>`).join('')}
-    <div class="fld" style="margin:10px 0 0"><textarea id="qe${i}" style="min-height:60px" placeholder="Explicação (opcional): aparece na correção" aria-label="Explicação da pergunta ${i+1}">${esc(x.e||'')}</textarea></div></div>`).join('');
+    <div class="fld" style="margin:10px 0 0"><textarea id="qe${i}" style="min-height:60px" placeholder="Explicação (opcional): aparece na correção" aria-label="Explicação da pergunta ${i+1}">${esc(x.e||'')}</textarea></div>
+    ${x.f?`<div class="qfonte ${x.v?'ok':'warn'}">${ic(x.v?'checkCircle':'alert')}<span><b>Fonte:</b> ${esc(String(x.f).replace(new RegExp(' \\(('+CATS_BASE.map(c=>c.replace(/[.*+?^${}()|[\]\\/]/g,'\\$&')).join('|')+')\\)','i'),''))}${x.t?`<br><i>“${esc(x.t)}”</i>`:''}${x.v?'':'<br><b>Não achei esse trecho igual no material: confira a resposta.</b>'}</span></div>`:''}</div>`).join('');
 }
 
 /* ---------- Ações ---------- */
@@ -3055,7 +3094,7 @@ document.addEventListener('change',async e=>{if(e.target.id!=='gp-foto')return;c
   if(!ICO.grad)ICO.grad=['M22 10 12 5 2 10l10 5 10-5z','M6 12v5c3 3 9 3 12 0v-5'];})();
 const MENU=[['dia','Dia a dia','listCheck',[['avaliar','Avaliar'],['recados','Recados'],['colegas','Colegas avaliam'],['limpeza','Limpeza']]],
   ['equipe','Equipe','users',[['equipe','Pessoas e PINs'],['escala','Escala e férias'],['acessos','Acessos']]],
-  ['aprend','Treinamentos','grad',[['treinos','Treinamentos'],['quiz','Quizzes']]],
+  ['aprend','Treinamentos','grad',[['treinos','Treinamentos'],['quiz','Quizzes'],['base','Base de conhecimento']]],
   ['recon','Ranking','trophy',[['ranking','Ranking'],['premios','Prêmios']]],
   ['tv','TV','tv',[['cardapio','Cardápio'],['tv','Anúncios e vídeos']]]];
 S.subUlt={};
@@ -3883,14 +3922,22 @@ Object.assign(A,{
 const IA_SUGESTOES=['Uso correto de EPI','Contaminação cruzada','Higienização das mãos','Controle de temperatura dos alimentos','Validade e etiquetagem','Limpeza e sanitização de bancadas','Coleta de amostras','Prevenção de quedas e cortes','Descarte correto de resíduos','Produtos químicos de limpeza'];
 function iaModal(){
   if(!S.tr&&!DEMO&&!iaModal.tentou){iaModal.tentou=1;carregarTreinosG().then(()=>{if(M.ia&&!M.iaBusy)iaModal()})}
+  if(!S.base&&!iaModal.tentouB){iaModal.tentouB=1;carregarBase().then(()=>{if(M.ia&&!M.iaBusy)iaModal()})}
   const trs=(S.tr&&S.tr.treinos||[]).filter(t=>t.status==='pronto');
-  const v=M.ia||{tema:'',treino:'',n:10,nivel:'medio'};
+  const bd=basePronta();
+  const v=M.ia||{tema:'',treino:'',n:10,nivel:'medio',usarBase:true,docs:null};
+  if(v.docs===null&&S.base)v.docs=bd.map(d=>d.id);
   M={ia:v};
   openModal(`<div class="iahd"><span class="avbig ia">${ic('sparkles')}</span><div><h2>Gerar quiz com IA</h2><p class="muted" style="margin:2px 0 0">O Gemini monta as perguntas. Você revisa tudo antes de salvar.</p></div></div>
+   <div class="fld iabase"><label class="check" style="margin:0"><input type="checkbox" id="ia-ub" ${v.usarBase&&bd.length?'checked':''} ${bd.length?'':'disabled'}> ${ic('book')} <b>Usar a Base de conhecimento Sodexo</b></label>
+     ${!S.base?`<small class="muted">Carregando a base…</small>`:!bd.length?`<div class="notice" style="font-size:14px;margin-top:8px">${ic('alert')} A base ainda está vazia. Suba os materiais em <b>Treinamentos → Base de conhecimento</b>. Sem a base, a IA usa conhecimento geral e pode não seguir as regras da Sodexo.</div>`
+     :`<small class="muted">A IA usa <b>só</b> os materiais marcados e mostra de onde tirou cada resposta.</small>
+       <div class="iadocs" ${v.usarBase?'':'hidden'}>${bd.map(d=>`<label class="check"><input type="checkbox" class="ia-doc" value="${esc(d.id)}" ${(v.docs||[]).includes(d.id)?'checked':''}> <span>${esc(d.titulo)} <small class="muted">· ${esc(d.categoria)}${(d.fatos||[]).length?` · ${(d.fatos||[]).length} regras`:''}</small></span></label>`).join('')}
+       <div class="acts" style="margin:4px 0 0"><button class="link" data-act="iaDocsTodos" data-k="1" style="padding:0">Marcar todos</button><button class="link" data-act="iaDocsTodos" data-k="0" style="padding:0">Desmarcar todos</button></div></div>`}</div>
    <div class="fld"><label for="ia-tr">Usar um treinamento como base <small class="muted">(opcional)</small></label>
      <select id="ia-tr"><option value="">Não, só o tema abaixo</option>${trs.map(t=>`<option value="${esc(t.id)}" ${v.treino===t.id?'selected':''}>${esc(t.titulo)}</option>`).join('')}</select>
      <small class="muted">${trs.length?'Com um treinamento, as perguntas cobram só o que foi ensinado no vídeo.':S.tr?'Nenhum treinamento com resumo pronto ainda.':'Carregando treinamentos…'}</small></div>
-   <div class="fld"><label for="ia-tema">Tema</label><textarea id="ia-tema" rows="2" placeholder="Ex.: PREAXION, contaminação cruzada, uso de EPI">${esc(v.tema)}</textarea></div>
+   <div class="fld"><label for="ia-tema">Tema ${v.usarBase&&bd.length?'<small class="muted">(opcional com a base: em branco, a IA escolhe os pontos mais importantes)</small>':''}</label><textarea id="ia-tema" rows="2" placeholder="Ex.: Preparo em lotes, temperatura de distribuição, Preaxion">${esc(v.tema)}</textarea></div>
    <div class="iachips">${IA_SUGESTOES.map(t=>`<button class="chip off" data-act="iaTema" data-t="${esc(t)}">${esc(t)}</button>`).join('')}</div>
    <div class="two"><div class="fld"><label>Quantas perguntas</label><div class="seg" style="grid-template-columns:repeat(2,1fr)">${[5,10].map(n=>`<button class="${v.n===n?'on':''}" data-act="iaN" data-k="${n}">${n}</button>`).join('')}</div></div>
      <div class="fld"><label>Nível</label><div class="seg" style="grid-template-columns:repeat(2,1fr)"><button class="${v.nivel==='facil'?'on':''}" data-act="iaNivel" data-k="facil">Fácil</button><button class="${v.nivel==='medio'?'on':''}" data-act="iaNivel" data-k="medio">Médio</button></div></div></div>
@@ -3898,21 +3945,24 @@ function iaModal(){
    <p class="ferr"></p>
    <div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="iaGerar">${ic('sparkles')} Gerar perguntas</button></div>`);
 }
-function iaLer(){if(!M.ia)return;const a=$('#ia-tema'),b=$('#ia-tr');if(a)M.ia.tema=a.value;if(b)M.ia.treino=b.value}
+function iaLer(){if(!M.ia)return;const a=$('#ia-tema'),b=$('#ia-tr'),u=$('#ia-ub');if(a)M.ia.tema=a.value;if(b)M.ia.treino=b.value;if(u&&!u.disabled)M.ia.usarBase=u.checked;
+  if(document.querySelector('.ia-doc'))M.ia.docs=[...document.querySelectorAll('.ia-doc:checked')].map(x=>x.value)}
 async function iaGerar(btn){
-  iaLer();const v=M.ia;
-  if(!v.tema.trim()&&!v.treino)return ferr('Escreva um tema ou escolha um treinamento.');
+  iaLer();const v=M.ia;const docIds=v.usarBase&&basePronta().length?(v.docs||[]):[];
+  if(v.usarBase&&basePronta().length&&!docIds.length)return ferr('Marque pelo menos 1 material da base, ou desmarque "Usar a Base de conhecimento".');
+  if(!v.tema.trim()&&!v.treino&&!docIds.length)return ferr('Escreva um tema ou escolha um treinamento.');
   M.iaBusy=true;busyBtn(btn,true,'Gerando… pode levar até 2 minutos');
   try{
     let j;
     if(DEMO){await new Promise(r=>setTimeout(r,900));j={ok:true,titulo:v.tema||'Quiz da semana',perguntas:[
       {p:'Qual é o momento certo de lavar as mãos na cozinha?',ops:['Só no início do turno','Antes de manipular alimentos e sempre que trocar de tarefa','Só quando estiverem sujas','No fim do turno'],c:1,e:'Lavar as mãos a cada troca de tarefa evita levar sujeira e micróbios de um lugar para outro.'},
       {p:'Por quanto tempo, no mínimo, devemos esfregar as mãos com sabão?',ops:['5 segundos','10 segundos','20 segundos','Não importa'],c:2,e:'São pelo menos 20 segundos esfregando palmas, dorso, entre os dedos e unhas.'}]}}
-    else{const r=await fetch(SUPA_URL.replace(/\/$/,'')+'/functions/v1/gerar-quiz',{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPA_KEY},body:JSON.stringify({pin:adminPin,tema:v.tema,treinoId:v.treino||null,n:v.n,nivel:v.nivel})});j=await r.json().catch(()=>null)}
+    else{const r=await fetch(SUPA_URL.replace(/\/$/,'')+'/functions/v1/gerar-quiz',{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPA_KEY},body:JSON.stringify({pin:adminPin,tema:v.tema,treinoId:v.treino||null,n:v.n,nivel:v.nivel,docIds})});j=await r.json().catch(()=>null)}
     if(!j||j.erro)throw new Error((j&&j.erro)||'Não foi possível gerar agora.');
     M.iaBusy=false;closeModal();
-    quizForm(null,{titulo:j.titulo,perguntas:j.perguntas});
-    toast(`${j.perguntas.length} perguntas geradas. Revise antes de salvar.`);
+    quizForm(null,{titulo:j.titulo,perguntas:j.perguntas,comBase:j.comBase});
+    const nv=j.perguntas.filter(q=>q.f&&!q.v).length;
+    toast(`${j.perguntas.length} perguntas geradas${j.comBase?' da base Sodexo':''}.${nv?` ${nv} com fonte para conferir.`:''} Revise antes de salvar.`);
   }catch(e){M.iaBusy=false;busyBtn(btn,false,'Gerar perguntas');ferr(msg(e))}
 }
 Object.assign(A,{
@@ -3921,7 +3971,9 @@ Object.assign(A,{
   iaN:d=>{iaLer();M.ia.n=+d.k;iaModal()},
   iaNivel:d=>{iaLer();M.ia.nivel=d.k;iaModal()},
   iaGerar:(d,b)=>iaGerar(b),
+  iaDocsTodos:d=>{document.querySelectorAll('.ia-doc').forEach(x=>x.checked=d.k==='1');iaLer()},
 });
+document.addEventListener('change',e=>{if(e.target.id==='ia-ub'&&M.ia){iaLer();iaModal()}});
 
 
 /* =====================================================================
@@ -4123,6 +4175,163 @@ Object.assign(A,{
   qrCopiar:async()=>{const t=textoResultado();try{await navigator.clipboard.writeText(t);toast('Resultado copiado. Cole no WhatsApp.')}catch(e){M={};openModal(`<h2>Copie o resultado</h2><textarea rows="14" style="width:100%">${esc(t)}</textarea><div class="acts"><button class="btn" data-act="close">Fechar</button></div>`)}},
 });
 document.addEventListener('change',e=>{if(e.target.id==='selQzR'){S.qrId=e.target.value;render()}});
+
+
+/* =====================================================================
+   BASE DE CONHECIMENTO SODEXO — materiais oficiais (PDF, Word, PowerPoint,
+   fotos e links). A IA lê, resume e separa as regras e números oficiais.
+   O "Gerar com IA" dos quizzes usa só esta base.
+   ===================================================================== */
+const CATS_BASE=['Regras de Ouro','Segurança dos alimentos','Segurança do trabalho','Boas práticas','POP / Procedimentos','DDS','Limpeza e higienização','Outros'];
+const TIPO_BASE={pdf:['PDF','fileText'],docx:['Word','fileText'],pptx:['PowerPoint','present'],imagem:['Foto','image'],link:['Link','link'],youtube:['YouTube','film']};
+Object.assign(RPC,{baseDocs:['base_docs_gestao',['p_pin']],salvarBaseDoc:['salvar_base_doc',['p_pin','p']]});
+async function funcaoBase(body){
+  if(DEMO)return MOCK_BASE(body);
+  let r;try{r=await fetch(SUPA_URL.replace(/\/$/,'')+'/functions/v1/base-conhecimento',{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPA_KEY},body:JSON.stringify({pin:adminPin,...body})})}
+  catch(e){throw new Error('Sem conexão com a internet.')}
+  const j=await r.json().catch(()=>null);if(!j)throw new Error('O servidor demorou para responder. Toque em Ler de novo daqui a pouco.');if(j.erro)throw new Error(j.erro);return j;
+}
+async function carregarBase(){try{S.base=await call('baseDocs',adminPin);S.baseErr=''}catch(e){S.baseErr=msg(e)}if(S.view==='admin'&&(S.tab==='base')&&!$('#modal').innerHTML)render()}
+function basePronta(){return (S.base||[]).filter(d=>d.status==='pronto')}
+
+/* ---------- leitura no navegador (rápida e sem custo) ---------- */
+const libs={};
+function carregarScript(src){return libs[src]||(libs[src]=new Promise((ok,err)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=()=>{delete libs[src];err(new Error('Não consegui carregar o leitor de arquivos. Confira a internet.'))};document.head.appendChild(s)}))}
+async function lerPdf(f){
+  await carregarScript('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js');
+  pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  const pdf=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise,partes=[];
+  for(let i=1;i<=pdf.numPages;i++){const pg=await pdf.getPage(i),tc=await pg.getTextContent();let linha='',out=[],ultY=null;
+    tc.items.forEach(it=>{const y=Math.round(it.transform[5]);if(ultY!==null&&Math.abs(y-ultY)>4){out.push(linha.trim());linha=''}linha+=it.str+(it.hasEOL?'':' ');ultY=y});out.push(linha.trim());
+    partes.push(`[pág. ${i}]\n`+out.filter(Boolean).join('\n'))}
+  return {texto:partes.join('\n\n'),paginas:pdf.numPages};
+}
+async function lerOffice(f,tipo){
+  await carregarScript('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js');
+  const z=await JSZip.loadAsync(await f.arrayBuffer()),dec=s=>s.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&apos;/g,"'").replace(/&amp;/g,'&');
+  const txtXml=x=>dec(x.replace(/<\/w:p>|<\/a:p>/g,'\n').replace(/<w:tab\/>/g,' ').replace(/<w:br\/>/g,'\n').replace(/<[^>]+>/g,'')).split('\n').map(l=>l.trim()).filter(Boolean).join('\n');
+  if(tipo==='docx'){const x=await z.file('word/document.xml').async('string');return {texto:txtXml(x),paginas:null}}
+  const nomes=Object.keys(z.files).filter(n=>/^ppt\/slides\/slide\d+\.xml$/.test(n)).sort((a,b)=>+a.match(/\d+/)[0]-+b.match(/\d+/)[0]);
+  const partes=[];for(let i=0;i<nomes.length;i++){const x=await z.file(nomes[i]).async('string');let t=txtXml(x);
+    const nt=z.file(nomes[i].replace('slides/slide','notesSlides/notesSlide'));if(nt){const n=txtXml(await nt.async('string')).replace(/^\d+$/gm,'').trim();if(n)t+='\n(Notas: '+n+')'}
+    partes.push(`[slide ${i+1}]\n`+t)}
+  return {texto:partes.join('\n\n'),paginas:nomes.length};
+}
+function tipoDoArquivo(f){const n=f.name.toLowerCase();
+  if(/\.pdf$/.test(n))return 'pdf';if(/\.docx$/.test(n))return 'docx';if(/\.pptx$/.test(n))return 'pptx';if(/\.(jpe?g|png|webp)$/.test(n))return 'imagem';
+  if(/\.(doc|ppt|xls|xlsx|heic)$/.test(n))return 'velho';return ''}
+const MIME_BASE={pdf:'application/pdf',docx:'application/vnd.openxmlformats-officedocument.wordprocessingml.document',pptx:'application/vnd.openxmlformats-officedocument.presentationml.presentation'};
+function catPeloNome(n){n=n.toLowerCase();return /regra.*ouro/.test(n)?'Regras de Ouro':/dds/.test(n)?'DDS':/\bpop\b|procedimento/.test(n)?'POP / Procedimentos':/limpeza|higieniza/.test(n)?'Limpeza e higienização':/trabalho|epi|preaxion|acidente/.test(n)?'Segurança do trabalho':/aliment|temperatura|dta|bpf|boas pr/.test(n)?'Segurança dos alimentos':'Outros'}
+
+/* Envia 1 arquivo: lê o texto aqui, guarda o original (privado) e manda a IA organizar */
+async function enviarParaBase(f,item){
+  const tipo=tipoDoArquivo(f);
+  if(tipo==='velho')throw new Error('Formato antigo. Abra no Word/PowerPoint e salve como PDF, .docx ou .pptx.');
+  if(!tipo)throw new Error('Tipo não aceito. Use PDF, Word (.docx), PowerPoint (.pptx) ou foto.');
+  if(f.size>40*1024*1024)throw new Error('Arquivo maior que 40 MB. Divida em partes.');
+  let lido={texto:'',paginas:null};
+  item.etapa='Lendo o arquivo…';renderBaseUp();
+  if(tipo==='pdf')lido=await lerPdf(f).catch(()=>({texto:'',paginas:null}));
+  else if(tipo==='docx'||tipo==='pptx')lido=await lerOffice(f,tipo);
+  const mime=tipo==='imagem'?(f.type||'image/jpeg'):MIME_BASE[tipo];
+  let path='';
+  if(!DEMO){item.etapa='Enviando…';renderBaseUp();
+    const r=await funcaoBase({acao:'link',tipo:mime,tamanho:f.size});path=r.path;
+    await enviarArquivo(SUPA_URL.replace(/\/$/,'')+'/storage/v1/object/upload/sign/base-sodexo/'+r.path+'?token='+encodeURIComponent(r.token),new File([f],f.name,{type:mime}),p=>{item.etapa='Enviando… '+p+'%';renderBaseUp()})}
+  const titulo=f.name.replace(/\.[^.]+$/,'').replace(/[_]+/g,' ').trim();
+  const s=await call('salvarBaseDoc',adminPin,{titulo,categoria:catPeloNome(f.name),tipo,path,tamanho:f.size,paginas:lido.paginas,texto:lido.texto});
+  item.etapa=tipo==='imagem'||(tipo==='pdf'&&lido.texto.replace(/\s/g,'').length<150*(lido.paginas||1))?'A IA está lendo as imagens… (até 2 min)':'A IA está organizando… (até 1 min)';renderBaseUp();
+  await funcaoBase({acao:'processar',id:s.id});
+}
+function renderBaseUp(){const el=$('#base-up');if(el)el.innerHTML=baseUpHtml()}
+function baseUpHtml(){const l=S.baseUp||[];if(!l.length)return '';
+  return `<div class="panel stack" style="gap:8px">${l.map(x=>`<div class="bup ${x.erro?'bad':x.ok?'ok':''}">${ic(x.erro?'x':x.ok?'checkCircle':'refresh',x.ok||x.erro?'':'girar')}<span><b>${esc(x.nome)}</b><small>${esc(x.erro||(x.ok?'Pronto':x.etapa||'Na fila…'))}</small></span></div>`).join('')}
+    ${l.every(x=>x.ok||x.erro)?`<button class="link" data-act="baseUpLimpar" style="padding:0;align-self:flex-start">Fechar</button>`:''}</div>`}
+async function baseReceber(files){
+  files=[...files];if(!files.length)return;
+  S.baseUp=(S.baseUp||[]).filter(x=>!x.ok&&!x.erro).concat(files.map(f=>({nome:f.name,f})));render();
+  for(const it of S.baseUp){if(it.ok||it.erro||it.rodando)continue;it.rodando=1;
+    try{await enviarParaBase(it.f,it);it.ok=1}catch(e){it.erro=msg(e)}
+    renderBaseUp();await carregarBase()}
+  const ok=S.baseUp.filter(x=>x.ok).length,er=S.baseUp.filter(x=>x.erro).length;
+  toast(er?`${ok} pronto${ok===1?'':'s'}, ${er} com problema. Veja a lista.`:`${ok} material${ok===1?'':'is'} na base.`);
+}
+
+/* ---------- tela da gestão ---------- */
+function aBase(){
+  if(!S.base){if(!S.baseErr)carregarBase();return S.baseErr?`<div class="notice">${esc(S.baseErr)} <button class="link" data-act="baseReload">Tentar de novo</button></div>`:carregando('Abrindo a base…')}
+  const l=S.base,f=(S.baseCat?l.filter(d=>d.categoria===S.baseCat):l).filter(d=>!S.baseBusca||(d.titulo+' '+d.resumo+' '+(d.temas||[]).join(' ')).toLowerCase().includes(S.baseBusca.toLowerCase()));
+  const nf=l.reduce((s,d)=>s+(d.fatos||[]).length,0),nok=l.reduce((s,d)=>s+(d.fatos||[]).filter(x=>x.ok).length,0);
+  return `<section class="stack" style="gap:6px"><h2 style="font-size:20px">${ic('book')} Base de conhecimento Sodexo</h2>
+    <p class="muted" style="margin:0">Suba aqui os materiais oficiais: Regras de Ouro, POPs, manuais, DDS. A IA lê cada um, faz um resumo e separa as <b>regras e números oficiais</b>. O <b>Gerar com IA</b> dos quizzes passa a usar <b>só</b> esta base.</p></section>
+   <div class="basedrop" id="basedrop">
+     <div>${ic('download')}<b>Arraste os arquivos aqui</b><small>PDF, Word (.docx), PowerPoint (.pptx) ou fotos · até 40 MB cada · pode enviar vários de uma vez</small></div>
+     <div class="acts" style="justify-content:center"><label class="btn">${ic('plus')} Escolher arquivos<input id="base-arq" type="file" multiple accept=".pdf,.docx,.pptx,.jpg,.jpeg,.png,.webp,application/pdf,image/*" hidden></label><button class="btn alt" data-act="baseLink">${ic('link')} Adicionar link</button></div>
+   </div>
+   <div id="base-up">${baseUpHtml()}</div>
+   <div class="stats"><div class="stat"><b class="num">${l.length}</b><span>materiais</span></div><div class="stat"><b class="num">${nf}</b><span>regras e números encontrados</span></div><div class="stat"><b class="num">${nok}/${nf}</b><span>regras conferidas pela gestão</span></div></div>
+   ${l.length?`<div class="toolbar"><div class="grp"><input id="base-busca" type="search" placeholder="Buscar na base" value="${esc(S.baseBusca||'')}" style="min-width:200px"><select id="base-cat" aria-label="Categoria"><option value="">Todas as categorias</option>${CATS_BASE.map(c=>`<option ${S.baseCat===c?'selected':''}>${esc(c)}</option>`).join('')}</select></div><button class="btn sm alt" data-act="baseReload">${ic('refresh')} Atualizar</button></div>`:''}
+   ${f.length?`<div class="list">${f.map(baseCard).join('')}</div>`:l.length?'<div class="empty">Nada encontrado com esse filtro.</div>':'<div class="empty">A base ainda está vazia. Comece pelas Regras de Ouro e pelos POPs que a equipe mais usa.</div>'}
+   <div class="notice" style="font-size:13px">${ic('lock')} Os arquivos ficam guardados de forma privada: só a gestão abre. Para ler e gerar quizzes, o conteúdo é enviado ao Gemini (Google).</div>`;
+}
+function baseCard(d){
+  const t=TIPO_BASE[d.tipo]||['Arquivo','fileText'],fs=d.fatos||[],ok=fs.filter(x=>x.ok).length;
+  const st=d.status==='pronto'?'':d.status==='erro'?`<span class="chip bad">${ic('x')} Não foi lido</span>`:`<span class="chip gold">${ic('refresh','girar')} Lendo…</span>`;
+  return `<div class="panel stack bcard" style="gap:8px">
+    <div class="bc-h"><span class="bc-i">${ic(t[1])}</span><div style="flex:1;min-width:0"><b>${esc(d.titulo)}</b><small class="muted">${esc(t[0])}${d.paginas?` · ${d.paginas} ${d.tipo==='pptx'?'slides':'pág.'}`:''} · ${esc(d.categoria)} · ${esc(quando(d.criado))}</small></div>${st}</div>
+    ${d.status==='erro'?`<div class="notice" style="font-size:14px">${esc(d.erro||'Não foi possível ler.')}</div>`:''}
+    ${d.resumo?`<p style="margin:0;font-size:14px;line-height:1.5">${esc(d.resumo)}</p>`:''}
+    ${(d.temas||[]).length?`<div class="iachips" style="margin:0">${d.temas.map(x=>`<span class="chip off">${esc(x)}</span>`).join('')}</div>`:''}
+    ${fs.length?`<details ${S.baseAberto===d.id?'open':''}><summary class="link" style="cursor:pointer;padding:0;font-weight:800">${ic('target')} ${fs.length} regras e números oficiais · ${ok} conferida${ok===1?'':'s'}</summary>
+      <ul class="bfatos">${fs.map((x,i)=>`<li class="${x.ok?'ok':''}"><button class="bf-ck" data-act="baseFatoOk" data-id="${esc(d.id)}" data-i="${i}" aria-label="Marcar como conferida" title="${x.ok?'Conferida':'Toque para marcar como conferida'}">${ic(x.ok?'checkCircle':'check')}</button><span>${esc(x.fato)}${x.pagina?` <small class="muted">(${d.tipo==='pptx'?'slide':'pág.'} ${esc(x.pagina)})</small>`:''}</span></li>`).join('')}</ul>
+      <div class="acts"><button class="btn sm alt" data-act="baseFatosTodos" data-id="${esc(d.id)}">${ic('checkCircle')} Marcar todas como conferidas</button><button class="btn sm alt" data-act="baseFatosEd" data-id="${esc(d.id)}">${ic('pencil')} Corrigir regras</button></div></details>`:''}
+    <div class="acts">${d.status!=='lendo'?`<button class="btn sm alt" data-act="baseAbrir" data-id="${esc(d.id)}">${ic('eye')} Abrir</button><button class="btn sm alt" data-act="baseEd" data-id="${esc(d.id)}">${ic('pencil')} Nome e categoria</button><button class="btn sm alt" data-act="baseLer" data-id="${esc(d.id)}">${ic('refresh')} Ler de novo</button>`:''}<button class="btn sm alt" data-act="baseDel" data-id="${esc(d.id)}">${ic('trash')} Excluir</button></div></div>`;
+}
+async function baseSalvar(p,txt){try{await call('salvarBaseDoc',adminPin,p);await carregarBase();if(txt)toast(txt)}catch(e){toast(msg(e))}}
+Object.assign(A,{
+  baseReload:()=>{S.base=null;S.baseErr='';render()},
+  baseUpLimpar:()=>{S.baseUp=[];renderBaseUp()},
+  baseLink:()=>{M={};openModal(`<h2>${ic('link')} Adicionar link</h2>
+    <div class="fld"><label for="bl-u">Endereço (link)</label><input id="bl-u" type="url" placeholder="https://..." inputmode="url"></div>
+    <div class="fld"><label for="bl-c">Categoria</label><select id="bl-c">${CATS_BASE.map(c=>`<option>${esc(c)}</option>`).join('')}</select></div>
+    <ul class="muted" style="font-size:14px;margin:0 0 12px;padding-left:18px;line-height:1.5"><li><b>Página da internet:</b> a IA lê o texto da página.</li><li><b>YouTube:</b> a IA assiste e tira o conteúdo do vídeo.</li><li><b>Google Drive, Docs ou Slides:</b> compartilhe como <b>"Qualquer pessoa com o link"</b>.</li><li>Páginas que pedem login (como a SodexoNet) não funcionam: baixe o arquivo e envie aqui.</li></ul>
+    <p class="ferr"></p><div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="baseLinkOk">Adicionar</button></div>`);setTimeout(()=>{const i=$('#bl-u');i&&i.focus()},50)},
+  baseLinkOk:async(d,b)=>{let u=$('#bl-u').value.trim();if(!/^https?:\/\//i.test(u))u='https://'+u;try{new URL(u)}catch(e){return ferr('Esse endereço não parece um link válido.')}
+    const yt=/(^|\.)youtube\.com|youtu\.be/i.test(new URL(u).hostname);busyBtn(b,true,'Lendo…');
+    try{const s=await call('salvarBaseDoc',adminPin,{titulo:u,categoria:$('#bl-c').value,tipo:yt?'youtube':'link',url:u});closeModal();await carregarBase();toast(yt?'A IA está assistindo o vídeo… (até 2 min)':'A IA está lendo a página…');
+      try{await funcaoBase({acao:'processar',id:s.id});toast('Link adicionado à base.')}catch(e){toast(msg(e))}await carregarBase()}
+    catch(e){busyBtn(b,false,'Adicionar');ferr(msg(e))}},
+  baseAbrir:async d=>{try{const r=await funcaoBase({acao:'abrir',id:d.id});window.open(r.url,'_blank','noopener')}catch(e){toast(msg(e))}},
+  baseLer:async d=>{const x=S.base.find(y=>y.id===d.id);if(x){x.status='lendo';render()}try{await funcaoBase({acao:'processar',id:d.id});toast('Material lido de novo.')}catch(e){toast(msg(e))}await carregarBase()},
+  baseDel:d=>confirmModal('Excluir este material?','Ele sai da base e o arquivo é apagado. Quizzes já criados continuam iguais.','Excluir',async()=>{await funcaoBase({acao:'apagar',id:d.id});await carregarBase();toast('Material excluído.')}),
+  baseEd:d=>{const x=S.base.find(y=>y.id===d.id);M={bid:d.id};openModal(`<h2>Nome e categoria</h2><div class="fld"><label for="be-t">Nome</label><input id="be-t" value="${esc(x.titulo)}" maxlength="200"></div>
+    <div class="fld"><label for="be-c">Categoria</label><select id="be-c">${CATS_BASE.map(c=>`<option ${x.categoria===c?'selected':''}>${esc(c)}</option>`).join('')}</select></div><p class="ferr"></p>
+    <div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="baseEdOk">Salvar</button></div>`)},
+  baseEdOk:async()=>{const p={id:M.bid,titulo:$('#be-t').value.trim(),categoria:$('#be-c').value};if(!p.titulo)return ferr('Dê um nome.');closeModal();await baseSalvar(p,'Salvo.')},
+  baseFatoOk:d=>{const x=S.base.find(y=>y.id===d.id);const f=x.fatos.slice();f[+d.i]={...f[+d.i],ok:!f[+d.i].ok};x.fatos=f;S.baseAberto=d.id;render();baseSalvar({id:d.id,fatos:f})},
+  baseFatosTodos:d=>{const x=S.base.find(y=>y.id===d.id);x.fatos=x.fatos.map(f=>({...f,ok:true}));S.baseAberto=d.id;render();baseSalvar({id:d.id,fatos:x.fatos},'Todas as regras marcadas como conferidas.')},
+  baseFatosEd:d=>{const x=S.base.find(y=>y.id===d.id);M={bid:d.id};openModal(`<h2>Corrigir regras e números</h2>
+    <p class="muted" style="margin-top:0;font-size:14px">Uma regra por linha. Corrija o que a IA leu errado, apague o que não é regra e acrescente o que faltou. Para indicar a página, termine a linha com <b>(pág. 3)</b>. Ao salvar, todas ficam marcadas como conferidas.</p>
+    <textarea id="bf-t" rows="16" style="width:100%;font-size:14px">${esc((x.fatos||[]).map(f=>f.fato+(f.pagina?` (pág. ${f.pagina})`:'')).join('\n'))}</textarea><p class="ferr"></p>
+    <div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="baseFatosOk">Salvar regras</button></div>`)},
+  baseFatosOk:async()=>{const f=$('#bf-t').value.split('\n').map(l=>l.trim()).filter(Boolean).slice(0,80).map(l=>{const m=l.match(/\s*\((?:pág\.?|slide)\s*([\w-]+)\)\s*$/i);return {fato:(m?l.slice(0,m.index):l).trim(),pagina:m?m[1]:'',ok:true}});closeModal();S.baseAberto=M.bid;await baseSalvar({id:M.bid,fatos:f},'Regras salvas.')},
+});
+document.addEventListener('change',e=>{
+  if(e.target.id==='base-arq'){baseReceber(e.target.files);e.target.value=''}
+  if(e.target.id==='base-cat'){S.baseCat=e.target.value;render()}
+});
+document.addEventListener('input',e=>{if(e.target.id==='base-busca'){S.baseBusca=e.target.value;const p=e.target.selectionStart;render();const i=$('#base-busca');if(i){i.focus();try{i.setSelectionRange(p,p)}catch(_){}}}});
+['dragover','dragleave','drop'].forEach(ev=>document.addEventListener(ev,e=>{const z=e.target.closest&&e.target.closest('#basedrop');if(!z)return;e.preventDefault();z.classList.toggle('on',ev==='dragover');if(ev==='drop')baseReceber(e.dataTransfer.files)}));
+
+/* ---------- demo ---------- */
+const BASE_DEMO={baseDocs:[]};function DEMO_DB(){return BASE_DEMO}
+Object.assign(MOCK,{baseDocs:p=>BASE_DEMO.baseDocs,salvarBaseDoc:(p,x)=>{const o=BASE_DEMO.baseDocs.find(d=>d.id===x.id);if(o){Object.assign(o,x);return {ok:true,id:o.id}}const d={...x,id:'b'+Date.now()+Math.random().toString(36).slice(2,6),status:'novo',resumo:'',temas:[],fatos:[],criado:new Date().toISOString(),chars:(x.texto||'').length};delete d.texto;BASE_DEMO.baseDocs.unshift(d);return {ok:true,id:d.id}}});
+function MOCK_BASE(b){
+  if(b.acao==='processar'){const x=(DEMO_DB().baseDocs||[]).find(d=>d.id===b.id);if(x){x.status='pronto';x.resumo='Material de exemplo lido no modo demonstração.';x.temas=['Exemplo'];x.fatos=[{fato:'Alimento quente pode ficar até 6 horas a no mínimo 60 °C.',pagina:'2',ok:false},{fato:'Abaixo de 60 °C, o prazo máximo é 1 hora.',pagina:'2',ok:false}]}return {ok:true}}
+  if(b.acao==='abrir')return {ok:true,url:'about:blank'};
+  if(b.acao==='apagar'){const db=DEMO_DB();db.baseDocs=(db.baseDocs||[]).filter(d=>d.id!==b.id);return {ok:true}}
+  return {ok:true};
+}
 
 let TV_MODE=false;try{TV_MODE=new URLSearchParams(location.search).has('tv')}catch(e){}
 if(TV_MODE){S.view='tv';iniciarTv();tvPintar(true)}
