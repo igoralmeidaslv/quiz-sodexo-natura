@@ -1095,6 +1095,18 @@ h2 .chip .i{width:12px;height:12px;vertical-align:-1px}
 .chg-gi{flex:none;width:42px;height:42px;border-radius:50%;background:var(--brand);color:var(--brand-ink);display:grid;place-items:center}.chg-gi .i{width:20px;height:20px}
 .chg-gi.int{background:var(--accent)}
 .chg-gi.set{background:var(--ok)}
+.chx-top{position:sticky;top:0;z-index:6;background:var(--brand);color:var(--brand-ink);padding-top:env(safe-area-inset-top,0px);box-shadow:0 2px 8px rgba(10,20,80,.18)}
+.chx-top .wrap{display:flex;align-items:center;gap:10px;min-height:60px;padding-top:6px;padding-bottom:6px}
+.chx-sair{flex:none;display:inline-flex;align-items:center;gap:2px;background:rgba(255,255,255,.16);color:inherit;border:0;border-radius:999px;padding:8px 14px 8px 8px;font:inherit;font-weight:800;font-size:14px;cursor:pointer;min-height:40px}
+.chx-sair .i{width:20px;height:20px}
+.chx-sair:active{background:rgba(255,255,255,.28)}
+.chx-t{flex:1;min-width:0}.chx-t b{display:block;font-size:17px;line-height:1.2}.chx-t small{display:block;font-size:12.5px;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chx-seg{flex:none;display:flex;gap:4px;background:rgba(255,255,255,.14);border-radius:999px;padding:3px}
+.chx-seg button{border:0;background:none;color:inherit;font:inherit;font-weight:800;font-size:13px;border-radius:999px;padding:7px 12px;display:inline-flex;align-items:center;gap:4px;cursor:pointer}
+.chx-seg button.on{background:var(--surface);color:var(--brand)}
+.chx-main{padding-top:12px}
+body.modo-chat{background:var(--bg)}
+@media (max-width:480px){.chx-t small{display:none}.chx-seg button{padding:7px 9px}}
 .passos-av{margin:8px 0 12px;padding-left:22px;display:grid;gap:8px;font-size:15px;line-height:1.45}
 @media (max-width:430px){.ch-abas button{flex-direction:column;gap:2px;font-size:12px;padding-left:2px;padding-right:2px;min-height:48px}.ch-abas button .ch-badge{position:absolute;top:2px;right:4px}.ch-abas button{position:relative}}
 .chg-sep{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:8px 4px 2px}
@@ -1294,7 +1306,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261125234444';
+const APP_VERSION='20261125234817';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -1369,6 +1381,11 @@ function toast(t){const e=$('#toast');e.textContent=t;e.hidden=false;clearTimeou
 function topbar(sub,right){
   return `${DEMO?'<div class="demo">Modo demonstração com dados de exemplo. Equipe: PIN 1111 · Gestão: 123456</div>':''}<header class="top"><div class="wrap ${S.view==='admin'?'wide':''}"><div class="brand"><img src="${LOGO}" alt="Sodexo"><span class="sep" aria-hidden="true"></span><div class="q">so<span class="dx">DEX</span>o${sub?`<small>${sub}</small>`:''}</div></div>${right||''}</div></header>`;
 }
+function chxTop(titulo,sub,extra){
+  return `${DEMO?'<div class="demo">Modo demonstração com dados de exemplo. Equipe: PIN 1111 · Gestão: 123456</div>':''}<header class="chx-top"><div class="wrap ${S.view==='admin'?'wide':''}">
+    <button class="chx-sair" data-act="chSair" aria-label="Sair do chat e voltar ao app">${ic('chevL')}<span>${S.view==='admin'?'Painel':'App'}</span></button>
+    <div class="chx-t"><b>${titulo}</b>${sub?`<small>${sub}</small>`:''}</div>${extra||''}</div></header>`;
+}
 function versaoTxt(){const v=String(typeof APP_VERSION!=='undefined'?APP_VERSION:'');return v.length>=12?'Versão '+v.slice(6,8)+'/'+v.slice(4,6)+'/'+v.slice(0,4)+' · '+v.slice(8,10)+'h'+v.slice(10,12):'Versão '+v}
 function footer(){
   return `<footer class="foot ${S.view==='admin'?'wide':''}"><div class="wrap">
@@ -1434,7 +1451,8 @@ function vHome(){
   if(!GRUPOS[me.grupo])return topbar('Unidade Natura',sair)+`<main class="wrap"><div class="empty">Olá, ${esc(me.nome)}! Seu cadastro ainda está sem grupo. Peça para a gestão escolher seu grupo na aba Equipe.</div></main>`;
   let body;
   if(S.play)return vPlay();
-  if(S.ctab==='chat')body=cChat(me);else if(S.ctab==='tarefas'&&me.grupo==='lim')body=cTarefas(me);else if(S.ctab==='colegas')body=cColegas(me);else if(S.ctab==='cursos')body=cCursos(me);else if(S.ctab==='escala')body=cEscala(me);else if(S.ctab==='quiz')body=cQuiz(me);else if(S.ctab==='ranking')body=cRanking(me);else if(S.ctab==='hist')body=`<div style="display:flex;justify-content:space-between;align-items:center"><button class="link" data-act="ctab" data-k="ranking" style="padding:0">${ic('chevL')} Ranking</button></div>`+cHist(me);else if(S.ctab==='desemp'){body=cDesemp(me);marcarRecadosLidos()}else body=cHoje(me);
+  if(S.ctab==='chat')return chxTop('Chat soDEXo',esc(GRUPOS[me.grupo].nome)+' · '+esc(String(me.nome).split(' ')[0]))+`<main class="wrap stack ch-main chx-main">${cChat(me)}</main>`;
+  if(S.ctab==='tarefas'&&me.grupo==='lim')body=cTarefas(me);else if(S.ctab==='colegas')body=cColegas(me);else if(S.ctab==='cursos')body=cCursos(me);else if(S.ctab==='escala')body=cEscala(me);else if(S.ctab==='quiz')body=cQuiz(me);else if(S.ctab==='ranking')body=cRanking(me);else if(S.ctab==='hist')body=`<div style="display:flex;justify-content:space-between;align-items:center"><button class="link" data-act="ctab" data-k="ranking" style="padding:0">${ic('chevL')} Ranking</button></div>`+cHist(me);else if(S.ctab==='desemp'){body=cDesemp(me);marcarRecadosLidos()}else body=cHoje(me);
   const nChat=chNao(),chatB=`<button class="ghost icob ch-top ${S.ctab==='chat'?'on':''}" data-act="ctab" data-k="chat" aria-label="Chat${nChat?', '+nChat+' mensagens novas':''}" title="Chat">${ic('message')}${nChat?`<span class="ch-badge num">${nChat>9?'9+':nChat}</span>`:''}</button>`;
   return topbar(GRUPOS[me.grupo]?GRUPOS[me.grupo].nome:'Unidade Natura',`<span class="topr">${chatB}${sair}</span>`)+`<main class="wrap stack ${S.ctab==='chat'?'ch-main':''}">${body}</main>`+(S.ctab==='chat'?'':footer())+bnav();
 }
@@ -1535,6 +1553,8 @@ function vAdmin(){
   const grp=grupoDaAba(S.tab);
   const body=!S.adm?(S.status==='err'?`<div class="notice">Sem conexão com o servidor agora. Você continua logada. ${esc(S.errMsg)} <button class="link" data-act="reloadAdm">Tentar de novo</button></div>`:carregando('Abrindo a gestão…')):S.tab==='chat'?aChat():S.tab==='forum'?aForum():S.tab==='avaliar'?aAvaliar():S.tab==='recados'?aRecados():S.tab==='colegas'?aColegas():S.tab==='tv'?aTv():S.tab==='limpeza'?aLimpeza():S.tab==='cardapio'?aCardapio():S.tab==='ranking'?aRanking():S.tab==='quiz'?aQuiz():S.tab==='base'?aBase():S.tab==='treinos'?aTreinos():S.tab==='escala'?aEscala():S.tab==='acessos'?aAcessos():S.tab==='equipe'?aEquipe():S.tab==='premios'?aPremios():aAjustes();
   const quem=S.adm&&S.adm.eu&&S.adm.eu!=='Gestão'?'Gestão · '+String(S.adm.eu).split(' ')[0]:'Gestão · Natura';
+  if(S.adm&&(S.tab==='chat'||S.tab==='forum')){const nc=chNaoG(),nf=frPendG();
+    return chxTop('Chat',esc(quem),`<div class="chx-seg"><button class="${S.tab==='chat'?'on':''}" data-act="tab" data-k="chat">Conversas${nc?` <span class="ch-badge num">${nc>9?'9+':nc}</span>`:''}</button><button class="${S.tab==='forum'?'on':''}" data-act="tab" data-k="forum">Fórum${nf?` <span class="ch-badge num">${nf>9?'9+':nf}</span>`:''}</button></div>`)+`<main class="wrap wide stack chx-main">${body}</main>`}
   return topbar(esc(quem),`<span class="topr">${minhaGestora()?`<button class="ghost icob perfb" data-act="meuPerfil" aria-label="Minha foto e cargo" title="Minha foto e cargo">${avatar(minhaGestora(),40)}</button>`:''}<button class="ghost icob ${S.tab==='ajustes'?'on':''}" data-act="tab" data-k="ajustes" aria-label="Ajustes" title="Ajustes">${ic('cog')}</button><button class="ghost" data-act="adminOut">Sair</button></span>`)+
    `<nav class="mnav"><div class="wrap wide">${MENU.map(([g,l,icn,subs])=>`<button class="${grp&&grp[0]===g?'on':''}" data-act="mgrp" data-k="${g}">${ic(icn)}<span class="longo">${l}</span><span class="curto">${MENU_CURTO[g]||l}</span>${g==='chat'&&(chNaoG()+frPendG())?`<span class="ch-badge num mnb">${chNaoG()+frPendG()>9?'9+':chNaoG()+frPendG()}</span>`:''}</button>`).join('')}</div></nav>
    ${grp?`<nav class="snav"><div class="wrap wide">${grp[3].map(([k,l])=>`<button class="${S.tab===k?'on':''}" data-act="tab" data-k="${k}">${l}</button>`).join('')}</div></nav>`:`<nav class="snav"><div class="wrap wide"><button class="on">Ajustes</button></div></nav>`}
@@ -1636,13 +1656,14 @@ function aAjustes(){
     <div class="card"><b>Dados</b><p class="muted" style="margin:0;font-size:14px">Tudo fica guardado no Supabase, um banco de dados gratuito. Os PINs ficam protegidos: a equipe nunca vê o PIN dos colegas.</p>${S.adm&&S.adm.planilhaUrl?`<div class="acts"><a class="btn sm alt" href="${esc(S.adm.planilhaUrl)}" target="_blank" rel="noopener">Abrir planilha</a></div>`:''}</div>
    </div>`;
 }
-function guardarTela(){try{LS.set('qsn_tela',JSON.stringify({em:Date.now(),view:S.view,ctab:S.ctab,chConv:S.chConv||null,tab:S.tab,chatSel:S.chatSel||null,grupo:S.grupo,qmodo:S.qmodo||null}))}catch(e){}}
+function guardarTela(){if(S.view==='home'&&S.ctab!=='chat')S.chVoltar=S.ctab;if(S.view==='admin'&&S.tab!=='chat'&&S.tab!=='forum')S.chVoltarG=S.tab;try{LS.set('qsn_tela',JSON.stringify({em:Date.now(),view:S.view,ctab:S.ctab,chConv:S.chConv||null,tab:S.tab,chatSel:S.chatSel||null,grupo:S.grupo,qmodo:S.qmodo||null}))}catch(e){}}
 function restaurarTela(){try{if(location.hash&&location.hash.length>1)return;const t=JSON.parse(LS.get('qsn_tela')||'null');if(!t||Date.now()-t.em>12*3600e3||t.view!==S.view)return;
   if(S.view==='home'&&t.ctab){S.ctab=t.ctab;if(t.chConv)S.chConv=t.chConv}
   if(S.view==='admin'&&t.tab){S.tab=t.tab;if(t.chatSel)S.chatSel=t.chatSel;if(t.grupo&&GRUPOS[t.grupo])S.grupo=t.grupo;if(t.qmodo)S.qmodo=t.qmodo}}catch(e){}}
 function render(){
   const v=S.view;guardarTela();
-  document.body.classList.toggle('has-nav',v==='home'&&!S.play);
+  const chx=(v==='home'&&S.ctab==='chat'&&!S.play)||(v==='admin'&&(S.tab==='chat'||S.tab==='forum'));
+  document.body.classList.toggle('has-nav',v==='home'&&!S.play&&!chx);document.body.classList.toggle('modo-chat',chx);
   $('#app').innerHTML=v==='tv'?vTv():v==='login'?vLogin()+footer():v==='home'?vHome():v==='adminLogin'?vAdminLogin()+footer():vAdmin();
 }
 
@@ -4675,6 +4696,7 @@ setInterval(()=>{if(!adminPin||S.view!=='admin'||document.visibilityState!=='vis
 /* ---------------------------- ações ---------------------------- */
 Object.assign(A,{
   chConv:d=>{S.chConv=d.k;S.chFoto=null;render();if(d.k==='forum')carregarForum()},
+  chSair:()=>{if(S.view==='admin'){S.tab=S.chVoltarG&&S.chVoltarG!=='chat'?S.chVoltarG:'avaliar';S.chatSel=null}else S.ctab=S.chVoltar&&S.chVoltar!=='chat'?S.chVoltar:'hoje';S.chFoto=null;render();scrollTo(0,0)},
   chIr:d=>{S.ctab='chat';S.chConv=d.k;S.play=null;render();scrollTo(0,0)},
   chEnviar:(d,b)=>S.view==='admin'?chEnviarG(b):chEnviarColab(b),
   chFoto:d=>chFotoModal(S.view==='admin'?(CG.msgs[S.chatSel]||[]):(CH.msgs[S.chConv||'gestao']||[]),d.id),
