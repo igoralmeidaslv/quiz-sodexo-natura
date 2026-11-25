@@ -1306,7 +1306,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261125234817';
+const APP_VERSION='20261125204939';const APP_NUM='1.41';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -1386,7 +1386,7 @@ function chxTop(titulo,sub,extra){
     <button class="chx-sair" data-act="chSair" aria-label="Sair do chat e voltar ao app">${ic('chevL')}<span>${S.view==='admin'?'Painel':'App'}</span></button>
     <div class="chx-t"><b>${titulo}</b>${sub?`<small>${sub}</small>`:''}</div>${extra||''}</div></header>`;
 }
-function versaoTxt(){const v=String(typeof APP_VERSION!=='undefined'?APP_VERSION:'');return v.length>=12?'Versão '+v.slice(6,8)+'/'+v.slice(4,6)+'/'+v.slice(0,4)+' · '+v.slice(8,10)+'h'+v.slice(10,12):'Versão '+v}
+function versaoTxt(){const v=String(typeof APP_VERSION!=='undefined'?APP_VERSION:''),n=typeof APP_NUM!=='undefined'?APP_NUM:'';return (n?'Versão '+n:'Versão')+(v.length>=12?' · '+v.slice(6,8)+'/'+v.slice(4,6)+'/'+v.slice(0,4)+' às '+v.slice(8,10)+'h'+v.slice(10,12):'')}
 function footer(){
   return `<footer class="foot ${S.view==='admin'?'wide':''}"><div class="wrap">
     <div class="fl"><img src="${LOGO_W}" alt="Sodexo"><span class="tag">so<b style="color:#FF6B6B">DEX</b>o · Unidade Natura</span></div>
