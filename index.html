@@ -1095,6 +1095,7 @@ h2 .chip .i{width:12px;height:12px;vertical-align:-1px}
 .chg-gi{flex:none;width:42px;height:42px;border-radius:50%;background:var(--brand);color:var(--brand-ink);display:grid;place-items:center}.chg-gi .i{width:20px;height:20px}
 .chg-gi.int{background:var(--accent)}
 .chg-gi.set{background:var(--ok)}
+.passos-av{margin:8px 0 12px;padding-left:22px;display:grid;gap:8px;font-size:15px;line-height:1.45}
 @media (max-width:430px){.ch-abas button{flex-direction:column;gap:2px;font-size:12px;padding-left:2px;padding-right:2px;min-height:48px}.ch-abas button .ch-badge{position:absolute;top:2px;right:4px}.ch-abas button{position:relative}}
 .chg-sep{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:8px 4px 2px}
 .chg-t{display:flex;flex-direction:column;gap:8px;min-height:0}
@@ -1293,7 +1294,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261125234309';
+const APP_VERSION='20261125234444';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -2665,7 +2666,7 @@ function b64u8(s){const p='='.repeat((4-s.length%4)%4),b=atob((s+p).replace(/-/g
 async function ligarAvisos(silencioso){
   if(!pushSuportado()){if(!silencioso)toast(IOS&&!STANDALONE?'No iPhone, instale o app na tela inicial primeiro (Compartilhar → Adicionar à Tela de Início).':'Este celular não aceita avisos pelo navegador.');return false}
   try{
-    if(Notification.permission!=='granted'){if(silencioso)return false;const p=await Notification.requestPermission();if(p!=='granted'){toast('Avisos bloqueados. Libere nas configurações do navegador.');render();return false}}
+    if(Notification.permission!=='granted'){if(silencioso)return false;const p=await Notification.requestPermission();if(p!=='granted'){avisosBloqueados();render();return false}}
     const reg=await navigator.serviceWorker.ready;
     let sub=await reg.pushManager.getSubscription();
     if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u8(VAPID_PUB)});
@@ -4663,7 +4664,7 @@ async function chEnviarG(b){
 }
 async function ligarAvisosG(){
   if(!pushSuportado()){toast(IOS&&!STANDALONE?'No iPhone, instale o app na tela inicial primeiro.':'Este aparelho não aceita avisos pelo navegador.');return}
-  try{if(Notification.permission!=='granted'){const p=await Notification.requestPermission();if(p!=='granted'){toast('Avisos bloqueados. Libere nas configurações do navegador.');return}}
+  try{if(Notification.permission!=='granted'){const p=await Notification.requestPermission();if(p!=='granted'){avisosBloqueados();return}}
     const reg=await navigator.serviceWorker.ready;let sub=await reg.pushManager.getSubscription();if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u8(VAPID_PUB)});
     await call('salvarPushG',adminPin,sub.toJSON());LS.set('qsn_push_g','1');toast('Pronto! Você vai receber um aviso quando a equipe escrever.');render()}
   catch(e){toast('Não foi possível ligar os avisos: '+msg(e))}
@@ -4864,6 +4865,17 @@ Object.assign(MOCK,{
   forumAcao:(pin,id,a)=>{if(a==='apagar_resp'){FORUM_DEMO.ps.forEach(p=>p.respostas=p.respostas.filter(r=>r.id!==id))}else{const p=FORUM_DEMO.ps.find(x=>x.id===id);if(a==='apagar')p.apagada=true;else p.fixada=a==='fixar'}return {ok:true}},
 });
 
+function avisosBloqueados(){
+  const ua=navigator.userAgent,ios=/iPhone|iPad|iPod/.test(ua),app=matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+  const passos=ios?['Abra os <b>Ajustes</b> do iPhone.','Desça até <b>Notificações</b>.','Toque em <b>soDEXo</b>.','Ligue <b>Permitir Notificações</b>.','Volte aqui e toque no botão de aviso de novo.']
+    :app?['Segure o dedo em cima do ícone do <b>soDEXo</b> na tela do celular.','Toque em <b>Informações do app</b> (o ícone ⓘ).','Toque em <b>Notificações</b>.','Ligue <b>Permitir notificações</b> (ou "Mostrar notificações").','Volte aqui e toque no botão de aviso de novo.']
+    :['Toque no <b>cadeado</b> (ou no ícone de ajustes) ao lado do endereço do site, lá em cima.','Toque em <b>Permissões</b> ou <b>Configurações do site</b>.','Em <b>Notificações</b>, escolha <b>Permitir</b>.','Recarregue a página e toque no botão de aviso de novo.'];
+  M={};openModal(`<h2>${ic('bell')} Os avisos estão bloqueados</h2>
+    <p>Em algum momento o celular recebeu "Bloquear" para os avisos do soDEXo. Por segurança, o app não pode pedir de novo: é preciso liberar uma vez, à mão. Leva 1 minuto:</p>
+    <ol class="passos-av">${passos.map(p=>`<li>${p}</li>`).join('')}</ol>
+    <p class="muted" style="font-size:14px">Se não achar, em celular Android dá para ir em <b>Configurações → Apps → soDEXo (ou Chrome) → Notificações</b>.</p>
+    <div class="acts"><button class="btn" data-act="close">Entendi</button></div>`);
+}
 let TV_MODE=false;try{TV_MODE=new URLSearchParams(location.search).has('tv')}catch(e){}
 if(TV_MODE){S.view='tv';iniciarTv();tvPintar(true)}
 else{
