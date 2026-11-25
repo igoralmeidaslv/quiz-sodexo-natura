@@ -1092,6 +1092,7 @@ h2 .chip .i{width:12px;height:12px;vertical-align:-1px}
 .chg-row .t{flex:1;min-width:0}.chg-row .t b{display:block;font-size:14px}.chg-row .t small{display:block;color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .chg-r{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex:none}.chg-r small{font-size:11px;color:var(--muted)}
 .chg-gi{flex:none;width:42px;height:42px;border-radius:50%;background:var(--brand);color:var(--brand-ink);display:grid;place-items:center}.chg-gi .i{width:20px;height:20px}
+.chg-gi.int{background:var(--accent)}
 .chg-sep{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:8px 4px 2px}
 .chg-t{display:flex;flex-direction:column;gap:8px;min-height:0}
 .chg-t.vazio{background:var(--sunk);border-radius:16px}
@@ -1289,7 +1290,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261125211954';
+const APP_VERSION='20261125233558';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -4616,28 +4617,28 @@ async function carregarChatG(){
 function chMarcarLidoG(){const sel=S.chatSel,l=CG.msgs[sel]||[];if(!sel||!l.length)return;const ult=l[l.length-1].id;
   const c=(CG.lista&&CG.lista.conversas||[]).find(x=>x.conversa===sel);if(c)c.nao=0;
   if((CG['lido_'+sel]||0)>=ult)return;CG['lido_'+sel]=ult;call('chatLerG',adminPin,sel,ult).catch(()=>{})}
-function chNomeConv(conv){if(conv==='grupo')return {nome:'Grupo da equipe',sub:'Todos da equipe'};const c=(S.adm&&S.adm.equipe||[]).find(x=>x.id===conv);return c?{nome:c.nome,sub:GRUPOS[c.grupo]?GRUPOS[c.grupo].nome:'',c}:{nome:'Colaborador removido',sub:''}}
+function chNomeConv(conv){if(conv==='grupo')return {nome:'Grupo da equipe',sub:'Todos da equipe'};if(conv==='interno')return {nome:'Só a gestão',sub:'Conversa entre as gestoras · a equipe não vê'};const c=(S.adm&&S.adm.equipe||[]).find(x=>x.id===conv);return c?{nome:c.nome,sub:GRUPOS[c.grupo]?GRUPOS[c.grupo].nome:'',c}:{nome:'Colaborador removido',sub:''}}
 function chListaGHtml(){
-  const cs=(CG.lista&&CG.lista.conversas)||[],grupo=cs.find(c=>c.conversa==='grupo')||{conversa:'grupo'},priv=cs.filter(c=>c.conversa!=='grupo');
+  const cs=(CG.lista&&CG.lista.conversas)||[],grupo=cs.find(c=>c.conversa==='grupo')||{conversa:'grupo'},interno=cs.find(c=>c.conversa==='interno')||{conversa:'interno'},priv=cs.filter(c=>c.conversa!=='grupo'&&c.conversa!=='interno');
   const b=(S.chatBusca||'').toLowerCase();
   const linha=c=>{const n=chNomeConv(c.conversa),u=c.ultima;if(b&&!n.nome.toLowerCase().includes(b))return '';
-    return `<button class="chg-row ${S.chatSel===c.conversa?'on':''}" data-act="chSel" data-k="${esc(c.conversa)}">${c.conversa==='grupo'?`<span class="chg-gi">${ic('users')}</span>`:avatar(n.c||{nome:n.nome},42)}
-      <span class="t"><b>${esc(n.nome)}</b><small>${u?(u.tipo==='g'?'Você: ':c.conversa==='grupo'?esc(String(u.autor||'').split(' ')[0])+': ':'')+esc(u.apagada?'Mensagem apagada':u.texto?u.texto.slice(0,60):'Foto'):esc(n.sub)}</small></span>
-      <span class="chg-r">${u?`<small>${chHora(u.em)}</small>`:''}${c.nao?`<span class="ch-badge num">${c.nao}</span>`:c.aguardando&&c.conversa!=='grupo'?'<span class="chip gold" style="font-size:11px">Responder</span>':''}</span></button>`};
-  return linha(grupo)+(priv.length?`<div class="chg-sep">Conversas com a equipe</div>`+priv.map(linha).join(''):`<div class="chg-sep">Ninguém escreveu ainda. Use "Nova conversa" para falar com alguém.</div>`);
+    return `<button class="chg-row ${S.chatSel===c.conversa?'on':''}" data-act="chSel" data-k="${esc(c.conversa)}">${c.conversa==='grupo'?`<span class="chg-gi">${ic('users')}</span>`:c.conversa==='interno'?`<span class="chg-gi int">${ic('lock')}</span>`:avatar(n.c||{nome:n.nome},42)}
+      <span class="t"><b>${esc(n.nome)}</b><small>${u?(c.conversa==='interno'?(u.autor===(S.adm&&S.adm.eu)?'Você: ':esc(String(u.autor||'').split(' ')[0])+': '):u.tipo==='g'?'Você: ':c.conversa==='grupo'?esc(String(u.autor||'').split(' ')[0])+': ':'')+esc(u.apagada?'Mensagem apagada':u.texto?u.texto.slice(0,60):'Foto'):esc(n.sub)}</small></span>
+      <span class="chg-r">${u?`<small>${chHora(u.em)}</small>`:''}${c.nao?`<span class="ch-badge num">${c.nao}</span>`:c.aguardando&&c.conversa!=='grupo'&&c.conversa!=='interno'?'<span class="chip gold" style="font-size:11px">Responder</span>':''}</span></button>`};
+  return linha(grupo)+linha(interno)+(priv.length?`<div class="chg-sep">Conversas com a equipe</div>`+priv.map(linha).join(''):`<div class="chg-sep">Ninguém escreveu ainda. Use "Nova conversa" para falar com alguém.</div>`);
 }
-function chThreadGLista(){const sel=S.chatSel,l=CG.msgs[sel]||[];return chBolhas(l,m=>m.tipo==='g',{gestao:true,grupo:sel==='grupo',podeApagar:true,mais:l.length>=80&&!CG['fim_'+sel]})}
+function chThreadGLista(){const sel=S.chatSel,l=CG.msgs[sel]||[],eu=S.adm&&S.adm.eu;return chBolhas(l,sel==='interno'?m=>m.autor===eu:m=>m.tipo==='g',{gestao:true,grupo:sel==='grupo'||sel==='interno',podeApagar:true,mais:l.length>=80&&!CG['fim_'+sel]})}
 function aChat(){
   if(!CG.lista){carregarChatG();return carregando('Abrindo o chat…')}
   const sel=S.chatSel,n=sel?chNomeConv(sel):null,pushOk=pushSuportado()&&Notification.permission==='granted'&&LS.get('qsn_push_g')==='1';
   const lista=`<div class="chg-l ${sel?'esconde-m':''}"><div class="chg-top"><input id="chat-busca" type="search" placeholder="Buscar pessoa" value="${esc(S.chatBusca||'')}"><button class="btn sm" data-act="chNova">${ic('plus')} Nova conversa</button></div>
-    ${pushOk?'':`<button class="chg-push" data-act="chPushG">${ic('bell')} Receber aviso no celular quando a equipe escrever</button>`}
+    ${pushOk?'':`<button class="chg-push" data-act="chPushG">${ic('bell')} Receber aviso no celular quando chegar mensagem</button>`}
     <div id="chg-convs">${chListaGHtml()}</div></div>`;
   if(sel&&!CG.msgs[sel]){call('chatMsgsG',adminPin,sel,0).then(l=>{CG.msgs[sel]=l;chMarcarLidoG();render()}).catch(e=>toast(msg(e)))}
-  const thread=sel?`<div class="chg-t"><div class="chg-h"><button class="ghost icob so-m" data-act="chSel" data-k="" aria-label="Voltar">${ic('chevL')}</button>${sel==='grupo'?`<span class="chg-gi">${ic('users')}</span>`:avatar(n.c||{nome:n.nome},40)}<div style="flex:1;min-width:0"><b>${esc(n.nome)}</b><small class="muted" style="display:block">${sel==='grupo'?'Todos da equipe veem as mensagens':'Conversa privada · só esta pessoa e a gestão veem'}</small></div>
+  const thread=sel?`<div class="chg-t"><div class="chg-h"><button class="ghost icob so-m" data-act="chSel" data-k="" aria-label="Voltar">${ic('chevL')}</button>${sel==='grupo'?`<span class="chg-gi">${ic('users')}</span>`:sel==='interno'?`<span class="chg-gi int">${ic('lock')}</span>`:avatar(n.c||{nome:n.nome},40)}<div style="flex:1;min-width:0"><b>${esc(n.nome)}</b><small class="muted" style="display:block">${sel==='grupo'?'Todos da equipe veem as mensagens':sel==='interno'?'Só a Ianne e a Jessyca veem · a equipe não vê':'Conversa privada · só esta pessoa e a gestão veem'}</small></div>
       ${sel==='grupo'?`<label class="chg-modo"><span>Só a gestão envia</span><button class="switch ${CG.lista.soGestao?'on':''}" data-act="chModo" role="switch" aria-checked="${!!CG.lista.soGestao}" aria-label="Só a gestão envia no grupo"></button></label>`:''}</div>
       <div class="ch-lista" id="ch-lista">${CG.msgs[sel]?chThreadGLista():carregando('Abrindo…')}</div>${chComposer('')}</div>`
-    :`<div class="chg-t vazio esconde-m"><div class="ch-vazio">${ic('message')}<span>Escolha uma conversa à esquerda.<br>O <b>Grupo da equipe</b> substitui o grupo do WhatsApp.</span></div></div>`;
+    :`<div class="chg-t vazio esconde-m"><div class="ch-vazio">${ic('message')}<span>Escolha uma conversa à esquerda.<br>O <b>Grupo da equipe</b> substitui o grupo do WhatsApp.<br><b>Só a gestão</b> é a conversa entre as gestoras.</span></div></div>`;
   setTimeout(()=>{chAjustar();if(sel)chRolar(true)},30);
   return `<div class="chg">${lista}${thread}</div>`;
 }
