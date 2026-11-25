@@ -364,11 +364,12 @@ table.esc button.nmb{background:none;border:0;padding:0;font:inherit;font-weight
 .escolha button.on{border-color:#E0A100;background:#FFF6DA}
 .escolha button span.t{flex:1;min-width:0}.escolha button small{color:var(--muted);font-weight:700}
 .mnav{background:var(--surface);border-bottom:1px solid var(--line)}
-.mnav .wrap{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;padding-top:6px;padding-bottom:6px}
-.mnav button{background:none;border:0;border-radius:12px;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:3px;font-weight:800;font-size:12.5px;color:var(--muted);min-height:54px;white-space:nowrap}
+.mnav .wrap{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:4px;padding-top:6px;padding-bottom:6px}
+.mnav button{min-width:0;background:none;border:0;border-radius:12px;padding:8px 2px;display:flex;flex-direction:column;align-items:center;gap:3px;font-weight:800;font-size:12.5px;color:var(--muted);min-height:54px;white-space:nowrap}
 .mnav button .i{font-size:20px}
 .mnav button.on{background:var(--accent-soft);color:var(--brand)}
-@media (min-width:760px){.mnav button{flex-direction:row;justify-content:center;gap:8px;font-size:14.5px}}
+@media (min-width:760px){.mnav button{flex-direction:row;justify-content:center;gap:8px;font-size:14.5px}.mnav .curto{display:none}}
+@media (max-width:759px){.mnav .longo{display:none}.mnav button{font-size:11.5px;letter-spacing:-.1px}.mnav .wrap{gap:2px;padding-left:8px;padding-right:8px}}
 .snav{background:var(--bg);border-bottom:1px solid var(--line)}
 .snav .wrap{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-top:10px;padding-bottom:10px}
 .snav button{flex:0 0 auto;border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:999px;padding:8px 16px;font-weight:800;font-size:14px;min-height:40px}
@@ -1080,8 +1081,8 @@ h2 .chip .i{width:12px;height:12px;vertical-align:-1px}
 .fr-gtop{display:flex;gap:10px;flex-wrap:wrap}.fr-gtop .fr-busca{flex:1;min-width:220px}.fr-gtop .seg{flex:1;min-width:300px}
 @media (max-width:560px){.fr-rform{flex-direction:column;align-items:stretch}}
 /* gestão */
-.chg{display:grid;grid-template-columns:340px 1fr;gap:14px;height:calc(100dvh - 250px);min-height:460px}
-.chg-l{display:flex;flex-direction:column;gap:8px;min-height:0}
+.chg{display:grid;grid-template-columns:340px minmax(0,1fr);gap:14px;height:calc(100dvh - 250px);min-height:460px}
+.chg-l{display:flex;flex-direction:column;gap:8px;min-height:0;min-width:0}
 .chg-top{display:flex;gap:8px}
 .chg-top input{flex:1;min-width:0;height:40px;border:1px solid var(--line);border-radius:12px;padding:0 12px;background:var(--surface);color:var(--ink);font:inherit}
 .chg-push{display:flex;gap:8px;align-items:center;text-align:left;border:1px dashed var(--brand);background:var(--accent-soft);color:var(--accent-ink);border-radius:12px;padding:8px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
@@ -1093,13 +1094,15 @@ h2 .chip .i{width:12px;height:12px;vertical-align:-1px}
 .chg-r{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex:none}.chg-r small{font-size:11px;color:var(--muted)}
 .chg-gi{flex:none;width:42px;height:42px;border-radius:50%;background:var(--brand);color:var(--brand-ink);display:grid;place-items:center}.chg-gi .i{width:20px;height:20px}
 .chg-gi.int{background:var(--accent)}
+.chg-gi.set{background:var(--ok)}
+@media (max-width:430px){.ch-abas button{flex-direction:column;gap:2px;font-size:12px;padding-left:2px;padding-right:2px;min-height:48px}.ch-abas button .ch-badge{position:absolute;top:2px;right:4px}.ch-abas button{position:relative}}
 .chg-sep{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:8px 4px 2px}
 .chg-t{display:flex;flex-direction:column;gap:8px;min-height:0}
 .chg-t.vazio{background:var(--sunk);border-radius:16px}
 .chg-h{display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px 12px}
 .chg-modo{display:flex;gap:8px;align-items:center;font-size:13px;font-weight:700;flex:none}
 .so-m{display:none!important}
-@media (max-width:760px){.chg{grid-template-columns:1fr;height:calc(100dvh - 230px)}.esconde-m{display:none!important}.so-m{display:grid!important}.chg-modo span{display:none}}
+@media (max-width:760px){.chg{grid-template-columns:minmax(0,1fr);height:calc(100dvh - 230px)}.esconde-m{display:none!important}.so-m{display:grid!important}.chg-modo span{display:none}}
 </style>
 
 <div id="app"></div>
@@ -1290,7 +1293,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261125233558';
+const APP_VERSION='20261125234309';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -1532,7 +1535,7 @@ function vAdmin(){
   const body=!S.adm?(S.status==='err'?`<div class="notice">Sem conexão com o servidor agora. Você continua logada. ${esc(S.errMsg)} <button class="link" data-act="reloadAdm">Tentar de novo</button></div>`:carregando('Abrindo a gestão…')):S.tab==='chat'?aChat():S.tab==='forum'?aForum():S.tab==='avaliar'?aAvaliar():S.tab==='recados'?aRecados():S.tab==='colegas'?aColegas():S.tab==='tv'?aTv():S.tab==='limpeza'?aLimpeza():S.tab==='cardapio'?aCardapio():S.tab==='ranking'?aRanking():S.tab==='quiz'?aQuiz():S.tab==='base'?aBase():S.tab==='treinos'?aTreinos():S.tab==='escala'?aEscala():S.tab==='acessos'?aAcessos():S.tab==='equipe'?aEquipe():S.tab==='premios'?aPremios():aAjustes();
   const quem=S.adm&&S.adm.eu&&S.adm.eu!=='Gestão'?'Gestão · '+String(S.adm.eu).split(' ')[0]:'Gestão · Natura';
   return topbar(esc(quem),`<span class="topr">${minhaGestora()?`<button class="ghost icob perfb" data-act="meuPerfil" aria-label="Minha foto e cargo" title="Minha foto e cargo">${avatar(minhaGestora(),40)}</button>`:''}<button class="ghost icob ${S.tab==='ajustes'?'on':''}" data-act="tab" data-k="ajustes" aria-label="Ajustes" title="Ajustes">${ic('cog')}</button><button class="ghost" data-act="adminOut">Sair</button></span>`)+
-   `<nav class="mnav"><div class="wrap wide">${MENU.map(([g,l,icn,subs])=>`<button class="${grp&&grp[0]===g?'on':''}" data-act="mgrp" data-k="${g}">${ic(icn)}<span>${l}</span>${g==='chat'&&(chNaoG()+frPendG())?`<span class="ch-badge num mnb">${chNaoG()+frPendG()>9?'9+':chNaoG()+frPendG()}</span>`:''}</button>`).join('')}</div></nav>
+   `<nav class="mnav"><div class="wrap wide">${MENU.map(([g,l,icn,subs])=>`<button class="${grp&&grp[0]===g?'on':''}" data-act="mgrp" data-k="${g}">${ic(icn)}<span class="longo">${l}</span><span class="curto">${MENU_CURTO[g]||l}</span>${g==='chat'&&(chNaoG()+frPendG())?`<span class="ch-badge num mnb">${chNaoG()+frPendG()>9?'9+':chNaoG()+frPendG()}</span>`:''}</button>`).join('')}</div></nav>
    ${grp?`<nav class="snav"><div class="wrap wide">${grp[3].map(([k,l])=>`<button class="${S.tab===k?'on':''}" data-act="tab" data-k="${k}">${l}</button>`).join('')}</div></nav>`:`<nav class="snav"><div class="wrap wide"><button class="on">Ajustes</button></div></nav>`}
    <main class="wrap wide stack">${body}</main>`+footer();
 }
@@ -1632,8 +1635,12 @@ function aAjustes(){
     <div class="card"><b>Dados</b><p class="muted" style="margin:0;font-size:14px">Tudo fica guardado no Supabase, um banco de dados gratuito. Os PINs ficam protegidos: a equipe nunca vê o PIN dos colegas.</p>${S.adm&&S.adm.planilhaUrl?`<div class="acts"><a class="btn sm alt" href="${esc(S.adm.planilhaUrl)}" target="_blank" rel="noopener">Abrir planilha</a></div>`:''}</div>
    </div>`;
 }
+function guardarTela(){try{LS.set('qsn_tela',JSON.stringify({em:Date.now(),view:S.view,ctab:S.ctab,chConv:S.chConv||null,tab:S.tab,chatSel:S.chatSel||null,grupo:S.grupo,qmodo:S.qmodo||null}))}catch(e){}}
+function restaurarTela(){try{if(location.hash&&location.hash.length>1)return;const t=JSON.parse(LS.get('qsn_tela')||'null');if(!t||Date.now()-t.em>12*3600e3||t.view!==S.view)return;
+  if(S.view==='home'&&t.ctab){S.ctab=t.ctab;if(t.chConv)S.chConv=t.chConv}
+  if(S.view==='admin'&&t.tab){S.tab=t.tab;if(t.chatSel)S.chatSel=t.chatSel;if(t.grupo&&GRUPOS[t.grupo])S.grupo=t.grupo;if(t.qmodo)S.qmodo=t.qmodo}}catch(e){}}
 function render(){
-  const v=S.view;
+  const v=S.view;guardarTela();
   document.body.classList.toggle('has-nav',v==='home'&&!S.play);
   $('#app').innerHTML=v==='tv'?vTv():v==='login'?vLogin()+footer():v==='home'?vHome():v==='adminLogin'?vAdminLogin()+footer():vAdmin();
 }
@@ -3219,6 +3226,7 @@ document.addEventListener('change',async e=>{if(e.target.id!=='gp-foto')return;c
 (function(){if(!ICO.cog)ICO.cog=['M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z','M12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z'];
   if(!ICO.users)ICO.users=['M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2','M9 3a4 4 0 1 1 0 8 4 4 0 0 1 0-8z','M22 21v-2a4 4 0 0 0-3-3.87','M16 3.13a4 4 0 0 1 0 7.75'];
   if(!ICO.grad)ICO.grad=['M22 10 12 5 2 10l10 5 10-5z','M6 12v5c3 3 9 3 12 0v-5'];})();
+const MENU_CURTO={aprend:'Treinos',dia:'Dia a dia'};
 const MENU=[['chat','Chat','message',[['chat','Conversas'],['forum','Fórum de dúvidas']]],['dia','Dia a dia','listCheck',[['avaliar','Avaliar'],['recados','Recados'],['colegas','Colegas avaliam'],['limpeza','Limpeza']]],
   ['equipe','Equipe','users',[['equipe','Pessoas e PINs'],['escala','Escala e férias'],['acessos','Acessos']]],
   ['aprend','Treinamentos','grad',[['treinos','Treinamentos'],['quiz','Quizzes'],['base','Base de conhecimento']]],
@@ -4522,9 +4530,11 @@ function MOCK_BASE(b){
 Object.assign(RPC,{
   chatColab:['chat_colab',['p_pin','p_desde']],chatEnviarColab:['chat_enviar_colab',['p_pin','p_conversa','p_texto','p_foto']],chatLerColab:['chat_ler_colab',['p_pin','p_conversa','p_ate']],
   chatLista:['chat_gestao_lista',['p_pin']],chatMsgsG:['chat_gestao_msgs',['p_pin','p_conversa','p_desde']],chatEnviarG:['chat_enviar_gestao',['p_pin','p_conversa','p_texto','p_foto']],chatLerG:['chat_ler_gestao',['p_pin','p_conversa','p_ate']],
-  chatApagar:['chat_apagar',['p_pin','p_id']],chatModo:['chat_modo_grupo',['p_pin','p_so_gestao']],salvarPushG:['salvar_push_gestao',['p_pin','p_sub']],chatAntes:['chat_anteriores',['p_pin','p_conversa','p_antes']],
+  chatApagar:['chat_apagar',['p_pin','p_id']],chatModo:['chat_modo_grupo',['p_pin','p_so_gestao','p_conversa']],salvarPushG:['salvar_push_gestao',['p_pin','p_sub']],chatAntes:['chat_anteriores',['p_pin','p_conversa','p_antes']],
 });
 const CH={msgs:{},max:0,lendo:false};          /* equipe */
+const SETOR_CURTO={coz:'Cozinheiros',ofc:'Oficiais',lim:'Limpeza'};
+function setorNome(g,curto){return curto&&SETOR_CURTO[g]?SETOR_CURTO[g]:GRUPOS[g]?GRUPOS[g].nome:g}
 const CG={msgs:{},lista:null,lendo:false};     /* gestão */
 function chHora(iso){const d=new Date(iso),h=new Date();const hm=pad2(d.getHours())+':'+pad2(d.getMinutes());return d.toDateString()===h.toDateString()?hm:pad2(d.getDate())+'/'+pad2(d.getMonth()+1)+' '+hm}
 function chDia(iso){const d=new Date(iso),h=new Date(),o=new Date(Date.now()-864e5);if(d.toDateString()===h.toDateString())return 'Hoje';if(d.toDateString()===o.toDateString())return 'Ontem';return DIAS_L[d.getDay()]+', '+pad2(d.getDate())+'/'+pad2(d.getMonth()+1)}
@@ -4557,7 +4567,7 @@ async function chAvisar(pin,id){try{if(DEMO||!id)return;fetch(SUPA_URL.replace(/
 function chFotoModal(lista,id){const m=lista.find(x=>x.id===+id);if(!m||!m.foto)return;M={};openModal(`<div style="text-align:center"><img src="${m.foto}" alt="Foto" style="max-width:100%;max-height:75vh;border-radius:12px"></div><div class="acts" style="margin-top:12px"><a class="btn alt" href="${m.foto}" download="foto-chat-${m.id}.jpg">${ic('download')} Baixar</a><button class="btn" data-act="close">Fechar</button></div>`)}
 
 /* ---------------------------- EQUIPE ---------------------------- */
-function chNao(){return (S.chat?(S.chat.naoGrupo||0)+(S.chat.naoPrivado||0):0)+frNovas()}
+function chNao(){return (S.chat?(S.chat.naoGrupo||0)+(S.chat.naoSetor||0)+(S.chat.naoPrivado||0):0)+frNovas()}
 function chAjustar(){const w=$('.ch-wrap')||$('.chg');if(!w)return;const top=w.getBoundingClientRect().top+scrollY,nav=$('.bnav'),nb=nav&&getComputedStyle(nav).display!=='none'?nav.getBoundingClientRect().height:0;w.style.height=Math.max(360,innerHeight-top-nb-14)+'px'}
 addEventListener('resize',()=>chAjustar());
 async function carregarChat(){
@@ -4565,35 +4575,36 @@ async function carregarChat(){
   try{const r=await call('chatColab',S.me.pin,CH.max||0);const novas=r.msgs||[];
     const antes=chNao();S.chat=r;
     if(novas.length){const meu=S.me.id||(eu()||{}).id;CH.max=Math.max(CH.max,...novas.map(m=>m.id));
-      CH.msgs.grupo=chMerge(CH.msgs.grupo,novas.filter(m=>m.conversa==='grupo'));CH.msgs.gestao=chMerge(CH.msgs.gestao,novas.filter(m=>m.conversa!=='grupo'))}
+      CH.msgs.grupo=chMerge(CH.msgs.grupo,novas.filter(m=>m.conversa==='grupo'));CH.msgs.setor=chMerge(CH.msgs.setor,novas.filter(m=>m.conversa.startsWith('grupo:')));CH.msgs.gestao=chMerge(CH.msgs.gestao,novas.filter(m=>!m.conversa.startsWith('grupo')))}
     if(S.view==='home'&&S.ctab==='chat'){if((S.chConv||'gestao')!=='forum'){chMarcarLido();if(!chAtualizarLista(cChatLista()))render()}}
     else if(S.view==='home'&&(antes!==chNao()||novas.length)&&!S.play&&!$('#modal').innerHTML&&!/INPUT|TEXTAREA/.test((document.activeElement||{}).tagName||''))render();
   }catch(e){}finally{CH.lendo=false}
 }
 function chMarcarLido(){
   const conv=S.chConv||'gestao',l=CH.msgs[conv]||[];if(!l.length||!S.chat)return;const ult=l[l.length-1].id;
-  const k=conv==='grupo'?'lidoGrupo':'lidoPrivado';if((S.chat[k]||0)>=ult)return;
-  S.chat[k]=ult;if(conv==='grupo')S.chat.naoGrupo=0;else S.chat.naoPrivado=0;
+  const suf=conv==='grupo'?'Grupo':conv==='setor'?'Setor':'Privado';if((S.chat['lido'+suf]||0)>=ult)return;
+  S.chat['lido'+suf]=ult;S.chat['nao'+suf]=0;
   call('chatLerColab',S.me.pin,conv,ult).catch(()=>{});
 }
 function cChatLista(){const conv=S.chConv||'gestao',me=eu()||{},l=CH.msgs[conv]||[];
-  return chBolhas(l,m=>m.tipo==='c'&&m.autorId===me.id,{grupo:conv==='grupo',mais:l.length>=80&&!CH['fim_'+conv]})}
+  return chBolhas(l,m=>m.tipo==='c'&&m.autorId===me.id,{grupo:conv==='grupo'||conv==='setor',mais:l.length>=80&&!CH['fim_'+conv]})}
 function cChat(me){
   if(!S.chat){carregarChat();return carregando('Abrindo o chat…')}
   const conv=S.chConv||'gestao',c=S.chat,gs=c.gestoras||[];
   const aba=(k,l,n)=>`<button class="${conv===k?'on':''}" data-act="chConv" data-k="${k}">${l}${n?` <span class="ch-badge num">${n}</span>`:''}</button>`;
-  const info=conv==='grupo'?`<div class="ch-info">${ic('users')}<span><b>Grupo da equipe.</b> Avisos da gestão e conversas de todos. Todos da equipe veem.${c.soGestao?' No momento, <b>só a gestão envia</b> mensagens aqui.':''}</span></div>`
+  const st=c.setor||(me&&me.grupo),stN=setorNome(st);
+  const info=conv==='setor'?`<div class="ch-info">${ic('users')}<span><b>Grupo ${esc(stN)}.</b> Só a gestão e os colegas do seu setor veem.${c.soGestaoSetor?' No momento, <b>só a gestão envia</b> mensagens aqui.':''}</span></div>`:conv==='grupo'?`<div class="ch-info">${ic('users')}<span><b>Equipe toda.</b> Avisos da gestão para todos os setores. Toda a equipe vê.${c.soGestao?' No momento, <b>só a gestão envia</b> mensagens aqui.':''}</span></div>`
     :`<div class="ch-info">${gs.length?`<span class="ch-av">${gs.slice(0,3).map(g=>avatar(g,28)).join('')}</span>`:ic('message')}<span><b>Fale com a gestão.</b> Tire suas dúvidas aqui. Só você e as gestoras${gs.length?' ('+gs.map(g=>esc(String(g.nome).split(' ')[0])).join(' e ')+')':''} veem esta conversa.</span></div>`;
-  const abas=`<div class="seg ch-abas" style="grid-template-columns:repeat(3,1fr)">${aba('gestao',ic('message')+' Gestão',c.naoPrivado)}${aba('grupo',ic('users')+' Grupo',c.naoGrupo)}${aba('forum',ic('help')+' Dúvidas',frNovas())}</div>`;
+  const abas=`<div class="seg ch-abas" style="grid-template-columns:repeat(${st?4:3},1fr)">${aba('gestao',ic('message')+'<span>Gestão</span>',c.naoPrivado)}${aba('grupo',ic('users')+'<span>Todos</span>',c.naoGrupo)}${st?aba('setor',ic('users')+'<span>'+esc(setorNome(st,true))+'</span>',c.naoSetor):''}${aba('forum',ic('help')+'<span>Dúvidas</span>',frNovas())}</div>`;
   if(conv==='forum')return `<div class="stack">${abas}${cForum()}</div>`;
-  const bloq=conv==='grupo'&&c.soGestao?'Só a gestão envia mensagens no grupo. Use a aba "Gestão" para falar com elas.':'';
+  const bloq=(conv==='grupo'&&c.soGestao)||(conv==='setor'&&c.soGestaoSetor)?'Só a gestão envia mensagens neste grupo. Use a aba "Gestão" para falar com elas.':'';
   setTimeout(()=>{chAjustar();chRolar(true);chMarcarLido()},30);
   return `<div class="ch-wrap">${abas}
     ${info}<div class="ch-lista" id="ch-lista">${cChatLista()}</div>${chComposer(bloq)}</div>`;
 }
 function chatCard(){const n=chNao();if(!n)return '';
-  const ch=S.chat||{},k=ch.naoPrivado?'gestao':ch.naoGrupo?'grupo':'forum';
-  return `<button class="cta rec-cta" data-act="chIr" data-k="${k}"><span class="ic">${ic('message')}</span><span style="flex:1;min-width:0"><b style="display:block">Você tem ${n} mensage${n>1?'ns novas':'m nova'} no chat</b><small style="display:block;font-weight:600">${k==='gestao'?'Resposta da gestão':k==='grupo'?'Grupo da equipe':'Resposta no fórum de dúvidas'} · toque para ler</small></span><span>›</span></button>`}
+  const ch=S.chat||{},k=ch.naoPrivado?'gestao':ch.naoSetor?'setor':ch.naoGrupo?'grupo':'forum';
+  return `<button class="cta rec-cta" data-act="chIr" data-k="${k}"><span class="ic">${ic('message')}</span><span style="flex:1;min-width:0"><b style="display:block">Você tem ${n} mensage${n>1?'ns novas':'m nova'} no chat</b><small style="display:block;font-weight:600">${k==='gestao'?'Resposta da gestão':k==='setor'?'Grupo '+esc(setorNome(ch.setor)):k==='grupo'?'Grupo da equipe toda':'Resposta no fórum de dúvidas'} · toque para ler</small></span><span>›</span></button>`}
 async function chEnviarColab(b){
   const t=$('#ch-txt'),txt=(t.value||'').trim(),foto=S.chFoto||null,conv=S.chConv||'gestao';
   if(!txt&&!foto)return;busyBtn(b,true,'');
@@ -4617,17 +4628,19 @@ async function carregarChatG(){
 function chMarcarLidoG(){const sel=S.chatSel,l=CG.msgs[sel]||[];if(!sel||!l.length)return;const ult=l[l.length-1].id;
   const c=(CG.lista&&CG.lista.conversas||[]).find(x=>x.conversa===sel);if(c)c.nao=0;
   if((CG['lido_'+sel]||0)>=ult)return;CG['lido_'+sel]=ult;call('chatLerG',adminPin,sel,ult).catch(()=>{})}
-function chNomeConv(conv){if(conv==='grupo')return {nome:'Grupo da equipe',sub:'Todos da equipe'};if(conv==='interno')return {nome:'Só a gestão',sub:'Conversa entre as gestoras · a equipe não vê'};const c=(S.adm&&S.adm.equipe||[]).find(x=>x.id===conv);return c?{nome:c.nome,sub:GRUPOS[c.grupo]?GRUPOS[c.grupo].nome:'',c}:{nome:'Colaborador removido',sub:''}}
+function chNomeConv(conv){if(conv==='grupo')return {nome:'Equipe toda',sub:'Todos os setores'};if(conv.startsWith('grupo:'))return {nome:'Grupo '+setorNome(conv.slice(6)),sub:'Só '+setorNome(conv.slice(6)).toLowerCase()};if(conv==='interno')return {nome:'Só a gestão',sub:'Conversa entre as gestoras · a equipe não vê'};const c=(S.adm&&S.adm.equipe||[]).find(x=>x.id===conv);return c?{nome:c.nome,sub:GRUPOS[c.grupo]?GRUPOS[c.grupo].nome:'',c}:{nome:'Colaborador removido',sub:''}}
 function chListaGHtml(){
-  const cs=(CG.lista&&CG.lista.conversas)||[],grupo=cs.find(c=>c.conversa==='grupo')||{conversa:'grupo'},interno=cs.find(c=>c.conversa==='interno')||{conversa:'interno'},priv=cs.filter(c=>c.conversa!=='grupo'&&c.conversa!=='interno');
+  const cs=(CG.lista&&CG.lista.conversas)||[],grupo=cs.find(c=>c.conversa==='grupo')||{conversa:'grupo'},interno=cs.find(c=>c.conversa==='interno')||{conversa:'interno'},priv=cs.filter(c=>!c.conversa.startsWith('grupo')&&c.conversa!=='interno');
+  const ordem=Object.keys(GRUPOS),sets=[...new Set([...((CG.lista&&CG.lista.setores)||[]),...cs.filter(c=>c.conversa.startsWith('grupo:')).map(c=>c.conversa.slice(6))])].sort((a,b)=>ordem.indexOf(a)-ordem.indexOf(b));
+  const setores=sets.map(g=>cs.find(c=>c.conversa==='grupo:'+g)||{conversa:'grupo:'+g});
   const b=(S.chatBusca||'').toLowerCase();
   const linha=c=>{const n=chNomeConv(c.conversa),u=c.ultima;if(b&&!n.nome.toLowerCase().includes(b))return '';
-    return `<button class="chg-row ${S.chatSel===c.conversa?'on':''}" data-act="chSel" data-k="${esc(c.conversa)}">${c.conversa==='grupo'?`<span class="chg-gi">${ic('users')}</span>`:c.conversa==='interno'?`<span class="chg-gi int">${ic('lock')}</span>`:avatar(n.c||{nome:n.nome},42)}
-      <span class="t"><b>${esc(n.nome)}</b><small>${u?(c.conversa==='interno'?(u.autor===(S.adm&&S.adm.eu)?'Você: ':esc(String(u.autor||'').split(' ')[0])+': '):u.tipo==='g'?'Você: ':c.conversa==='grupo'?esc(String(u.autor||'').split(' ')[0])+': ':'')+esc(u.apagada?'Mensagem apagada':u.texto?u.texto.slice(0,60):'Foto'):esc(n.sub)}</small></span>
-      <span class="chg-r">${u?`<small>${chHora(u.em)}</small>`:''}${c.nao?`<span class="ch-badge num">${c.nao}</span>`:c.aguardando&&c.conversa!=='grupo'&&c.conversa!=='interno'?'<span class="chip gold" style="font-size:11px">Responder</span>':''}</span></button>`};
-  return linha(grupo)+linha(interno)+(priv.length?`<div class="chg-sep">Conversas com a equipe</div>`+priv.map(linha).join(''):`<div class="chg-sep">Ninguém escreveu ainda. Use "Nova conversa" para falar com alguém.</div>`);
+    return `<button class="chg-row ${S.chatSel===c.conversa?'on':''}" data-act="chSel" data-k="${esc(c.conversa)}">${c.conversa.startsWith('grupo')?`<span class="chg-gi ${c.conversa==='grupo'?'':'set'}">${ic('users')}</span>`:c.conversa==='interno'?`<span class="chg-gi int">${ic('lock')}</span>`:avatar(n.c||{nome:n.nome},42)}
+      <span class="t"><b>${esc(n.nome)}</b><small>${u?(c.conversa==='interno'?(u.autor===(S.adm&&S.adm.eu)?'Você: ':esc(String(u.autor||'').split(' ')[0])+': '):u.tipo==='g'?'Você: ':c.conversa.startsWith('grupo')?esc(String(u.autor||'').split(' ')[0])+': ':'')+esc(u.apagada?'Mensagem apagada':u.texto?u.texto.slice(0,60):'Foto'):esc(n.sub)}</small></span>
+      <span class="chg-r">${u?`<small>${chHora(u.em)}</small>`:''}${c.nao?`<span class="ch-badge num">${c.nao}</span>`:c.aguardando&&!c.conversa.startsWith('grupo')&&c.conversa!=='interno'?'<span class="chip gold" style="font-size:11px">Responder</span>':''}</span></button>`};
+  return `<div class="chg-sep">Grupos</div>`+linha(grupo)+setores.map(linha).join('')+`<div class="chg-sep">Gestoras</div>`+linha(interno)+(priv.length?`<div class="chg-sep">Conversas com a equipe</div>`+priv.map(linha).join(''):`<div class="chg-sep">Ninguém escreveu ainda. Use "Nova conversa" para falar com alguém.</div>`);
 }
-function chThreadGLista(){const sel=S.chatSel,l=CG.msgs[sel]||[],eu=S.adm&&S.adm.eu;return chBolhas(l,sel==='interno'?m=>m.autor===eu:m=>m.tipo==='g',{gestao:true,grupo:sel==='grupo'||sel==='interno',podeApagar:true,mais:l.length>=80&&!CG['fim_'+sel]})}
+function chThreadGLista(){const sel=S.chatSel,l=CG.msgs[sel]||[],eu=S.adm&&S.adm.eu;return chBolhas(l,sel==='interno'?m=>m.autor===eu:m=>m.tipo==='g',{gestao:true,grupo:sel.startsWith('grupo')||sel==='interno',podeApagar:true,mais:l.length>=80&&!CG['fim_'+sel]})}
 function aChat(){
   if(!CG.lista){carregarChatG();return carregando('Abrindo o chat…')}
   const sel=S.chatSel,n=sel?chNomeConv(sel):null,pushOk=pushSuportado()&&Notification.permission==='granted'&&LS.get('qsn_push_g')==='1';
@@ -4635,10 +4648,10 @@ function aChat(){
     ${pushOk?'':`<button class="chg-push" data-act="chPushG">${ic('bell')} Receber aviso no celular quando chegar mensagem</button>`}
     <div id="chg-convs">${chListaGHtml()}</div></div>`;
   if(sel&&!CG.msgs[sel]){call('chatMsgsG',adminPin,sel,0).then(l=>{CG.msgs[sel]=l;chMarcarLidoG();render()}).catch(e=>toast(msg(e)))}
-  const thread=sel?`<div class="chg-t"><div class="chg-h"><button class="ghost icob so-m" data-act="chSel" data-k="" aria-label="Voltar">${ic('chevL')}</button>${sel==='grupo'?`<span class="chg-gi">${ic('users')}</span>`:sel==='interno'?`<span class="chg-gi int">${ic('lock')}</span>`:avatar(n.c||{nome:n.nome},40)}<div style="flex:1;min-width:0"><b>${esc(n.nome)}</b><small class="muted" style="display:block">${sel==='grupo'?'Todos da equipe veem as mensagens':sel==='interno'?'Só a Ianne e a Jessyca veem · a equipe não vê':'Conversa privada · só esta pessoa e a gestão veem'}</small></div>
-      ${sel==='grupo'?`<label class="chg-modo"><span>Só a gestão envia</span><button class="switch ${CG.lista.soGestao?'on':''}" data-act="chModo" role="switch" aria-checked="${!!CG.lista.soGestao}" aria-label="Só a gestão envia no grupo"></button></label>`:''}</div>
+  const thread=sel?`<div class="chg-t"><div class="chg-h"><button class="ghost icob so-m" data-act="chSel" data-k="" aria-label="Voltar">${ic('chevL')}</button>${sel.startsWith('grupo')?`<span class="chg-gi ${sel==='grupo'?'':'set'}">${ic('users')}</span>`:sel==='interno'?`<span class="chg-gi int">${ic('lock')}</span>`:avatar(n.c||{nome:n.nome},40)}<div style="flex:1;min-width:0"><b>${esc(n.nome)}</b><small class="muted" style="display:block">${sel==='grupo'?'Toda a equipe vê as mensagens':sel.startsWith('grupo:')?'Só '+esc(setorNome(sel.slice(6)).toLowerCase())+' e a gestão veem':sel==='interno'?'Só a Ianne e a Jessyca veem · a equipe não vê':'Conversa privada · só esta pessoa e a gestão veem'}</small></div>
+      ${sel.startsWith('grupo')?(()=>{const on=sel==='grupo'?!!CG.lista.soGestao:!!(CG.lista.modos||{})[sel];return `<label class="chg-modo"><span>Só a gestão envia</span><button class="switch ${on?'on':''}" data-act="chModo" role="switch" aria-checked="${on}" aria-label="Só a gestão envia neste grupo"></button></label>`})():''}</div>
       <div class="ch-lista" id="ch-lista">${CG.msgs[sel]?chThreadGLista():carregando('Abrindo…')}</div>${chComposer('')}</div>`
-    :`<div class="chg-t vazio esconde-m"><div class="ch-vazio">${ic('message')}<span>Escolha uma conversa à esquerda.<br>O <b>Grupo da equipe</b> substitui o grupo do WhatsApp.<br><b>Só a gestão</b> é a conversa entre as gestoras.</span></div></div>`;
+    :`<div class="chg-t vazio esconde-m"><div class="ch-vazio">${ic('message')}<span>Escolha uma conversa à esquerda.<br>Os <b>grupos</b> substituem os grupos do WhatsApp: um para a equipe toda e um para cada setor.<br><b>Só a gestão</b> é a conversa entre as gestoras.</span></div></div>`;
   setTimeout(()=>{chAjustar();if(sel)chRolar(true)},30);
   return `<div class="chg">${lista}${thread}</div>`;
 }
@@ -4670,7 +4683,7 @@ Object.assign(A,{
       if(el){el.innerHTML=adm?chThreadGLista():cChatLista();el.scrollTop=el.scrollHeight-h}}catch(e){toast(msg(e))}},
   chSel:d=>{S.chatSel=d.k||null;S.chFoto=null;render();if(d.k)scrollTo(0,0)},
   chApagar:d=>confirmModal('Apagar esta mensagem?','Ela some para todos e aparece "Mensagem apagada pela gestão".','Apagar',async()=>{await call('chatApagar',adminPin,+d.id);const l=CG.msgs[S.chatSel]||[];const m=l.find(x=>x.id===+d.id);if(m){m.apagada=true;m.foto=null;m.texto=''}render();toast('Mensagem apagada.')}),
-  chModo:async(d,b)=>{const on=!CG.lista.soGestao;b.disabled=true;try{await call('chatModo',adminPin,on);CG.lista.soGestao=on;render();toast(on?'Agora só a gestão envia no grupo.':'Toda a equipe pode enviar no grupo.')}catch(e){toast(msg(e));b.disabled=false}},
+  chModo:async(d,b)=>{const sel=S.chatSel,on=!(sel==='grupo'?CG.lista.soGestao:(CG.lista.modos||{})[sel]);b.disabled=true;try{await call('chatModo',adminPin,on,sel);if(sel==='grupo')CG.lista.soGestao=on;else{CG.lista.modos=CG.lista.modos||{};CG.lista.modos[sel]=on}render();toast(on?'Agora só a gestão envia no grupo.':'Toda a equipe pode enviar no grupo.')}catch(e){toast(msg(e));b.disabled=false}},
   chPushG:()=>ligarAvisosG(),
   chNova:()=>{const eq=(S.adm.equipe||[]).filter(c=>c.ativo&&GRUPOS[c.grupo]);M={};
     openModal(`<h2>Nova conversa</h2><p class="muted" style="margin-top:0">Escolha com quem falar. A conversa é privada: só a pessoa e a gestão veem.</p>
@@ -4689,20 +4702,20 @@ document.addEventListener('input',e=>{
 });
 document.addEventListener('keydown',e=>{if(e.target.id==='ch-txt'&&e.key==='Enter'&&(e.ctrlKey||e.metaKey||(!('ontouchstart' in window)&&!e.shiftKey))){e.preventDefault();const b=document.querySelector('[data-act=chEnviar]');b&&b.click()}});
 addEventListener('hashchange',()=>{const h=location.hash;
-  if(S.me&&S.view==='home'&&(h==='#chat'||h==='#chat-grupo')){S.play=null;S.ctab='chat';S.chConv=h==='#chat-grupo'?'grupo':'gestao';render();carregarChat()}
+  if(S.me&&S.view==='home'&&(h==='#chat'||h==='#chat-grupo'||h==='#chat-setor')){S.play=null;S.ctab='chat';S.chConv=h==='#chat-grupo'?'grupo':h==='#chat-setor'?'setor':'gestao';render();carregarChat()}
   if(S.view==='admin'&&h.startsWith('#chat-')){S.tab='chat';S.chatSel=h.slice(6);render();carregarChatG()}});
 
 /* ---------------------------- demo ---------------------------- */
 const CHAT_DEMO={msgs:[{id:1,conversa:'grupo',tipo:'g',autorId:'g1',autor:'Ianne Tamara',texto:'Bom dia, equipe! A partir de hoje os avisos ficam aqui no app.',em:new Date(Date.now()-3600e3).toISOString()},{id:2,conversa:'e0',tipo:'g',autorId:'g2',autor:'Jessyca Almeida',texto:'Oi! Qualquer dúvida, pode escrever aqui.',em:new Date(Date.now()-1800e3).toISOString()}],so:false,n:3};
 Object.assign(MOCK,{
-  chatColab:(pin,desde)=>{const me=S.me||{id:'e0',nome:'Ana'};return {soGestao:CHAT_DEMO.so,gestoras:[{id:'g1',nome:'Ianne Tamara',cargo:'Gerente da Unidade',foto:''},{id:'g2',nome:'Jessyca Almeida',cargo:'Gerente de Processos',foto:''}],lidoGrupo:0,lidoPrivado:0,naoGrupo:0,naoPrivado:0,msgs:CHAT_DEMO.msgs.filter(m=>(m.conversa==='grupo'||m.conversa===me.id)&&m.id>(desde||0))}},
-  chatEnviarColab:(pin,conv,t,f)=>{const me=S.me||{id:'e0',nome:'Ana'};const id=++CHAT_DEMO.n;CHAT_DEMO.msgs.push({id,conversa:conv==='grupo'?'grupo':me.id,tipo:'c',autorId:me.id,autor:me.nome,texto:t,foto:f,em:new Date().toISOString()});return {ok:true,id}},
+  chatColab:(pin,desde)=>{const me=S.me||{id:'e0',nome:'Ana'};return {soGestao:CHAT_DEMO.so,gestoras:[{id:'g1',nome:'Ianne Tamara',cargo:'Gerente da Unidade',foto:''},{id:'g2',nome:'Jessyca Almeida',cargo:'Gerente de Processos',foto:''}],setor:(eu()||me).grupo||'coz',soGestaoSetor:!!(CHAT_DEMO.modos||{})['grupo:'+((eu()||me).grupo||'coz')],lidoGrupo:0,lidoPrivado:0,lidoSetor:0,naoGrupo:0,naoPrivado:0,naoSetor:0,msgs:CHAT_DEMO.msgs.filter(m=>(m.conversa==='grupo'||m.conversa===me.id||m.conversa==='grupo:'+((eu()||me).grupo||'coz'))&&m.id>(desde||0))}},
+  chatEnviarColab:(pin,conv,t,f)=>{const me=S.me||{id:'e0',nome:'Ana'};const id=++CHAT_DEMO.n;CHAT_DEMO.msgs.push({id,conversa:conv==='grupo'?'grupo':conv==='setor'?'grupo:'+((eu()||me).grupo||'coz'):me.id,tipo:'c',autorId:me.id,autor:me.nome,texto:t,foto:f,em:new Date().toISOString()});return {ok:true,id}},
   chatLerColab:()=>({ok:true}),chatLerG:()=>({ok:true}),
-  chatLista:()=>{const convs=[...new Set(CHAT_DEMO.msgs.map(m=>m.conversa))];return {soGestao:CHAT_DEMO.so,conversas:convs.map(c=>{const l=CHAT_DEMO.msgs.filter(m=>m.conversa===c);const u=l[l.length-1];return {conversa:c,ultimoId:u.id,ultima:u,nao:l.filter(m=>m.tipo==='c').length,aguardando:u.tipo==='c'}}).sort((a,b)=>b.ultimoId-a.ultimoId)}},
+  chatLista:()=>{const convs=[...new Set(CHAT_DEMO.msgs.map(m=>m.conversa))];return {soGestao:CHAT_DEMO.so,modos:CHAT_DEMO.modos||{},setores:['coz','ofc','lim'],conversas:convs.map(c=>{const l=CHAT_DEMO.msgs.filter(m=>m.conversa===c);const u=l[l.length-1];return {conversa:c,ultimoId:u.id,ultima:u,nao:l.filter(m=>m.tipo==='c').length,aguardando:u.tipo==='c'}}).sort((a,b)=>b.ultimoId-a.ultimoId)}},
   chatMsgsG:(p,conv,desde)=>CHAT_DEMO.msgs.filter(m=>m.conversa===conv&&m.id>(desde||0)),
   chatEnviarG:(p,conv,t,f)=>{const id=++CHAT_DEMO.n;CHAT_DEMO.msgs.push({id,conversa:conv,tipo:'g',autorId:'g1',autor:'Ianne Tamara',texto:t,foto:f,em:new Date().toISOString()});return {ok:true,id}},
   chatApagar:(p,id)=>{const m=CHAT_DEMO.msgs.find(x=>x.id===id);if(m)m.apagada=true;return {ok:true}},
-  chatModo:(p,on)=>{CHAT_DEMO.so=on;return {ok:true}},salvarPushG:()=>({ok:true}),chatAntes:()=>[],
+  chatModo:(p,on,conv)=>{if(conv==='grupo')CHAT_DEMO.so=on;else{CHAT_DEMO.modos=CHAT_DEMO.modos||{};CHAT_DEMO.modos[conv]=on}return {ok:true}},salvarPushG:()=>({ok:true}),chatAntes:()=>[],
 });
 
 
@@ -4854,10 +4867,11 @@ Object.assign(MOCK,{
 let TV_MODE=false;try{TV_MODE=new URLSearchParams(location.search).has('tv')}catch(e){}
 if(TV_MODE){S.view='tv';iniciarTv();tvPintar(true)}
 else{
+restaurarTela();
 if(S.me&&location.hash==='#tarefas')S.ctab='tarefas';
 if(S.me&&location.hash==='#quiz')S.ctab='quiz';
 if(S.me&&location.hash==='#desemp')S.ctab='desemp';
-if(S.me&&(location.hash==='#chat'||location.hash==='#chat-grupo')){S.ctab='chat';S.chConv=location.hash==='#chat-grupo'?'grupo':'gestao'}
+if(S.me&&(location.hash==='#chat'||location.hash==='#chat-grupo'||location.hash==='#chat-setor')){S.ctab='chat';S.chConv=location.hash==='#chat-grupo'?'grupo':location.hash==='#chat-setor'?'setor':'gestao'}
 if(S.view==='admin'&&location.hash.startsWith('#chat-')){S.tab='chat';S.chatSel=location.hash.slice(6)}
 if(S.me&&location.hash.startsWith('#forum')){S.ctab='chat';S.chConv='forum';S.frAbrir=location.hash.slice(7)||null}
 if(S.view==='admin'&&location.hash.startsWith('#forum')){S.tab='forum';S.frAbrir=location.hash.slice(7)||null;S.frFiltroG='todas'}
