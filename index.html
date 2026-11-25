@@ -984,6 +984,11 @@ body.tvmode.nocur{cursor:none}
 .mg-abas button{display:flex;gap:10px;align-items:center;text-align:left;background:var(--sunk);border:2px solid transparent;border-radius:14px;padding:8px 12px;color:var(--ink);cursor:pointer;font:inherit;flex:1 1 220px}
 .mg-abas button.on{border-color:var(--brand);background:var(--surface)}
 .mg-abas b{display:block;font-size:14px}.mg-abas small{display:block;font-size:12px;color:var(--muted)}
+.anon.info{background:var(--accent-soft);color:var(--accent-ink)}
+.mg-it{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:12px;background:var(--sunk)}
+.mg-it blockquote{margin:6px 0 0;padding:8px 12px;border-left:4px solid var(--brand);background:var(--surface);border-radius:0 10px 10px 0;font-size:15px;line-height:1.5}
+.mg-nt{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--muted);margin-top:4px}
+.mg-st i{font-style:normal;color:var(--line)}.mg-st i.on{color:#E0A21B}
 /* Equipe avalia a gestão */
 .anon{display:flex;gap:10px;align-items:flex-start;background:var(--ok-soft);color:var(--ok);border-radius:12px;padding:10px 12px;font-size:14px;margin-bottom:12px}
 .anon .i{flex:none;width:18px;height:18px;margin-top:2px}
@@ -1154,7 +1159,7 @@ const MOCK=(()=>{
   return{
     colegasStatus:pin=>{const c=byPin(pin);db.ac=db.ac||[];return {aberto:true,data:isoDia(),meuGrupo:c.grupo,colegas:db.equipe.filter(x=>x.ativo&&x.id!==c.id).map(({pin,...x})=>x),gestoras:[{id:'g1',nome:'Ianne Tamara',cargo:'Gerente da Unidade',foto:''},{id:'g2',nome:'Jessyca Almeida',cargo:'Gerente de Processos',foto:''}],feitasGestao:(db.ag||[]).filter(a=>a.autorId===c.id&&a.data===isoDia()).map(a=>a.gestorId),feitas:db.ac.filter(a=>a.autorId===c.id&&a.data===isoDia()).map(a=>a.alvoId)}},
     avaliarGestora:(pin,g,n,com)=>{const c=byPin(pin);db.ag=(db.ag||[]).filter(a=>!(a.autorId===c.id&&a.gestorId===g&&a.data===isoDia()));db.ag.push({autorId:c.id,gestorId:g,data:isoDia(),notas:n,comentario:com});return {ok:true}},
-    minhaAvalGestao:(p,dias)=>({minimo:3,eu:'g1',gestoras:[{id:'g1',nome:'Ianne Tamara',cargo:'Gerente da Unidade',foto:'',n:6,total:9,pessoas:5,medias:{comunicacao:4.2,respeito:4.7,apoio:3.8,justica:4.0,exemplo:4.5},mediasAnt:{comunicacao:3.9,respeito:4.7,apoio:4.1,justica:4.0,exemplo:4.3},comentarios:[{semana:isoDia(),texto:'Sempre explica bem quando muda alguma coisa no cardápio.'},{semana:isoDia(),texto:'Poderia passar mais vezes na produção no horário do almoço.'}]},{id:'g2',nome:'Jessyca Almeida',cargo:'Gerente de Processos',foto:'',n:2,total:2}]}),
+    minhaAvalGestao:(p,dias)=>({eu:'g1',gestoras:[{id:'g1',nome:'Ianne Tamara',cargo:'Gerente da Unidade',foto:'',n:2,recados:2,pessoas:2,antigasAnonimas:1,medias:{comunicacao:4.5,respeito:5,apoio:3.5,justica:4,exemplo:4.5},mediasAnt:null,lista:[{autor:'Bia (exemplo)',autorId:'e1',grupo:'coz',data:isoDia(),notas:{comunicacao:4,respeito:5,apoio:3,justica:4,exemplo:4},comentario:'Poderia passar mais vezes na produção no horário do almoço.'},{autor:'Caio (exemplo)',autorId:'e2',grupo:'coz',data:isoDia(),notas:null,comentario:'Sugestão: colocar um bebedouro perto da copa.'}]},{id:'g2',nome:'Jessyca Almeida',cargo:'Gerente de Processos',foto:'',n:0,recados:0,pessoas:0,lista:[]}]}),
     avaliarColega:(pin,alvo,n,com)=>{const c=byPin(pin);db.ac=(db.ac||[]).filter(a=>!(a.autorId===c.id&&a.alvoId===alvo&&a.data===isoDia()));db.ac.push({id:Date.now(),autorId:c.id,alvoId:alvo,data:isoDia(),notas:n,comentario:com||'',em:new Date().toISOString()});return {ok:true}},
     colegasGestao:p=>{chk(p);db.ac=db.ac||[{id:1,autorId:'e1',alvoId:'e0',data:isoDia(),notas:{epi:5,processos:5,educacao:4,cordialidade:5,equipe:4},comentario:'Sempre ajuda no almoço.'},{id:2,autorId:'e2',alvoId:'e0',data:isoDia(),notas:{epi:4,processos:5,educacao:5,cordialidade:5,equipe:5},comentario:''},{id:3,autorId:'e0',alvoId:'e2',data:isoDia(),notas:{epi:2,processos:3,educacao:4,cordialidade:4,equipe:3},comentario:'Esqueceu a touca.'}];return {hoje:isoDia(),abertoHoje:true,liberados:db.lib||[],avals:db.ac}},
     liberarColegas:(p,dia,on)=>{chk(p);db.lib=(db.lib||[]).filter(x=>x!==dia);if(on)db.lib.push(dia);return {ok:true}},
@@ -1183,7 +1188,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261125103036';
+const APP_VERSION='20261125205551';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -3140,10 +3145,10 @@ function cColegas(me){
   if(S.colAlvo&&S.colTipo==='g'){const a=(c.gestoras||[]).find(x=>x.id===S.colAlvo);M.colNotas=M.colNotas||{};
     if(a)return `<div><button class="link" data-act="colVoltar" style="padding:0">${ic('chevL')} Voltar</button></div>
      <section class="panel"><div style="display:flex;gap:12px;align-items:center;margin-bottom:10px">${avatar(a,52)}<div><div class="eyebrow">Avaliando a gestão</div><h2 style="font-size:20px;margin:0">${esc(a.nome)}</h2>${a.cargo?`<small class="muted">${esc(a.cargo)}</small>`:''}</div></div>
-     <div class="anon">${ic('lock')}<span><b>100% anônimo.</b> Ninguém vê quem avaliou, nem a própria gestão. As notas só aparecem para ela juntas com as de outras pessoas.</span></div>
+     <div class="anon info">${ic('eye')}<span><b>A gestão vê quem enviou</b>, para poder conversar e melhorar. <b>Seus colegas não veem.</b></span></div>
      ${CRIT_GES.map(([k,l,h])=>`<div class="crit2"><span><b>${esc(l)}</b><br><small>${esc(h)}</small></span><div class="stars" role="radiogroup" aria-label="${esc(l)}">${[1,2,3,4,5].map(n=>`<button class="${(M.colNotas[k]||0)>=n?'on':''}" data-act="colNota" data-k="${k}" data-n="${n}" aria-label="${n} de 5">${ic('star')}</button>`).join('')}</div></div>`).join('')}
-     <div class="fld"><label for="col-com">O que ela faz bem? O que pode melhorar? <small class="muted">(opcional)</small></label><textarea id="col-com" maxlength="500" style="min-height:90px" placeholder="Ex.: Sempre explica bem as mudanças. Poderia dar mais retorno sobre as avaliações."></textarea></div>
-     <p class="muted" style="font-size:13px;margin:0 0 12px">Seja sincero e respeitoso. Sua opinião ajuda a gestão a melhorar.</p>
+     <div class="fld"><label for="col-com">Sugestões e recados para ${esc(String(a.nome).split(' ')[0])}</label><textarea id="col-com" maxlength="800" style="min-height:100px" placeholder="O que ela faz bem? O que pode melhorar? Tem alguma sugestão para a unidade?"></textarea></div>
+     <p class="muted" style="font-size:13px;margin:0 0 12px">Pode dar as estrelas, deixar só um recado, ou os dois. Seja sincero e respeitoso: sua opinião ajuda a gestão a melhorar.</p>
      <button class="btn" style="width:100%" data-act="colEnviar">Enviar avaliação</button></section>`}
   if(S.colAlvo){const a=c.colegas.find(x=>x.id===S.colAlvo);M.colNotas=M.colNotas||{};
     return `<div><button class="link" data-act="colVoltar" style="padding:0">${ic('chevL')} Colegas</button></div>
@@ -3153,9 +3158,9 @@ function cColegas(me){
      <p class="muted" style="font-size:13px;margin:0 0 12px">${ic('eye')} <b>Seus colegas não veem quem avaliou.</b> A gestão vê, para acompanhar a equipe. Seja justo e respeitoso.</p>
      <button class="btn" style="width:100%" data-act="colEnviar">Enviar avaliação</button></section>`}
   const f=new Set(c.feitas);
-  return volta+`<section class="stack" style="gap:6px"><h1 style="font-size:24px">Avalie seus colegas</h1><p class="muted" style="margin:0">Você pode avaliar <b>sua gestão</b> e <b>qualquer colega da equipe</b>, de todos os grupos. Dê de 1 a 5 estrelas em EPI, processos, educação, cordialidade e trabalho em equipe. Leva 1 minuto por pessoa. Não vale pontos no ranking: serve para a gestão acompanhar a equipe.</p></section>
-   ${(c.gestoras||[]).length?(()=>{const fg=new Set(c.feitasGestao||[]);return `<section class="stack" style="gap:8px"><h2 style="font-size:17px;margin:4px 0 0">Sua gestão <span class="chip ok" style="font-size:12px;vertical-align:2px">${ic('lock')} 100% anônimo</span></h2>
-     <div class="colgrid">${c.gestoras.map(x=>`<button class="colrow" data-act="colAbrirG" data-id="${esc(x.id)}">${avatar(x,44)}<span class="t"><b>${esc(x.nome)}</b><br><small>${fg.has(x.id)?'Avaliada hoje · toque para mudar':esc(x.cargo||'Gestão')}</small></span>${fg.has(x.id)?`<span class="chip ok">${ic('check')} Feito</span>`:ic('chevR')}</button>`).join('')}</div></section>`})():''}
+  return volta+`<section class="stack" style="gap:6px"><h1 style="font-size:24px">Avalie seus colegas</h1><p class="muted" style="margin:0">Você pode avaliar e deixar sugestões para <b>sua gestão</b>, e avaliar <b>qualquer colega da equipe</b>, de todos os grupos. Seus colegas nunca veem quem avaliou. Dê de 1 a 5 estrelas em EPI, processos, educação, cordialidade e trabalho em equipe. Leva 1 minuto por pessoa. Não vale pontos no ranking: serve para a gestão acompanhar a equipe.</p></section>
+   ${(c.gestoras||[]).length?(()=>{const fg=new Set(c.feitasGestao||[]);return `<section class="stack" style="gap:8px"><h2 style="font-size:17px;margin:4px 0 0">Sua gestão <span class="chip off" style="font-size:12px;vertical-align:2px">${ic('message')} avaliação e recados</span></h2>
+     <div class="colgrid">${c.gestoras.map(x=>`<button class="colrow" data-act="colAbrirG" data-id="${esc(x.id)}">${avatar(x,44)}<span class="t"><b>${esc(x.nome)}</b><br><small>${fg.has(x.id)?'Enviado hoje · toque para mudar':esc(x.cargo||'Gestão')+' · avaliar ou deixar recado'}</small></span>${fg.has(x.id)?`<span class="chip ok">${ic('check')} Feito</span>`:ic('chevR')}</button>`).join('')}</div></section>`})():''}
    ${c.colegas.length>8?`<div class="fld" style="margin:0"><input id="col-busca" type="search" placeholder="Buscar colega pelo nome" value="${esc(S.colBusca||'')}" autocomplete="off"></div>`:''}
    ${(()=>{const meu=c.meuGrupo||me.grupo,b=String(S.colBusca||'').trim().toLowerCase(),ls=c.colegas.filter(x=>!b||String(x.nome).toLowerCase().includes(b));
      const gs=[meu,...ORDEM_G.filter(g=>g!==meu)],outros=ls.filter(x=>!gs.includes(x.grupo));
@@ -3168,11 +3173,15 @@ Object.assign(A,{
   colAbrirG:d=>{S.colAlvo=d.id;S.colTipo='g';M={colNotas:{}};render();scrollTo(0,0)},
   colVoltar:()=>{S.colAlvo=null;render();scrollTo(0,0)},
   colNota:d=>{M.colNotas=M.colNotas||{};M.colNotas[d.k]=+d.n;document.querySelectorAll(`[data-act=colNota][data-k=${d.k}]`).forEach(b=>b.classList.toggle('on',+b.dataset.n<=+d.n))},
-  colEnviar:async(d,b)=>{const g=S.colTipo==='g',n=M.colNotas||{};const falta=(g?CRIT_GES:CRIT_COL).filter(([k])=>!n[k]);if(falta.length){toast('Dê estrelas em: '+falta.map(x=>x[1]).join(', '));return}
+  colEnviar:async(d,b)=>{const g=S.colTipo==='g',n=M.colNotas||{};const falta=(g?CRIT_GES:CRIT_COL).filter(([k])=>!n[k]);
+    if(g){const com=($('#col-com').value||'').trim(),dadas=CRIT_GES.length-falta.length;
+      if(!dadas&&com.length<5){toast('Dê as estrelas ou escreva um recado.');return}
+      if(dadas&&falta.length){toast('Dê estrelas em: '+falta.map(x=>x[1]).join(', ')+'. Ou tire as estrelas e deixe só o recado.');return}}
+    else if(falta.length){toast('Dê estrelas em: '+falta.map(x=>x[1]).join(', '));return}
     busyBtn(b,true,'Enviando…');try{
       if(g){await call('avaliarGestora',S.me.pin,S.colAlvo,n,$('#col-com').value.trim());S.col.feitasGestao=[...new Set([...(S.col.feitasGestao||[]),S.colAlvo])]}
       else{await call('avaliarColega',S.me.pin,S.colAlvo,n,$('#col-com').value.trim());S.col.feitas=[...new Set([...S.col.feitas,S.colAlvo])]}
-      S.colAlvo=null;S.colTipo=null;M={};render();scrollTo(0,0);toast(g?'Avaliação enviada de forma anônima. Obrigado!':'Avaliação enviada. Obrigado!')}catch(e){toast(msg(e));busyBtn(b,false,'Tentar de novo')}}
+      S.colAlvo=null;S.colTipo=null;M={};render();scrollTo(0,0);toast(g?'Enviado para a gestão. Obrigado!':'Avaliação enviada. Obrigado!')}catch(e){toast(msg(e));busyBtn(b,false,'Tentar de novo')}}
 });
 document.addEventListener('input',e=>{if(e.target.id==='col-busca'){S.colBusca=e.target.value;const p=e.target.selectionStart;render();const i=$('#col-busca');if(i){i.focus();try{i.setSelectionRange(p,p)}catch(_){}}}});
 /* gestão */
@@ -3182,25 +3191,31 @@ function minhaAvalHtml(){
   const R=S.mg;if(!R){if(!S.mgErr)carregarMinhaG();return S.mgErr?'':`<section class="panel mg">${carregando('Abrindo a avaliação da gestão…')}</section>`}
   const gs=R.gestoras||[];if(!gs.length)return '';
   if(!S.mgSel||!gs.some(g=>g.id===S.mgSel))S.mgSel=gs[0].id;
-  const m=gs.find(g=>g.id===S.mgSel),eu=m.id===R.eu,nome1=String(m.nome).split(' ')[0];
+  const m=gs.find(g=>g.id===S.mgSel),eu=m.id===R.eu,nome1=String(m.nome).split(' ')[0],eqm=(S.adm&&S.adm.equipe)||[];
   const f1=v=>Number(v).toFixed(1).replace('.',',');
+  const mediaG=g=>g.medias?CRIT_GES.reduce((s,[k])=>s+Number(g.medias[k]||0),0)/CRIT_GES.length:null;
   const seg=`<div class="seg" style="grid-template-columns:repeat(3,1fr);max-width:360px">${[[30,'30 dias'],[90,'90 dias'],[365,'1 ano']].map(([n,l])=>`<button class="${S.mgDias===n?'on':''}" data-act="mgDias" data-k="${n}">${l}</button>`).join('')}</div>`;
-  const abas=gs.length>1?`<div class="mg-abas">${gs.map(g=>`<button class="${g.id===m.id?'on':''}" data-act="mgSel" data-id="${esc(g.id)}">${avatar(g,32)}<span><b>${esc(g.nome)}${g.id===R.eu?' (você)':''}</b><small>${esc(g.cargo||'Gestão')} · ${g.n>=R.minimo?f1(CRIT_GES.reduce((s,[k])=>s+Number((g.medias||{})[k]||0),0)/CRIT_GES.length)+' / 5':g.n+' aval.'}</small></span></button>`).join('')}</div>`:'';
-  const head=`<div class="mg-h"><span class="avi">${ic('users')}</span><div><b>Como a equipe avalia a gestão</b><small class="muted">Comunicação, respeito, apoio, justiça e exemplo · 100% anônimo · as gestoras veem a avaliação de todas</small></div></div>`;
-  if(m.n<R.minimo)return `<section class="panel mg stack" style="gap:12px">${head}${abas}${seg}<p style="margin:0"><b>${esc(eu?'Você':m.nome)}</b>: ${m.n?`${m.n} avaliaç${m.n>1?'ões':'ão'} nos últimos ${S.mgDias} dias.`:`nenhuma avaliação nos últimos ${S.mgDias} dias.`} As notas e comentários aparecem a partir de <b>${R.minimo} avaliações</b>, para que ninguém seja identificado.</p>
-    <p class="muted" style="margin:0;font-size:13px">A avaliação abre para a equipe junto com a dos colegas: aos fins de semana e nos dias que vocês liberarem.</p></section>`;
-  const geral=CRIT_GES.reduce((s,[k])=>s+Number(m.medias[k]||0),0)/CRIT_GES.length,ant=m.mediasAnt;
-  const cor=v=>v>=4?'ok':v>=3?'gold':'bad';
-  const semanas={};(m.comentarios||[]).forEach(c=>(semanas[c.semana]=semanas[c.semana]||[]).push(c.texto));
+  const abas=gs.length>1?`<div class="mg-abas">${gs.map(g=>`<button class="${g.id===m.id?'on':''}" data-act="mgSel" data-id="${esc(g.id)}">${avatar(g,32)}<span><b>${esc(g.nome)}${g.id===R.eu?' (você)':''}</b><small>${esc(g.cargo||'Gestão')} · ${g.n?f1(mediaG(g))+' / 5 · ':''}${g.recados} recado${g.recados===1?'':'s'}</small></span></button>`).join('')}</div>`:'';
+  const head=`<div class="mg-h"><span class="avi">${ic('users')}</span><div><b>A equipe avalia a gestão</b><small class="muted">Estrelas, sugestões e recados · a gestão vê quem enviou, os colegas não</small></div></div>`;
+  const ant=m.mediasAnt,geral=mediaG(m),cor=v=>v>=4?'ok':v>=3?'gold':'bad';
+  const estrelas=v=>`<span class="mg-st">${[1,2,3,4,5].map(i=>`<i class="${i<=v?'on':''}">★</i>`).join('')}</span>`;
+  const lista=m.lista||[];
   return `<section class="panel mg stack" style="gap:14px">${head}${abas}${seg}
-    <div class="mg-top"><div class="fbring">${anelHtml(Math.round(geral/5*100),cor(geral))}</div><div><b class="num" style="font-family:var(--display);font-size:30px">${f1(geral)} <small style="font-size:16px" class="muted">/ 5</small></b><small class="muted" style="display:block">${esc(eu?'Sua média geral':'Média geral de '+nome1)} · ${m.n} avaliações de ${m.pessoas} pessoa${m.pessoas>1?'s':''} nos últimos ${S.mgDias} dias</small></div></div>
+    ${m.n?`<div class="mg-top"><div class="fbring">${anelHtml(Math.round(geral/5*100),cor(geral))}</div><div><b class="num" style="font-family:var(--display);font-size:30px">${f1(geral)} <small style="font-size:16px" class="muted">/ 5</small></b><small class="muted" style="display:block">${esc(eu?'Sua média geral':'Média geral de '+nome1)} · ${m.n} avaliaç${m.n>1?'ões':'ão'} de ${m.pessoas} pessoa${m.pessoas>1?'s':''} nos últimos ${S.mgDias} dias</small></div></div>
     <div class="stack" style="gap:10px">${CRIT_GES.map(([k,l,h])=>{const v=Number(m.medias[k]||0),d=ant&&ant[k]!=null?v-Number(ant[k]):null;
       return `<div><div class="qprog" style="margin-bottom:4px"><span><b>${esc(l)}</b> <small class="muted">${esc(h)}</small></span><span class="num"><b>${f1(v)}</b>${d!=null&&Math.abs(d)>=0.1?` <small class="tend ${d>0?'up':'down'}">${d>0?'▲':'▼'} ${f1(Math.abs(d))}</small>`:''}</span></div><div class="fbar"><i class="${v>=4?'ok':v>=3?'mid':'bad'}" style="width:${v/5*100}%"></i></div></div>`}).join('')}</div>
-    ${ant?`<p class="muted" style="margin:0;font-size:13px">▲▼ comparação com os ${S.mgDias} dias anteriores.</p>`:''}
-    <div><h3 style="font-size:16px;margin:0 0 8px">O que a equipe escreveu${eu?'':' para '+esc(nome1)}</h3>
-      ${Object.keys(semanas).length?Object.entries(semanas).map(([w,ts])=>`<div class="mg-sem"><span class="eyebrow">Semana de ${esc(dataBel(janelaSem(w).abre))}</span>${ts.map(t=>`<blockquote>“${esc(t)}”</blockquote>`).join('')}</div>`).join(''):'<p class="muted" style="margin:0">Ninguém deixou comentário neste período.</p>'}</div>
-    <div class="anon">${ic('lock')}<span>Ninguém, nem a gestão, sabe quem escreveu. Os comentários aparecem misturados dentro de cada semana. Use para melhorar, sem tentar descobrir quem foi.</span></div></section>`;
+    ${ant?`<p class="muted" style="margin:0;font-size:13px">▲▼ comparação com os ${S.mgDias} dias anteriores.</p>`:''}`
+    :`<p style="margin:0">${esc(eu?'Você ainda não recebeu':nome1+' ainda não recebeu')} avaliações com estrelas nos últimos ${S.mgDias} dias.</p>`}
+    <div><h3 style="font-size:16px;margin:0 0 8px">Quem enviou e o que disse (${lista.length})</h3>
+      ${lista.length?`<div class="stack" style="gap:8px">${lista.map(x=>{const c=eqm.find(e=>e.id===x.autorId)||{nome:x.autor,foto:x.foto};
+        return `<div class="mg-it">${avatar(c,36)}<div style="flex:1;min-width:0"><div><b>${esc(x.autor||'—')}</b> <small class="muted">${x.grupo&&GRUPOS[x.grupo]?esc(GRUPOS[x.grupo].nome)+' · ':''}${esc(diaLabel(x.data))}</small></div>
+          ${x.notas?`<div class="mg-nt">${CRIT_GES.map(([k,l])=>`<span>${esc({comunicacao:'Comunicação',respeito:'Respeito',apoio:'Apoio',justica:'Justiça',exemplo:'Exemplo'}[k]||l)} ${estrelas(x.notas[k]||0)}</span>`).join('')}</div>`:'<small class="chip off" style="margin-top:4px">Só recado</small>'}
+          ${x.comentario?`<blockquote>“${esc(x.comentario)}”</blockquote>`:''}</div></div>`}).join('')}</div>`
+      :'<p class="muted" style="margin:0">Nada enviado neste período.</p>'}
+      ${m.antigasAnonimas?`<p class="muted" style="margin:8px 0 0;font-size:13px">${ic('lock')} ${m.antigasAnonimas} avaliaç${m.antigasAnonimas>1?'ões foram enviadas':'ão foi enviada'} quando a avaliação ainda era 100% anônima. Para respeitar o que foi prometido, ${m.antigasAnonimas>1?'elas não aparecem':'ela não aparece'} aqui.</p>`:''}</div>
+    <div class="anon info">${ic('eye')}<span>A gestão vê quem enviou cada avaliação e recado. Entre os colegas continua anônimo. Use para conversar e melhorar, sem expor ninguém para a equipe.</span></div></section>`;
 }
+
 
 async function carregarColegasG(){const ate=isoDia(),de=somaDias(ate,-(S.colDias-1));try{S.colG=await call('colegasGestao',adminPin,de,ate);S.colGErr=''}catch(e){S.colGErr=msg(e)}if(S.view==='admin'&&S.tab==='colegas'&&!$('#modal').innerHTML)render()}
 function aColegas(){
@@ -3215,7 +3230,7 @@ function aColegas(){
       return `<div class="panel" style="padding:12px 14px"><div style="display:flex;align-items:center;gap:12px">${avatar(c,40)}<span style="flex:1;min-width:0"><b>${esc(c.nome)}</b><br><small class="muted">${ls.length?`${ls.length} avaliaç${ls.length>1?'ões':'ão'} de colegas`:'Nenhuma avaliação no período'}</small></span>${ls.length?`<span class="chip ${md(ls,'epi')+md(ls,'processos')+md(ls,'educacao')+md(ls,'cordialidade')+md(ls,'equipe')>=20?'ok':'gold'} num">${f1(CRIT_COL.reduce((s,[k])=>s+md(ls,k),0)/5)} / 5</span>`:''}</div>
        ${ls.length?`<div class="medias">${CRIT_COL.map(([k,l])=>`<div class="${md(ls,k)<3?'bx':''}"><b class="num">${f1(md(ls,k))}</b>${esc(l.split(' ')[0]==='Uso'?'EPI':l.split(' ')[0]==='Segue'?'Processos':l.split(' ')[0]==='Trabalho'?'Equipe':l.split(' ')[0])}</div>`).join('')}</div>
        <details style="margin-top:8px"><summary class="link" style="cursor:pointer;font-weight:800">Ver quem avaliou</summary><div class="avlist">${ls.map(a=>`<div class="avc"><b>${esc(nome(a.autorId))}</b>${(()=>{const au=eq.find(x=>x.id===a.autorId);return au&&GRUPOS[au.grupo]&&au.grupo!==c.grupo?` <small class="chip off">${esc(GRUPOS[au.grupo].nome)}</small>`:''})()} · <span class="muted">${esc(diaLabel(a.data))}</span><br>${CRIT_COL.map(([k,l])=>`${esc(l.split(' ').slice(-1)[0]==='EPI'?'EPI':l)}: <b class="num">${a.notas[k]}</b>`).join(' · ')}${a.comentario?`<br><i>“${esc(a.comentario)}”</i>`:''}</div>`).join('')}</div></details>`:''}</div>`}).join('')}</section>`};
-  return `<section class="stack" style="gap:6px"><h2 style="font-size:20px">${ic('users')} Colegas avaliam</h2><p class="muted" style="margin:0">A equipe avalia <b>qualquer colega</b>, de todos os grupos, e também <b>a gestão</b>, com 1 a 5 estrelas. Entre colegas é anônimo, e aqui a gestão vê quem avaliou. A avaliação da gestão é <b>100% anônima</b> para todos. Não vale pontos no ranking.</p></section>
+  return `<section class="stack" style="gap:6px"><h2 style="font-size:20px">${ic('users')} Colegas avaliam</h2><p class="muted" style="margin:0">A equipe avalia <b>qualquer colega</b>, de todos os grupos, e também <b>a gestão</b>, com 1 a 5 estrelas. Entre colegas é anônimo, e aqui a gestão vê quem avaliou. Na avaliação da gestão, vocês veem quem enviou cada nota e recado, e os colegas não veem. Não vale pontos no ranking.</p></section>
    ${minhaAvalHtml()}
    <section class="panel" style="display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap"><div><b>${fds?'Hoje é fim de semana: a avaliação já está aberta.':lib?'Avaliação liberada hoje.':'Hoje a avaliação está fechada.'}</b><br><small class="muted">${fds?'Abre sozinha aos sábados e domingos.':'Vai ficar fora hoje? Libere para a equipe avaliar.'}</small></div>
      ${fds?'':`<button class="switch ${lib?'on':''}" data-act="colLiberar" role="switch" aria-checked="${lib}" aria-label="Liberar avaliação hoje"></button>`}</section>
