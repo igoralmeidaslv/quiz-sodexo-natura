@@ -1000,6 +1000,105 @@ body.tvmode.nocur{cursor:none}
 .mg-sem{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
 .mg-sem blockquote{margin:0;padding:10px 14px;border-left:4px solid var(--brand);background:var(--sunk);border-radius:0 12px 12px 0;font-size:15px;line-height:1.5}
 h2 .chip .i{width:12px;height:12px;vertical-align:-1px}
+
+/* Chat */
+.ch-top{position:relative}
+.ch-badge{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--bad);color:#fff;font-size:11px;font-weight:900;line-height:1}
+.ch-top .ch-badge{position:absolute;top:-4px;right:-4px;border:2px solid var(--surface)}
+.mnav button{position:relative}
+.mnb{position:absolute;top:4px;right:calc(50% - 26px)}
+.ch-main{padding-bottom:0!important}
+.ch-wrap{display:flex;flex-direction:column;gap:10px;height:calc(100dvh - 190px - env(safe-area-inset-bottom));min-height:380px}
+.ch-abas button{display:flex;align-items:center;justify-content:center;gap:6px}
+.ch-abas .i{width:16px;height:16px}
+.ch-info{display:flex;gap:10px;align-items:center;font-size:13px;line-height:1.4;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.ch-info > .i{flex:none;width:18px;height:18px;color:var(--brand)}
+.ch-info b{color:var(--ink)}
+.ch-av{display:flex;flex:none}.ch-av > *{margin-left:-8px;border:2px solid var(--surface);border-radius:50%}.ch-av > *:first-child{margin-left:0}
+.ch-lista{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:2px;padding:8px 4px;background:var(--sunk);border-radius:16px;overscroll-behavior:contain}
+.ch-dia{text-align:center;margin:10px 0 6px}.ch-dia span{font-size:12px;font-weight:800;color:var(--muted);background:var(--surface);border-radius:999px;padding:4px 10px}
+.ch-m{display:flex;flex-direction:column;align-items:flex-start;max-width:82%;margin-top:6px}
+.ch-m.cont{margin-top:1px}
+.ch-m.eu{align-self:flex-end;align-items:flex-end}
+.ch-n{font-size:12px;font-weight:800;color:var(--accent-ink);margin:0 10px 2px}
+.ch-tag{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;background:var(--brand);color:var(--brand-ink);border-radius:6px;padding:1px 5px;vertical-align:1px}
+.ch-b{position:relative;background:var(--surface);border-radius:16px 16px 16px 4px;padding:8px 12px 6px;box-shadow:0 1px 1px rgba(20,30,90,.06);min-width:70px}
+.ch-m.cont .ch-b{border-radius:16px 16px 16px 16px}
+.ch-m.eu .ch-b{background:var(--brand);color:var(--brand-ink);border-radius:16px 16px 4px 16px}
+.ch-m.g:not(.eu) .ch-b{background:var(--accent-soft)}
+.ch-t{font-size:15px;line-height:1.45;white-space:normal;overflow-wrap:anywhere}
+.ch-m.eu .ch-t a{color:inherit}
+.ch-h{display:flex;justify-content:flex-end;align-items:center;gap:6px;font-size:11px;opacity:.7;margin-top:2px}
+.ch-del{background:none;border:0;padding:0;color:inherit;cursor:pointer;display:grid;opacity:.8}
+.ch-del .i{width:13px;height:13px}
+.ch-foto{display:block;background:none;border:0;padding:0;margin:-2px -6px 6px;cursor:zoom-in}
+.ch-foto img{display:block;max-width:240px;max-height:260px;border-radius:12px;object-fit:cover}
+.ch-mais{align-self:center;margin:4px 0 8px}
+.ch-vazio{margin:auto;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--muted);text-align:center;font-size:14px;padding:24px}
+.ch-vazio .i{width:34px;height:34px;color:var(--brand);opacity:.6}
+.ch-comp{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:6px}
+.ch-comp.off{display:flex;gap:8px;align-items:center;padding:12px 14px;color:var(--muted);font-size:14px}
+.ch-comp.off .i{flex:none;width:18px;height:18px}
+.ch-row{display:flex;align-items:flex-end;gap:6px}
+.ch-row textarea{flex:1;resize:none;border:0;outline:0;background:transparent;font:inherit;font-size:16px;line-height:1.4;padding:9px 6px;max-height:140px;color:var(--ink);min-height:42px}
+.ch-ico,.ch-env{flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;cursor:pointer;border:0}
+.ch-ico{background:var(--sunk);color:var(--brand)}
+.ch-env{background:var(--brand);color:var(--brand-ink)}
+.ch-ico .i,.ch-env .i{width:20px;height:20px}
+.ch-pv{display:flex;gap:10px;align-items:center;padding:6px;font-size:13px;color:var(--muted)}
+.ch-pv img{width:52px;height:52px;object-fit:cover;border-radius:10px}
+/* Fórum de dúvidas */
+.fr-nova{width:100%;justify-content:center}
+.fr-busca{width:100%;height:44px;border:1px solid var(--line);border-radius:12px;padding:0 14px;background:var(--surface);color:var(--ink);font:inherit;font-size:16px}
+.fr-filtros button{font-size:13px;padding-left:4px;padding-right:4px}
+.fr-card{gap:8px}
+.fr-card.fix{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.fr-card.fr-luz{animation:frluz 2.4s ease}
+@keyframes frluz{0%,40%{box-shadow:0 0 0 3px var(--brand)}100%{box-shadow:none}}
+.fr-top{display:flex;gap:6px;flex-wrap:wrap}
+.fr-top:empty{display:none}
+.fr-tit{margin:0;font-size:17px;line-height:1.35}
+.fr-txt{font-size:15px;line-height:1.5;color:var(--ink);overflow-wrap:anywhere}
+.fr-resp{background:var(--ok-soft);border-radius:12px;padding:10px 12px}
+.fr-rh{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:13px;margin-bottom:4px}
+.fr-rh > .i{width:16px;height:16px;color:var(--ok)}
+.fr-rh small{color:var(--muted);margin-left:auto}
+.fr-rt{font-size:15px;line-height:1.5;overflow-wrap:anywhere}
+.fr-espera{display:flex;gap:6px;align-items:center;font-size:13px;font-weight:700;color:var(--muted);background:var(--sunk);border-radius:10px;padding:8px 10px}
+.fr-espera .i{width:16px;height:16px}
+.fr-acts{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.fr-acts .link{display:inline-flex;align-items:center;gap:4px;font-size:13px;padding:6px 0}
+.fr-acts .link .i{width:15px;height:15px}
+.fr-acts .link.danger{color:var(--bad)}
+.fr-eu{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 14px;font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.fr-eu .i{width:16px;height:16px}
+.fr-eu.on{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.fr-autor{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.fr-rform{display:flex;gap:8px;align-items:flex-end}
+.fr-rform textarea{flex:1;min-width:0;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font:inherit;font-size:15px;resize:vertical;background:var(--surface);color:var(--ink)}
+.fr-g{display:flex;flex-direction:column;gap:12px;max-width:820px}
+.fr-gtop{display:flex;gap:10px;flex-wrap:wrap}.fr-gtop .fr-busca{flex:1;min-width:220px}.fr-gtop .seg{flex:1;min-width:300px}
+@media (max-width:560px){.fr-rform{flex-direction:column;align-items:stretch}}
+/* gestão */
+.chg{display:grid;grid-template-columns:340px 1fr;gap:14px;height:calc(100dvh - 250px);min-height:460px}
+.chg-l{display:flex;flex-direction:column;gap:8px;min-height:0}
+.chg-top{display:flex;gap:8px}
+.chg-top input{flex:1;min-width:0;height:40px;border:1px solid var(--line);border-radius:12px;padding:0 12px;background:var(--surface);color:var(--ink);font:inherit}
+.chg-push{display:flex;gap:8px;align-items:center;text-align:left;border:1px dashed var(--brand);background:var(--accent-soft);color:var(--accent-ink);border-radius:12px;padding:8px 12px;font:inherit;font-size:13px;font-weight:700;cursor:pointer}
+.chg-push .i{flex:none;width:16px;height:16px}
+#chg-convs{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:4px;min-height:0}
+.chg-row{display:flex;gap:10px;align-items:center;text-align:left;width:100%;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px 10px;color:var(--ink);font:inherit;cursor:pointer}
+.chg-row.on{border-color:var(--brand);box-shadow:0 0 0 1px var(--brand)}
+.chg-row .t{flex:1;min-width:0}.chg-row .t b{display:block;font-size:14px}.chg-row .t small{display:block;color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chg-r{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex:none}.chg-r small{font-size:11px;color:var(--muted)}
+.chg-gi{flex:none;width:42px;height:42px;border-radius:50%;background:var(--brand);color:var(--brand-ink);display:grid;place-items:center}.chg-gi .i{width:20px;height:20px}
+.chg-sep{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:8px 4px 2px}
+.chg-t{display:flex;flex-direction:column;gap:8px;min-height:0}
+.chg-t.vazio{background:var(--sunk);border-radius:16px}
+.chg-h{display:flex;gap:10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:8px 12px}
+.chg-modo{display:flex;gap:8px;align-items:center;font-size:13px;font-weight:700;flex:none}
+.so-m{display:none!important}
+@media (max-width:760px){.chg{grid-template-columns:1fr;height:calc(100dvh - 230px)}.esconde-m{display:none!important}.so-m{display:grid!important}.chg-modo span{display:none}}
 </style>
 
 <div id="app"></div>
@@ -1064,6 +1163,8 @@ const ICO={film:['<rect x="2" y="6" width="14" height="12" rx="2"/>','M16 13l5.2
   refresh:['M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8','M21 3v5h-5','M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16','M8 16H3v5'],
   maximize:['M8 3H5a2 2 0 0 0-2 2v3','M21 8V5a2 2 0 0 0-2-2h-3','M3 16v3a2 2 0 0 0 2 2h3','M16 21h3a2 2 0 0 0 2-2v-3'],
   plus:['M12 5v14','M5 12h14'],
+  help:['<circle cx="12" cy="12" r="10"/>','M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3','M12 17h.01'],
+  send:['M22 2 11 13','M22 2 15 22l-4-9-9-4z'],
   fileText:['M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z','M14 2v6h6','M8 13h8','M8 17h8','M8 9h2'],
   present:['<rect x="2" y="3" width="20" height="13" rx="2"/>','M12 16v5','M8 21h8','M7 12l3-3 2 2 4-4'],
   book:['M4 19.5V5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2.5','M6 21h14','M9 7h7','M9 11h5'],
@@ -1188,7 +1289,7 @@ const MOCK=(()=>{
 })();
 
 /* ---------- App (PWA) ---------- */
-const APP_VERSION='20261125205551';
+const APP_VERSION='20261125211954';
 let instalarEvt=null;
 const STANDALONE=(()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}})();
 const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
@@ -1328,8 +1429,9 @@ function vHome(){
   if(!GRUPOS[me.grupo])return topbar('Unidade Natura',sair)+`<main class="wrap"><div class="empty">Olá, ${esc(me.nome)}! Seu cadastro ainda está sem grupo. Peça para a gestão escolher seu grupo na aba Equipe.</div></main>`;
   let body;
   if(S.play)return vPlay();
-  if(S.ctab==='tarefas'&&me.grupo==='lim')body=cTarefas(me);else if(S.ctab==='colegas')body=cColegas(me);else if(S.ctab==='cursos')body=cCursos(me);else if(S.ctab==='escala')body=cEscala(me);else if(S.ctab==='quiz')body=cQuiz(me);else if(S.ctab==='ranking')body=cRanking(me);else if(S.ctab==='hist')body=`<div style="display:flex;justify-content:space-between;align-items:center"><button class="link" data-act="ctab" data-k="ranking" style="padding:0">${ic('chevL')} Ranking</button></div>`+cHist(me);else if(S.ctab==='desemp'){body=cDesemp(me);marcarRecadosLidos()}else body=cHoje(me);
-  return topbar(GRUPOS[me.grupo]?GRUPOS[me.grupo].nome:'Unidade Natura',sair)+`<main class="wrap stack">${body}</main>`+footer()+bnav();
+  if(S.ctab==='chat')body=cChat(me);else if(S.ctab==='tarefas'&&me.grupo==='lim')body=cTarefas(me);else if(S.ctab==='colegas')body=cColegas(me);else if(S.ctab==='cursos')body=cCursos(me);else if(S.ctab==='escala')body=cEscala(me);else if(S.ctab==='quiz')body=cQuiz(me);else if(S.ctab==='ranking')body=cRanking(me);else if(S.ctab==='hist')body=`<div style="display:flex;justify-content:space-between;align-items:center"><button class="link" data-act="ctab" data-k="ranking" style="padding:0">${ic('chevL')} Ranking</button></div>`+cHist(me);else if(S.ctab==='desemp'){body=cDesemp(me);marcarRecadosLidos()}else body=cHoje(me);
+  const nChat=chNao(),chatB=`<button class="ghost icob ch-top ${S.ctab==='chat'?'on':''}" data-act="ctab" data-k="chat" aria-label="Chat${nChat?', '+nChat+' mensagens novas':''}" title="Chat">${ic('message')}${nChat?`<span class="ch-badge num">${nChat>9?'9+':nChat}</span>`:''}</button>`;
+  return topbar(GRUPOS[me.grupo]?GRUPOS[me.grupo].nome:'Unidade Natura',`<span class="topr">${chatB}${sair}</span>`)+`<main class="wrap stack ${S.ctab==='chat'?'ch-main':''}">${body}</main>`+(S.ctab==='chat'?'':footer())+bnav();
 }
 function scoreCard(me){
   const ano=anoKey(),rk=ranking(S.pub,ano,me.grupo),mine=rk.find(x=>x.c.id===me.id)||{total:0,aval:0,quiz:0,pos:'-'};
@@ -1355,6 +1457,7 @@ function cHoje(me){
   return `<div style="display:flex;align-items:center;gap:12px">${avatar(me,52)}<div style="flex:1;min-width:0"><div class="eyebrow">Olá,</div><h1 style="font-size:24px">${esc(String(me.nome).split(' ')[0])}</h1></div><span class="gchip">${esc(GRUPOS[me.grupo].um)}</span></div>
     ${destaqueHojeCard(me)}
     ${colegasCard()}
+    ${chatCard()}
     ${recadosCard()}
     ${scoreCard(me)}
     ${fbCard(me)}
@@ -1425,10 +1528,10 @@ function cHist(me){
 /* ---------- Telas: gestão ---------- */
 function vAdmin(){
   const grp=grupoDaAba(S.tab);
-  const body=!S.adm?(S.status==='err'?`<div class="notice">Sem conexão com o servidor agora. Você continua logada. ${esc(S.errMsg)} <button class="link" data-act="reloadAdm">Tentar de novo</button></div>`:carregando('Abrindo a gestão…')):S.tab==='avaliar'?aAvaliar():S.tab==='recados'?aRecados():S.tab==='colegas'?aColegas():S.tab==='tv'?aTv():S.tab==='limpeza'?aLimpeza():S.tab==='cardapio'?aCardapio():S.tab==='ranking'?aRanking():S.tab==='quiz'?aQuiz():S.tab==='base'?aBase():S.tab==='treinos'?aTreinos():S.tab==='escala'?aEscala():S.tab==='acessos'?aAcessos():S.tab==='equipe'?aEquipe():S.tab==='premios'?aPremios():aAjustes();
+  const body=!S.adm?(S.status==='err'?`<div class="notice">Sem conexão com o servidor agora. Você continua logada. ${esc(S.errMsg)} <button class="link" data-act="reloadAdm">Tentar de novo</button></div>`:carregando('Abrindo a gestão…')):S.tab==='chat'?aChat():S.tab==='forum'?aForum():S.tab==='avaliar'?aAvaliar():S.tab==='recados'?aRecados():S.tab==='colegas'?aColegas():S.tab==='tv'?aTv():S.tab==='limpeza'?aLimpeza():S.tab==='cardapio'?aCardapio():S.tab==='ranking'?aRanking():S.tab==='quiz'?aQuiz():S.tab==='base'?aBase():S.tab==='treinos'?aTreinos():S.tab==='escala'?aEscala():S.tab==='acessos'?aAcessos():S.tab==='equipe'?aEquipe():S.tab==='premios'?aPremios():aAjustes();
   const quem=S.adm&&S.adm.eu&&S.adm.eu!=='Gestão'?'Gestão · '+String(S.adm.eu).split(' ')[0]:'Gestão · Natura';
   return topbar(esc(quem),`<span class="topr">${minhaGestora()?`<button class="ghost icob perfb" data-act="meuPerfil" aria-label="Minha foto e cargo" title="Minha foto e cargo">${avatar(minhaGestora(),40)}</button>`:''}<button class="ghost icob ${S.tab==='ajustes'?'on':''}" data-act="tab" data-k="ajustes" aria-label="Ajustes" title="Ajustes">${ic('cog')}</button><button class="ghost" data-act="adminOut">Sair</button></span>`)+
-   `<nav class="mnav"><div class="wrap wide">${MENU.map(([g,l,icn,subs])=>`<button class="${grp&&grp[0]===g?'on':''}" data-act="mgrp" data-k="${g}">${ic(icn)}<span>${l}</span></button>`).join('')}</div></nav>
+   `<nav class="mnav"><div class="wrap wide">${MENU.map(([g,l,icn,subs])=>`<button class="${grp&&grp[0]===g?'on':''}" data-act="mgrp" data-k="${g}">${ic(icn)}<span>${l}</span>${g==='chat'&&(chNaoG()+frPendG())?`<span class="ch-badge num mnb">${chNaoG()+frPendG()>9?'9+':chNaoG()+frPendG()}</span>`:''}</button>`).join('')}</div></nav>
    ${grp?`<nav class="snav"><div class="wrap wide">${grp[3].map(([k,l])=>`<button class="${S.tab===k?'on':''}" data-act="tab" data-k="${k}">${l}</button>`).join('')}</div></nav>`:`<nav class="snav"><div class="wrap wide"><button class="on">Ajustes</button></div></nav>`}
    <main class="wrap wide stack">${body}</main>`+footer();
 }
@@ -3115,7 +3218,7 @@ document.addEventListener('change',async e=>{if(e.target.id!=='gp-foto')return;c
 (function(){if(!ICO.cog)ICO.cog=['M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z','M12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z'];
   if(!ICO.users)ICO.users=['M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2','M9 3a4 4 0 1 1 0 8 4 4 0 0 1 0-8z','M22 21v-2a4 4 0 0 0-3-3.87','M16 3.13a4 4 0 0 1 0 7.75'];
   if(!ICO.grad)ICO.grad=['M22 10 12 5 2 10l10 5 10-5z','M6 12v5c3 3 9 3 12 0v-5'];})();
-const MENU=[['dia','Dia a dia','listCheck',[['avaliar','Avaliar'],['recados','Recados'],['colegas','Colegas avaliam'],['limpeza','Limpeza']]],
+const MENU=[['chat','Chat','message',[['chat','Conversas'],['forum','Fórum de dúvidas']]],['dia','Dia a dia','listCheck',[['avaliar','Avaliar'],['recados','Recados'],['colegas','Colegas avaliam'],['limpeza','Limpeza']]],
   ['equipe','Equipe','users',[['equipe','Pessoas e PINs'],['escala','Escala e férias'],['acessos','Acessos']]],
   ['aprend','Treinamentos','grad',[['treinos','Treinamentos'],['quiz','Quizzes'],['base','Base de conhecimento']]],
   ['recon','Ranking','trophy',[['ranking','Ranking'],['premios','Prêmios']]],
@@ -4410,16 +4513,358 @@ function MOCK_BASE(b){
   return {ok:true};
 }
 
+
+/* =====================================================================
+   CHAT — conversa privada de cada pessoa com a gestão (dúvidas)
+   e o Grupo da equipe (substitui o grupo do WhatsApp).
+   ===================================================================== */
+Object.assign(RPC,{
+  chatColab:['chat_colab',['p_pin','p_desde']],chatEnviarColab:['chat_enviar_colab',['p_pin','p_conversa','p_texto','p_foto']],chatLerColab:['chat_ler_colab',['p_pin','p_conversa','p_ate']],
+  chatLista:['chat_gestao_lista',['p_pin']],chatMsgsG:['chat_gestao_msgs',['p_pin','p_conversa','p_desde']],chatEnviarG:['chat_enviar_gestao',['p_pin','p_conversa','p_texto','p_foto']],chatLerG:['chat_ler_gestao',['p_pin','p_conversa','p_ate']],
+  chatApagar:['chat_apagar',['p_pin','p_id']],chatModo:['chat_modo_grupo',['p_pin','p_so_gestao']],salvarPushG:['salvar_push_gestao',['p_pin','p_sub']],chatAntes:['chat_anteriores',['p_pin','p_conversa','p_antes']],
+});
+const CH={msgs:{},max:0,lendo:false};          /* equipe */
+const CG={msgs:{},lista:null,lendo:false};     /* gestão */
+function chHora(iso){const d=new Date(iso),h=new Date();const hm=pad2(d.getHours())+':'+pad2(d.getMinutes());return d.toDateString()===h.toDateString()?hm:pad2(d.getDate())+'/'+pad2(d.getMonth()+1)+' '+hm}
+function chDia(iso){const d=new Date(iso),h=new Date(),o=new Date(Date.now()-864e5);if(d.toDateString()===h.toDateString())return 'Hoje';if(d.toDateString()===o.toDateString())return 'Ontem';return DIAS_L[d.getDay()]+', '+pad2(d.getDate())+'/'+pad2(d.getMonth()+1)}
+function chTexto(t){return esc(t).replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>').replace(/\n/g,'<br>')}
+function chMerge(alvo,lista){const ids=new Set((alvo||[]).map(m=>m.id));const out=(alvo||[]).slice();lista.forEach(m=>{if(ids.has(m.id)){const i=out.findIndex(x=>x.id===m.id);out[i]=m}else out.push(m)});return out.sort((a,b)=>a.id-b.id)}
+/* bolhas: meu(m) diz se a mensagem é "minha" (fica à direita) */
+function chBolhas(lista,meu,{gestao=false,grupo=false,podeApagar=false,mais=false}={}){
+  if(!lista.length)return `<div class="ch-vazio">${ic('message')}<span>Nenhuma mensagem ainda.${grupo?'':' Escreva abaixo para começar.'}</span></div>`;
+  let dia='',out=mais?`<button class="link ch-mais" data-act="chMais">Ver mensagens anteriores</button>`:'';
+  lista.forEach((m,i)=>{const dd=chDia(m.em);if(dd!==dia){dia=dd;out+=`<div class="ch-dia"><span>${esc(dd)}</span></div>`}
+    const mine=meu(m),ant=lista[i-1],mesmo=ant&&ant.tipo===m.tipo&&ant.autorId===m.autorId&&chDia(ant.em)===dd&&(new Date(m.em)-new Date(ant.em))<5*60e3;
+    const nome=m.tipo==='g'?`${esc(String(m.autor||'Gestão').split(' ')[0])} <span class="ch-tag">gestão</span>`:esc(m.autor||'');
+    out+=`<div class="ch-m ${mine?'eu':''} ${m.tipo==='g'?'g':''} ${mesmo?'cont':''}" data-id="${m.id}">
+      ${!mine&&!mesmo&&(grupo||gestao||m.tipo==='g')?`<div class="ch-n">${nome}</div>`:''}
+      <div class="ch-b">${m.apagada?'<i class="muted">Mensagem apagada pela gestão</i>':`${m.foto?`<button class="ch-foto" data-act="chFoto" data-id="${m.id}"><img src="${m.foto}" alt="Foto enviada" loading="lazy"></button>`:''}${m.texto?`<div class="ch-t">${chTexto(m.texto)}</div>`:''}`}
+        <span class="ch-h">${chHora(m.em)}${podeApagar&&!m.apagada?` <button class="ch-del" data-act="chApagar" data-id="${m.id}" aria-label="Apagar mensagem" title="Apagar">${ic('trash')}</button>`:''}</span></div></div>`});
+  return out;
+}
+function chComposer(bloq){
+  if(bloq)return `<div class="ch-comp off">${ic('lock')}<span>${esc(bloq)}</span></div>`;
+  return `<div class="ch-comp"><div id="ch-prev"></div><div class="ch-row">
+    <label class="ch-ico" aria-label="Enviar foto" title="Enviar foto">${ic('image')}<input type="file" id="ch-arq" accept="image/*" hidden></label>
+    <textarea id="ch-txt" rows="1" placeholder="Escreva uma mensagem" maxlength="2000" aria-label="Mensagem"></textarea>
+    <button class="ch-env" data-act="chEnviar" aria-label="Enviar">${ic('send')}</button></div></div>`;
+}
+function chRolar(forcar){const el=$('#ch-lista');if(!el)return;const perto=el.scrollHeight-el.scrollTop-el.clientHeight<160;if(forcar||perto)el.scrollTop=el.scrollHeight}
+function chAtualizarLista(html,forcar){const el=$('#ch-lista');if(!el)return false;const perto=el.scrollHeight-el.scrollTop-el.clientHeight<160;el.innerHTML=html;if(forcar||perto)el.scrollTop=el.scrollHeight;return true}
+async function chFotoArquivo(f){if(!f||!/^image\//.test(f.type))throw new Error('Escolha uma foto.');return await resizeFoto(f,1280,1280,false,450000)}
+async function chAvisar(pin,id){try{if(DEMO||!id)return;fetch(SUPA_URL.replace(/\/$/,'')+'/functions/v1/chat-aviso',{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPA_KEY},body:JSON.stringify({pin,id})}).catch(()=>{})}catch(e){}}
+function chFotoModal(lista,id){const m=lista.find(x=>x.id===+id);if(!m||!m.foto)return;M={};openModal(`<div style="text-align:center"><img src="${m.foto}" alt="Foto" style="max-width:100%;max-height:75vh;border-radius:12px"></div><div class="acts" style="margin-top:12px"><a class="btn alt" href="${m.foto}" download="foto-chat-${m.id}.jpg">${ic('download')} Baixar</a><button class="btn" data-act="close">Fechar</button></div>`)}
+
+/* ---------------------------- EQUIPE ---------------------------- */
+function chNao(){return (S.chat?(S.chat.naoGrupo||0)+(S.chat.naoPrivado||0):0)+frNovas()}
+function chAjustar(){const w=$('.ch-wrap')||$('.chg');if(!w)return;const top=w.getBoundingClientRect().top+scrollY,nav=$('.bnav'),nb=nav&&getComputedStyle(nav).display!=='none'?nav.getBoundingClientRect().height:0;w.style.height=Math.max(360,innerHeight-top-nb-14)+'px'}
+addEventListener('resize',()=>chAjustar());
+async function carregarChat(){
+  if(!S.me||CH.lendo)return;CH.lendo=true;
+  try{const r=await call('chatColab',S.me.pin,CH.max||0);const novas=r.msgs||[];
+    const antes=chNao();S.chat=r;
+    if(novas.length){const meu=S.me.id||(eu()||{}).id;CH.max=Math.max(CH.max,...novas.map(m=>m.id));
+      CH.msgs.grupo=chMerge(CH.msgs.grupo,novas.filter(m=>m.conversa==='grupo'));CH.msgs.gestao=chMerge(CH.msgs.gestao,novas.filter(m=>m.conversa!=='grupo'))}
+    if(S.view==='home'&&S.ctab==='chat'){if((S.chConv||'gestao')!=='forum'){chMarcarLido();if(!chAtualizarLista(cChatLista()))render()}}
+    else if(S.view==='home'&&(antes!==chNao()||novas.length)&&!S.play&&!$('#modal').innerHTML&&!/INPUT|TEXTAREA/.test((document.activeElement||{}).tagName||''))render();
+  }catch(e){}finally{CH.lendo=false}
+}
+function chMarcarLido(){
+  const conv=S.chConv||'gestao',l=CH.msgs[conv]||[];if(!l.length||!S.chat)return;const ult=l[l.length-1].id;
+  const k=conv==='grupo'?'lidoGrupo':'lidoPrivado';if((S.chat[k]||0)>=ult)return;
+  S.chat[k]=ult;if(conv==='grupo')S.chat.naoGrupo=0;else S.chat.naoPrivado=0;
+  call('chatLerColab',S.me.pin,conv,ult).catch(()=>{});
+}
+function cChatLista(){const conv=S.chConv||'gestao',me=eu()||{},l=CH.msgs[conv]||[];
+  return chBolhas(l,m=>m.tipo==='c'&&m.autorId===me.id,{grupo:conv==='grupo',mais:l.length>=80&&!CH['fim_'+conv]})}
+function cChat(me){
+  if(!S.chat){carregarChat();return carregando('Abrindo o chat…')}
+  const conv=S.chConv||'gestao',c=S.chat,gs=c.gestoras||[];
+  const aba=(k,l,n)=>`<button class="${conv===k?'on':''}" data-act="chConv" data-k="${k}">${l}${n?` <span class="ch-badge num">${n}</span>`:''}</button>`;
+  const info=conv==='grupo'?`<div class="ch-info">${ic('users')}<span><b>Grupo da equipe.</b> Avisos da gestão e conversas de todos. Todos da equipe veem.${c.soGestao?' No momento, <b>só a gestão envia</b> mensagens aqui.':''}</span></div>`
+    :`<div class="ch-info">${gs.length?`<span class="ch-av">${gs.slice(0,3).map(g=>avatar(g,28)).join('')}</span>`:ic('message')}<span><b>Fale com a gestão.</b> Tire suas dúvidas aqui. Só você e as gestoras${gs.length?' ('+gs.map(g=>esc(String(g.nome).split(' ')[0])).join(' e ')+')':''} veem esta conversa.</span></div>`;
+  const abas=`<div class="seg ch-abas" style="grid-template-columns:repeat(3,1fr)">${aba('gestao',ic('message')+' Gestão',c.naoPrivado)}${aba('grupo',ic('users')+' Grupo',c.naoGrupo)}${aba('forum',ic('help')+' Dúvidas',frNovas())}</div>`;
+  if(conv==='forum')return `<div class="stack">${abas}${cForum()}</div>`;
+  const bloq=conv==='grupo'&&c.soGestao?'Só a gestão envia mensagens no grupo. Use a aba "Gestão" para falar com elas.':'';
+  setTimeout(()=>{chAjustar();chRolar(true);chMarcarLido()},30);
+  return `<div class="ch-wrap">${abas}
+    ${info}<div class="ch-lista" id="ch-lista">${cChatLista()}</div>${chComposer(bloq)}</div>`;
+}
+function chatCard(){const n=chNao();if(!n)return '';
+  const ch=S.chat||{},k=ch.naoPrivado?'gestao':ch.naoGrupo?'grupo':'forum';
+  return `<button class="cta rec-cta" data-act="chIr" data-k="${k}"><span class="ic">${ic('message')}</span><span style="flex:1;min-width:0"><b style="display:block">Você tem ${n} mensage${n>1?'ns novas':'m nova'} no chat</b><small style="display:block;font-weight:600">${k==='gestao'?'Resposta da gestão':k==='grupo'?'Grupo da equipe':'Resposta no fórum de dúvidas'} · toque para ler</small></span><span>›</span></button>`}
+async function chEnviarColab(b){
+  const t=$('#ch-txt'),txt=(t.value||'').trim(),foto=S.chFoto||null,conv=S.chConv||'gestao';
+  if(!txt&&!foto)return;busyBtn(b,true,'');
+  try{const r=await call('chatEnviarColab',S.me.pin,conv,txt,foto);t.value='';S.chFoto=null;const p=$('#ch-prev');if(p)p.innerHTML='';chAvisar(S.me.pin,r.id);await carregarChat();chRolar(true)}
+  catch(e){toast(msg(e))}busyBtn(b,false);t.style.height='';t.focus();
+}
+setInterval(()=>{if(!S.me||S.view!=='home'||document.visibilityState!=='visible')return;
+  const aberto=S.ctab==='chat';const ag=Date.now();if(aberto||ag-(CH.ult||0)>45000){CH.ult=ag;carregarChat()}},6000);
+
+/* ---------------------------- GESTÃO ---------------------------- */
+function chNaoG(){return CG.lista?(CG.lista.conversas||[]).reduce((s,c)=>s+(c.nao||0),0):0}
+async function carregarChatG(){
+  if(!adminPin||CG.lendo)return;CG.lendo=true;
+  try{const antes=chNaoG();CG.lista=await call('chatLista',adminPin);
+    const sel=S.chatSel;
+    if(sel){const l=CG.msgs[sel]||[];const nov=await call('chatMsgsG',adminPin,sel,l.length?l[l.length-1].id:0);if(nov.length)CG.msgs[sel]=chMerge(l,nov);chMarcarLidoG()}
+    if(S.view==='admin'&&S.tab==='chat'){const lis=$('#chg-convs');if(lis)lis.innerHTML=chListaGHtml();if(!sel||!chAtualizarLista(chThreadGLista()))if(!$('#ch-txt'))render()}
+    else if(S.view==='admin'&&antes!==chNaoG()&&!$('#modal').innerHTML&&!/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||''))render();
+  }catch(e){}finally{CG.lendo=false}
+}
+function chMarcarLidoG(){const sel=S.chatSel,l=CG.msgs[sel]||[];if(!sel||!l.length)return;const ult=l[l.length-1].id;
+  const c=(CG.lista&&CG.lista.conversas||[]).find(x=>x.conversa===sel);if(c)c.nao=0;
+  if((CG['lido_'+sel]||0)>=ult)return;CG['lido_'+sel]=ult;call('chatLerG',adminPin,sel,ult).catch(()=>{})}
+function chNomeConv(conv){if(conv==='grupo')return {nome:'Grupo da equipe',sub:'Todos da equipe'};const c=(S.adm&&S.adm.equipe||[]).find(x=>x.id===conv);return c?{nome:c.nome,sub:GRUPOS[c.grupo]?GRUPOS[c.grupo].nome:'',c}:{nome:'Colaborador removido',sub:''}}
+function chListaGHtml(){
+  const cs=(CG.lista&&CG.lista.conversas)||[],grupo=cs.find(c=>c.conversa==='grupo')||{conversa:'grupo'},priv=cs.filter(c=>c.conversa!=='grupo');
+  const b=(S.chatBusca||'').toLowerCase();
+  const linha=c=>{const n=chNomeConv(c.conversa),u=c.ultima;if(b&&!n.nome.toLowerCase().includes(b))return '';
+    return `<button class="chg-row ${S.chatSel===c.conversa?'on':''}" data-act="chSel" data-k="${esc(c.conversa)}">${c.conversa==='grupo'?`<span class="chg-gi">${ic('users')}</span>`:avatar(n.c||{nome:n.nome},42)}
+      <span class="t"><b>${esc(n.nome)}</b><small>${u?(u.tipo==='g'?'Você: ':c.conversa==='grupo'?esc(String(u.autor||'').split(' ')[0])+': ':'')+esc(u.apagada?'Mensagem apagada':u.texto?u.texto.slice(0,60):'Foto'):esc(n.sub)}</small></span>
+      <span class="chg-r">${u?`<small>${chHora(u.em)}</small>`:''}${c.nao?`<span class="ch-badge num">${c.nao}</span>`:c.aguardando&&c.conversa!=='grupo'?'<span class="chip gold" style="font-size:11px">Responder</span>':''}</span></button>`};
+  return linha(grupo)+(priv.length?`<div class="chg-sep">Conversas com a equipe</div>`+priv.map(linha).join(''):`<div class="chg-sep">Ninguém escreveu ainda. Use "Nova conversa" para falar com alguém.</div>`);
+}
+function chThreadGLista(){const sel=S.chatSel,l=CG.msgs[sel]||[];return chBolhas(l,m=>m.tipo==='g',{gestao:true,grupo:sel==='grupo',podeApagar:true,mais:l.length>=80&&!CG['fim_'+sel]})}
+function aChat(){
+  if(!CG.lista){carregarChatG();return carregando('Abrindo o chat…')}
+  const sel=S.chatSel,n=sel?chNomeConv(sel):null,pushOk=pushSuportado()&&Notification.permission==='granted'&&LS.get('qsn_push_g')==='1';
+  const lista=`<div class="chg-l ${sel?'esconde-m':''}"><div class="chg-top"><input id="chat-busca" type="search" placeholder="Buscar pessoa" value="${esc(S.chatBusca||'')}"><button class="btn sm" data-act="chNova">${ic('plus')} Nova conversa</button></div>
+    ${pushOk?'':`<button class="chg-push" data-act="chPushG">${ic('bell')} Receber aviso no celular quando a equipe escrever</button>`}
+    <div id="chg-convs">${chListaGHtml()}</div></div>`;
+  if(sel&&!CG.msgs[sel]){call('chatMsgsG',adminPin,sel,0).then(l=>{CG.msgs[sel]=l;chMarcarLidoG();render()}).catch(e=>toast(msg(e)))}
+  const thread=sel?`<div class="chg-t"><div class="chg-h"><button class="ghost icob so-m" data-act="chSel" data-k="" aria-label="Voltar">${ic('chevL')}</button>${sel==='grupo'?`<span class="chg-gi">${ic('users')}</span>`:avatar(n.c||{nome:n.nome},40)}<div style="flex:1;min-width:0"><b>${esc(n.nome)}</b><small class="muted" style="display:block">${sel==='grupo'?'Todos da equipe veem as mensagens':'Conversa privada · só esta pessoa e a gestão veem'}</small></div>
+      ${sel==='grupo'?`<label class="chg-modo"><span>Só a gestão envia</span><button class="switch ${CG.lista.soGestao?'on':''}" data-act="chModo" role="switch" aria-checked="${!!CG.lista.soGestao}" aria-label="Só a gestão envia no grupo"></button></label>`:''}</div>
+      <div class="ch-lista" id="ch-lista">${CG.msgs[sel]?chThreadGLista():carregando('Abrindo…')}</div>${chComposer('')}</div>`
+    :`<div class="chg-t vazio esconde-m"><div class="ch-vazio">${ic('message')}<span>Escolha uma conversa à esquerda.<br>O <b>Grupo da equipe</b> substitui o grupo do WhatsApp.</span></div></div>`;
+  setTimeout(()=>{chAjustar();if(sel)chRolar(true)},30);
+  return `<div class="chg">${lista}${thread}</div>`;
+}
+async function chEnviarG(b){
+  const t=$('#ch-txt'),txt=(t.value||'').trim(),foto=S.chFoto||null,sel=S.chatSel;
+  if(!sel||(!txt&&!foto))return;busyBtn(b,true,'');
+  try{const r=await call('chatEnviarG',adminPin,sel,txt,foto);t.value='';S.chFoto=null;const p=$('#ch-prev');if(p)p.innerHTML='';chAvisar(adminPin,r.id);await carregarChatG();chRolar(true)}
+  catch(e){toast(msg(e))}busyBtn(b,false);t.style.height='';t.focus();
+}
+async function ligarAvisosG(){
+  if(!pushSuportado()){toast(IOS&&!STANDALONE?'No iPhone, instale o app na tela inicial primeiro.':'Este aparelho não aceita avisos pelo navegador.');return}
+  try{if(Notification.permission!=='granted'){const p=await Notification.requestPermission();if(p!=='granted'){toast('Avisos bloqueados. Libere nas configurações do navegador.');return}}
+    const reg=await navigator.serviceWorker.ready;let sub=await reg.pushManager.getSubscription();if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u8(VAPID_PUB)});
+    await call('salvarPushG',adminPin,sub.toJSON());LS.set('qsn_push_g','1');toast('Pronto! Você vai receber um aviso quando a equipe escrever.');render()}
+  catch(e){toast('Não foi possível ligar os avisos: '+msg(e))}
+}
+setInterval(()=>{if(!adminPin||S.view!=='admin'||document.visibilityState!=='visible')return;
+  const aberto=S.tab==='chat';const ag=Date.now();if(aberto||ag-(CG.ult||0)>45000){CG.ult=ag;carregarChatG()}},6000);
+
+/* ---------------------------- ações ---------------------------- */
+Object.assign(A,{
+  chConv:d=>{S.chConv=d.k;S.chFoto=null;render();if(d.k==='forum')carregarForum()},
+  chIr:d=>{S.ctab='chat';S.chConv=d.k;S.play=null;render();scrollTo(0,0)},
+  chEnviar:(d,b)=>S.view==='admin'?chEnviarG(b):chEnviarColab(b),
+  chFoto:d=>chFotoModal(S.view==='admin'?(CG.msgs[S.chatSel]||[]):(CH.msgs[S.chConv||'gestao']||[]),d.id),
+  chTirarFoto:()=>{S.chFoto=null;const p=$('#ch-prev');if(p)p.innerHTML=''},
+  chMais:async()=>{const adm=S.view==='admin',conv=adm?S.chatSel:(S.chConv||'gestao'),st=adm?CG:CH,l=st.msgs[conv]||[];if(!l.length)return;
+    try{const ant=await call('chatAntes',adm?adminPin:S.me.pin,conv,l[0].id);if(ant.length<80)st['fim_'+conv]=1;const el=$('#ch-lista'),h=el?el.scrollHeight:0;st.msgs[conv]=chMerge(l,ant);
+      if(el){el.innerHTML=adm?chThreadGLista():cChatLista();el.scrollTop=el.scrollHeight-h}}catch(e){toast(msg(e))}},
+  chSel:d=>{S.chatSel=d.k||null;S.chFoto=null;render();if(d.k)scrollTo(0,0)},
+  chApagar:d=>confirmModal('Apagar esta mensagem?','Ela some para todos e aparece "Mensagem apagada pela gestão".','Apagar',async()=>{await call('chatApagar',adminPin,+d.id);const l=CG.msgs[S.chatSel]||[];const m=l.find(x=>x.id===+d.id);if(m){m.apagada=true;m.foto=null;m.texto=''}render();toast('Mensagem apagada.')}),
+  chModo:async(d,b)=>{const on=!CG.lista.soGestao;b.disabled=true;try{await call('chatModo',adminPin,on);CG.lista.soGestao=on;render();toast(on?'Agora só a gestão envia no grupo.':'Toda a equipe pode enviar no grupo.')}catch(e){toast(msg(e));b.disabled=false}},
+  chPushG:()=>ligarAvisosG(),
+  chNova:()=>{const eq=(S.adm.equipe||[]).filter(c=>c.ativo&&GRUPOS[c.grupo]);M={};
+    openModal(`<h2>Nova conversa</h2><p class="muted" style="margin-top:0">Escolha com quem falar. A conversa é privada: só a pessoa e a gestão veem.</p>
+      <div class="list" style="max-height:60vh;overflow:auto">${ORDEM_G.map(g=>{const cs=eq.filter(c=>c.grupo===g).sort((a,b)=>String(a.nome).localeCompare(String(b.nome),'pt-BR'));return cs.length?`<div class="chg-sep">${esc(GRUPOS[g].nome)}</div>`+cs.map(c=>`<button class="chg-row" data-act="chNovaOk" data-k="${esc(c.id)}">${avatar(c,36)}<span class="t"><b>${esc(c.nome)}</b></span>${ic('chevR')}</button>`).join(''):''}).join('')}</div>
+      <div class="acts"><button class="btn alt" data-act="close">Cancelar</button></div>`)},
+  chNovaOk:d=>{closeModal();S.chatSel=d.k;CG.msgs[d.k]=CG.msgs[d.k]||null;render()},
+});
+document.addEventListener('change',async e=>{
+  if(e.target.id==='ch-arq'){const f=e.target.files[0];e.target.value='';if(!f)return;
+    try{S.chFoto=await chFotoArquivo(f);const p=$('#ch-prev');if(p)p.innerHTML=`<div class="ch-pv"><img src="${S.chFoto}" alt="Foto escolhida"><span>Foto pronta para enviar</span><button class="link" data-act="chTirarFoto">Tirar</button></div>`;const t=$('#ch-txt');t&&t.focus()}
+    catch(err){toast(msg(err))}}
+});
+document.addEventListener('input',e=>{
+  if(e.target.id==='ch-txt'){const t=e.target;t.style.height='auto';t.style.height=Math.min(t.scrollHeight,140)+'px'}
+  if(e.target.id==='chat-busca'){S.chatBusca=e.target.value;const l=$('#chg-convs');if(l)l.innerHTML=chListaGHtml()}
+});
+document.addEventListener('keydown',e=>{if(e.target.id==='ch-txt'&&e.key==='Enter'&&(e.ctrlKey||e.metaKey||(!('ontouchstart' in window)&&!e.shiftKey))){e.preventDefault();const b=document.querySelector('[data-act=chEnviar]');b&&b.click()}});
+addEventListener('hashchange',()=>{const h=location.hash;
+  if(S.me&&S.view==='home'&&(h==='#chat'||h==='#chat-grupo')){S.play=null;S.ctab='chat';S.chConv=h==='#chat-grupo'?'grupo':'gestao';render();carregarChat()}
+  if(S.view==='admin'&&h.startsWith('#chat-')){S.tab='chat';S.chatSel=h.slice(6);render();carregarChatG()}});
+
+/* ---------------------------- demo ---------------------------- */
+const CHAT_DEMO={msgs:[{id:1,conversa:'grupo',tipo:'g',autorId:'g1',autor:'Ianne Tamara',texto:'Bom dia, equipe! A partir de hoje os avisos ficam aqui no app.',em:new Date(Date.now()-3600e3).toISOString()},{id:2,conversa:'e0',tipo:'g',autorId:'g2',autor:'Jessyca Almeida',texto:'Oi! Qualquer dúvida, pode escrever aqui.',em:new Date(Date.now()-1800e3).toISOString()}],so:false,n:3};
+Object.assign(MOCK,{
+  chatColab:(pin,desde)=>{const me=S.me||{id:'e0',nome:'Ana'};return {soGestao:CHAT_DEMO.so,gestoras:[{id:'g1',nome:'Ianne Tamara',cargo:'Gerente da Unidade',foto:''},{id:'g2',nome:'Jessyca Almeida',cargo:'Gerente de Processos',foto:''}],lidoGrupo:0,lidoPrivado:0,naoGrupo:0,naoPrivado:0,msgs:CHAT_DEMO.msgs.filter(m=>(m.conversa==='grupo'||m.conversa===me.id)&&m.id>(desde||0))}},
+  chatEnviarColab:(pin,conv,t,f)=>{const me=S.me||{id:'e0',nome:'Ana'};const id=++CHAT_DEMO.n;CHAT_DEMO.msgs.push({id,conversa:conv==='grupo'?'grupo':me.id,tipo:'c',autorId:me.id,autor:me.nome,texto:t,foto:f,em:new Date().toISOString()});return {ok:true,id}},
+  chatLerColab:()=>({ok:true}),chatLerG:()=>({ok:true}),
+  chatLista:()=>{const convs=[...new Set(CHAT_DEMO.msgs.map(m=>m.conversa))];return {soGestao:CHAT_DEMO.so,conversas:convs.map(c=>{const l=CHAT_DEMO.msgs.filter(m=>m.conversa===c);const u=l[l.length-1];return {conversa:c,ultimoId:u.id,ultima:u,nao:l.filter(m=>m.tipo==='c').length,aguardando:u.tipo==='c'}}).sort((a,b)=>b.ultimoId-a.ultimoId)}},
+  chatMsgsG:(p,conv,desde)=>CHAT_DEMO.msgs.filter(m=>m.conversa===conv&&m.id>(desde||0)),
+  chatEnviarG:(p,conv,t,f)=>{const id=++CHAT_DEMO.n;CHAT_DEMO.msgs.push({id,conversa:conv,tipo:'g',autorId:'g1',autor:'Ianne Tamara',texto:t,foto:f,em:new Date().toISOString()});return {ok:true,id}},
+  chatApagar:(p,id)=>{const m=CHAT_DEMO.msgs.find(x=>x.id===id);if(m)m.apagada=true;return {ok:true}},
+  chatModo:(p,on)=>{CHAT_DEMO.so=on;return {ok:true}},salvarPushG:()=>({ok:true}),chatAntes:()=>[],
+});
+
+
+/* =====================================================================
+   FÓRUM DE DÚVIDAS — a equipe pergunta, a gestão responde para todos.
+   Quem perguntou pode esconder o nome dos colegas (a gestão sempre vê).
+   ===================================================================== */
+Object.assign(RPC,{
+  forumColab:['forum_colab',['p_pin']],forumPerguntar:['forum_perguntar',['p_pin','p_titulo','p_texto','p_anonimo']],forumApoiar:['forum_apoiar',['p_pin','p_id']],
+  forumLer:['forum_ler_colab',['p_pin','p_ate']],forumApagarMinha:['forum_apagar_minha',['p_pin','p_id']],
+  forumG:['forum_gestao',['p_pin']],forumResponder:['forum_responder',['p_pin','p_id','p_texto']],forumAcao:['forum_gestao_acao',['p_pin','p_id','p_acao']],
+});
+const FR={lendo:false,ult:0,sig:''};
+function frData(iso){const d=new Date(iso);return pad2(d.getDate())+'/'+pad2(d.getMonth()+1)+' às '+pad2(d.getHours())+':'+pad2(d.getMinutes())}
+function frAvisar(pin,tipo,id){try{if(DEMO||!id)return;fetch(SUPA_URL.replace(/\/$/,'')+'/functions/v1/chat-aviso',{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPA_KEY},body:JSON.stringify({pin,id,forum:tipo})}).catch(()=>{})}catch(e){}}
+function frNovas(){return S.forum?(S.forum.novas||0):0}
+function frPendG(){return S.forumG?(S.forumG.perguntas||[]).filter(p=>!p.respostas.length).length:0}
+function frOcupado(){return !!$('#modal').innerHTML||/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||'')}
+function frFiltrar(ps,filtro,busca){const b=(busca||'').trim().toLowerCase();
+  return ps.filter(p=>(filtro==='resp'?p.respostas.length:filtro==='agu'?!p.respostas.length:filtro==='minhas'?(p.minha||p.apoiei):true)
+    &&(!b||(p.titulo+' '+p.texto+' '+p.respostas.map(r=>r.texto).join(' ')).toLowerCase().includes(b)))}
+function frRespostas(p,gestao){
+  if(!p.respostas.length)return `<div class="fr-espera">${ic('clock')} Aguardando resposta da gestão</div>`;
+  return p.respostas.map(r=>`<div class="fr-resp"><div class="fr-rh">${ic('checkCircle')}<b>${esc(r.autor)}</b><span class="ch-tag">Gestão</span><small>${frData(r.em)}</small>${gestao?`<button class="ch-del" data-act="frApagarResp" data-id="${r.id}" aria-label="Apagar resposta" title="Apagar resposta">${ic('trash')}</button>`:''}</div><div class="fr-rt">${chTexto(r.texto)}</div></div>`).join('');
+}
+
+/* ---------------------------- EQUIPE ---------------------------- */
+async function carregarForum(forcar){
+  if(!S.me||FR.lendo)return;FR.lendo=true;
+  try{const antes=frNovas(),r=await call('forumColab',S.me.pin),sig=JSON.stringify(r.perguntas);const mudou=sig!==FR.sig;FR.sig=sig;S.forum=r;FR.ult=Date.now();
+    const aberto=S.view==='home'&&S.ctab==='chat'&&S.chConv==='forum';
+    if(aberto)frMarcarLido();
+    if(aberto&&(mudou||forcar)){if(forcar||!frOcupado())render()}
+    else if(S.view==='home'&&antes!==frNovas()&&!S.play&&!frOcupado())render();
+  }catch(e){}finally{FR.lendo=false}
+}
+function frMarcarLido(){const f=S.forum;if(!f)return;const ult=Math.max(0,...f.perguntas.flatMap(p=>p.respostas.map(r=>r.id)));
+  if(ult>(f.lido||0)){f.lido=ult;f.novas=0;call('forumLer',S.me.pin,ult).catch(()=>{})}}
+function cForum(){
+  if(!S.forum){carregarForum(true);return carregando('Abrindo o fórum…')}
+  const ps=S.forum.perguntas||[],filtro=S.frFiltro||'todas',lista=frFiltrar(ps,filtro,S.frBusca);
+  setTimeout(()=>{frMarcarLido();if(S.frAbrir){const el=document.getElementById('fr-'+S.frAbrir);S.frAbrir=null;if(el){el.scrollIntoView({block:'center'});el.classList.add('fr-luz')}}},40);
+  const f=(k,l)=>`<button class="${filtro===k?'on':''}" data-act="frFiltro" data-k="${k}">${l}</button>`;
+  return `<div class="ch-info">${ic('help')}<span><b>Fórum de dúvidas.</b> Pergunte aqui e a gestão responde <b>para todos</b>. Antes de perguntar, procure: talvez alguém já tenha feito a mesma pergunta.</span></div>
+    <button class="btn fr-nova" data-act="frNova">${ic('plus')} Fazer uma pergunta</button>
+    <input id="fr-busca" class="fr-busca" type="search" placeholder="Procurar dúvida (ex.: folga, uniforme, quiz)" value="${esc(S.frBusca||'')}">
+    <div class="seg fr-filtros" style="grid-template-columns:repeat(4,1fr)">${f('todas','Todas')}${f('resp','Respondidas')}${f('agu','Aguardando')}${f('minhas','Minhas')}</div>
+    <div class="stack" id="fr-lista">${frListaColab(lista,ps.length)}</div>`;
+}
+function frListaColab(lista,total){
+  if(!lista.length)return `<div class="ch-vazio">${ic('help')}<span>${total?'Nenhuma dúvida encontrada com esse filtro.':'Ainda não há perguntas.<br>Seja a primeira pessoa a perguntar!'}</span></div>`;
+  return lista.map(p=>`<article class="card fr-card ${p.fixada?'fix':''}" id="fr-${p.id}">
+    <div class="fr-top">${p.fixada?`<span class="chip gold">${ic('star')} Importante</span>`:''}${p.respostas.length?`<span class="chip ok">${ic('check')} Respondida</span>`:`<span class="chip off">Aguardando</span>`}</div>
+    <h3 class="fr-tit">${esc(p.titulo)}</h3>${p.texto?`<div class="fr-txt">${chTexto(p.texto)}</div>`:''}
+    <small class="muted">${p.minha?'Você perguntou'+(p.anonimo?' (seu nome não aparece para os colegas)':''):p.autor?'Pergunta de '+esc(String(p.autor).split(' ')[0]):'Pergunta de um colega'} · ${frData(p.em)}</small>
+    ${frRespostas(p,false)}
+    <div class="fr-acts">${p.minha?`<span class="muted" style="font-size:13px">${p.apoios?`${p.apoios} colega${p.apoios>1?'s':''} também ${p.apoios>1?'têm':'tem'} essa dúvida`:''}</span><button class="link" data-act="frApagarMinha" data-id="${p.id}">Apagar minha pergunta</button>`
+      :`<button class="fr-eu ${p.apoiei?'on':''}" data-act="frApoiar" data-id="${p.id}" aria-pressed="${p.apoiei}">${ic('hand')} Também tenho essa dúvida${p.apoios?` · ${p.apoios}`:''}</button>`}</div>
+  </article>`).join('');
+}
+function frNovaModal(){M={};
+  openModal(`<h2>Fazer uma pergunta</h2>
+    <div class="fld"><label for="fr-t">Sua dúvida</label><input id="fr-t" maxlength="200" placeholder="Ex.: Como faço para trocar minha folga?"></div>
+    <div class="fld"><label for="fr-x">Mais detalhes <small class="muted">(opcional)</small></label><textarea id="fr-x" rows="4" maxlength="3000" placeholder="Explique melhor, se precisar."></textarea></div>
+    <label class="check" style="margin-bottom:10px"><input id="fr-a" type="checkbox"> Não mostrar meu nome para os colegas</label>
+    <div class="notice" style="font-size:14px">${ic('info')} A pergunta e a resposta ficam visíveis para <b>toda a equipe</b>, assim todo mundo aprende junto. A gestão sempre vê quem perguntou. Para um assunto só seu, use a aba <b>Gestão</b>.</div>
+    <p class="ferr"></p>
+    <div class="acts"><button class="btn alt" data-act="close">Cancelar</button><button class="btn" data-act="frEnviar">${ic('send')} Publicar pergunta</button></div>`);
+  setTimeout(()=>{const t=$('#fr-t');t&&t.focus()},60);
+}
+
+/* ---------------------------- GESTÃO ---------------------------- */
+async function carregarForumG(forcar){
+  if(!adminPin||FR.lendoG)return;FR.lendoG=true;
+  try{const antes=frPendG(),r=await call('forumG',adminPin),sig=JSON.stringify(r.perguntas);const mudou=sig!==FR.sigG;FR.sigG=sig;S.forumG=r;FR.ultG=Date.now();
+    if(S.view==='admin'&&(forcar||(S.tab==='forum'?mudou:antes!==frPendG()))&&(forcar||!frOcupado()))render();
+  }catch(e){}finally{FR.lendoG=false}
+}
+function aForum(){
+  if(!S.forumG){carregarForumG(true);return carregando('Abrindo o fórum…')}
+  const ps=S.forumG.perguntas||[],filtro=S.frFiltroG||(frPendG()?'agu':'todas'),lista=frFiltrar(ps,filtro,S.frBuscaG),pend=frPendG();
+  setTimeout(()=>{if(S.frAbrir){const el=document.getElementById('fr-'+S.frAbrir);S.frAbrir=null;if(el){el.scrollIntoView({block:'center'});el.classList.add('fr-luz');const t=el.querySelector('textarea');t&&t.focus()}}},60);
+  const f=(k,l)=>`<button class="${filtro===k?'on':''}" data-act="frFiltroG" data-k="${k}">${l}</button>`;
+  return `<div class="fr-g">
+    <div class="ch-info">${ic('help')}<span><b>Fórum de dúvidas da equipe.</b> A resposta aparece para todos. Aqui vocês veem o nome de quem perguntou, mesmo quando a pessoa escolheu ficar anônima para os colegas. ${pend?`<b>${pend} pergunta${pend>1?'s':''} aguardando resposta.</b>`:'Tudo respondido.'}</span></div>
+    <div class="fr-gtop"><input id="fr-busca-g" class="fr-busca" type="search" placeholder="Procurar dúvida" value="${esc(S.frBuscaG||'')}">
+      <div class="seg fr-filtros" style="grid-template-columns:repeat(3,1fr)">${f('agu','Aguardando'+(pend?' ('+pend+')':''))}${f('resp','Respondidas')}${f('todas','Todas')}</div></div>
+    <div class="stack" id="fr-lista-g">${lista.length?lista.map(frCardG).join(''):`<div class="ch-vazio">${ic('help')}<span>${ps.length?'Nada neste filtro.':'Ninguém perguntou ainda. Quando alguém perguntar, aparece aqui.'}</span></div>`}</div></div>`;
+}
+function frCardG(p){
+  const c=(S.adm&&S.adm.equipe||[]).find(x=>x.id===p.autorId)||{nome:p.autor||'?'};
+  return `<article class="card fr-card ${p.fixada?'fix':''}" id="fr-${p.id}">
+    <div class="fr-autor">${avatar(c,36)}<div style="flex:1;min-width:0"><b>${esc(p.autor||'')}</b><small class="muted" style="display:block">${frData(p.em)}${p.anonimo?' · <span class="chip off" style="font-size:11px">anônima para os colegas</span>':''}</small></div>
+      ${p.fixada?`<span class="chip gold">${ic('star')} Importante</span>`:''}${p.respostas.length?`<span class="chip ok">Respondida</span>`:`<span class="chip bad">Responder</span>`}</div>
+    <h3 class="fr-tit">${esc(p.titulo)}</h3>${p.texto?`<div class="fr-txt">${chTexto(p.texto)}</div>`:''}
+    ${p.apoiadores&&p.apoiadores.length?`<small class="muted">${ic('hand')} Também têm essa dúvida: ${p.apoiadores.map(n=>esc(String(n).split(' ')[0])).join(', ')}</small>`:''}
+    ${p.respostas.length?frRespostas(p,true):''}
+    <div class="fr-rform"><textarea id="fr-r-${p.id}" rows="2" maxlength="4000" placeholder="${p.respostas.length?'Complementar a resposta…':'Escreva a resposta para a equipe…'}"></textarea><button class="btn sm" data-act="frResponder" data-id="${p.id}">${ic('send')} Responder</button></div>
+    <div class="fr-acts"><button class="link" data-act="frFixar" data-id="${p.id}" data-k="${p.fixada?'desafixar':'fixar'}">${ic('star')} ${p.fixada?'Tirar dos importantes':'Marcar como importante (fica no topo)'}</button>
+      ${p.autorId?`<button class="link" data-act="frConversar" data-k="${esc(p.autorId)}">${ic('message')} Responder em particular</button>`:''}
+      <button class="link danger" data-act="frApagar" data-id="${p.id}">${ic('trash')} Apagar pergunta</button></div>
+  </article>`;
+}
+
+/* ---------------------------- ações ---------------------------- */
+Object.assign(A,{
+  frFiltro:d=>{S.frFiltro=d.k;render()},frFiltroG:d=>{S.frFiltroG=d.k;render()},
+  frNova:()=>frNovaModal(),
+  frEnviar:async(d,b)=>{const t=($('#fr-t').value||'').trim(),x=($('#fr-x').value||'').trim(),a=$('#fr-a').checked,er=$('.ferr');
+    if(t.length<5){er.textContent='Escreva sua dúvida (pelo menos algumas palavras).';return}
+    busyBtn(b,true);try{const r=await call('forumPerguntar',S.me.pin,t,x,a);frAvisar(S.me.pin,'p',r.id);closeModal();S.frFiltro='todas';S.frBusca='';await carregarForum(true);render();toast('Pergunta publicada! Você recebe um aviso quando a gestão responder.')}
+    catch(e){er.textContent=msg(e);busyBtn(b,false)}},
+  frApoiar:async(d,b)=>{b.disabled=true;try{const r=await call('forumApoiar',S.me.pin,+d.id);const p=S.forum.perguntas.find(x=>x.id===+d.id);if(p){p.apoiei=r.apoiei;p.apoios+=r.apoiei?1:-1}render();if(r.apoiei)toast('Anotado! Você também recebe a resposta.')}catch(e){toast(msg(e));b.disabled=false}},
+  frApagarMinha:d=>confirmModal('Apagar sua pergunta?','Ela some do fórum para todos.','Apagar',async()=>{await call('forumApagarMinha',S.me.pin,+d.id);S.forum.perguntas=S.forum.perguntas.filter(x=>x.id!==+d.id);render();toast('Pergunta apagada.')}),
+  frResponder:async(d,b)=>{const t=$('#fr-r-'+d.id),txt=(t.value||'').trim();if(!txt){toast('Escreva a resposta.');t.focus();return}
+    busyBtn(b,true);try{const r=await call('forumResponder',adminPin,+d.id,txt);frAvisar(adminPin,'r',r.id);t.value='';t.blur();await carregarForumG(true);toast('Resposta publicada. Quem perguntou recebe um aviso.')}catch(e){toast(msg(e));busyBtn(b,false)}},
+  frApagarResp:d=>confirmModal('Apagar esta resposta?','Ela some do fórum para todos.','Apagar',async()=>{await call('forumAcao',adminPin,+d.id,'apagar_resp');await carregarForumG(true);toast('Resposta apagada.')}),
+  frApagar:d=>confirmModal('Apagar esta pergunta?','A pergunta e as respostas somem do fórum para todos.','Apagar',async()=>{await call('forumAcao',adminPin,+d.id,'apagar');await carregarForumG(true);toast('Pergunta apagada.')}),
+  frFixar:async(d,b)=>{b.disabled=true;try{await call('forumAcao',adminPin,+d.id,d.k);await carregarForumG(true);toast(d.k==='fixar'?'Marcada como importante: fica no topo para a equipe.':'Saiu dos importantes.')}catch(e){toast(msg(e));b.disabled=false}},
+  frConversar:d=>{S.tab='chat';S.chatSel=d.k;CG.msgs[d.k]=CG.msgs[d.k]||null;render();scrollTo(0,0)},
+});
+document.addEventListener('input',e=>{
+  if(e.target.id==='fr-busca'){S.frBusca=e.target.value;const l=$('#fr-lista');if(l&&S.forum){const ps=S.forum.perguntas||[];l.innerHTML=frListaColab(frFiltrar(ps,S.frFiltro||'todas',S.frBusca),ps.length)}}
+  if(e.target.id==='fr-busca-g'){S.frBuscaG=e.target.value;const l=$('#fr-lista-g');if(l&&S.forumG){const ps=S.forumG.perguntas||[],lista=frFiltrar(ps,S.frFiltroG||(frPendG()?'agu':'todas'),S.frBuscaG);l.innerHTML=lista.length?lista.map(frCardG).join(''):`<div class="ch-vazio">${ic('help')}<span>Nada encontrado.</span></div>`}}
+});
+setInterval(()=>{if(document.visibilityState!=='visible')return;const ag=Date.now();
+  if(S.me&&S.view==='home'){const aberto=S.ctab==='chat'&&S.chConv==='forum';if(ag-FR.ult>(aberto?20000:60000))carregarForum()}
+  if(adminPin&&S.view==='admin'){const aberto=S.tab==='forum';if(ag-(FR.ultG||0)>(aberto?20000:60000))carregarForumG()}
+},5000);
+addEventListener('hashchange',()=>{const h=location.hash;
+  if(S.me&&S.view==='home'&&h.startsWith('#forum')){S.play=null;S.ctab='chat';S.chConv='forum';S.frAbrir=h.slice(7)||null;S.frFiltro='todas';render();carregarForum(true)}
+  if(S.view==='admin'&&h.startsWith('#forum')){S.tab='forum';S.frAbrir=h.slice(7)||null;S.frFiltroG='todas';render();carregarForumG(true)}});
+
+/* ---------------------------- demo ---------------------------- */
+const FORUM_DEMO={n:3,r:2,ps:[
+  {id:1,autorId:'e1',autor:'Bruno (exemplo)',anonimo:false,titulo:'Até quando posso trocar minha folga?',texto:'Queria trocar a folga de sábado com um colega.',em:new Date(Date.now()-86400e3).toISOString(),fixada:true,ap:['e2'],respostas:[{id:1,autor:'Jessyca Almeida',texto:'Pode trocar avisando a gestão até quarta-feira. As duas pessoas precisam concordar.',em:new Date(Date.now()-80000e3).toISOString()}]},
+  {id:2,autorId:'e3',autor:'Carla (exemplo)',anonimo:true,titulo:'O quiz vale ponto no ranking do mês?',texto:'',em:new Date(Date.now()-3600e3).toISOString(),fixada:false,ap:[],respostas:[]}]};
+function frDemoJson(p,meId,g){return {id:p.id,titulo:p.titulo,texto:p.texto,em:p.em,fixada:p.fixada,anonimo:p.anonimo,minha:p.autorId===meId,autor:g||!p.anonimo||p.autorId===meId?p.autor:null,autorId:g||!p.anonimo?p.autorId:null,apoios:p.ap.length,apoiei:p.ap.includes(meId),apoiadores:g?p.ap.map(()=>'Ana (exemplo)'):null,respostas:p.respostas}}
+Object.assign(MOCK,{
+  forumColab:()=>{const me=(S.me||{}).id||'e0';const ps=FORUM_DEMO.ps.filter(p=>!p.apagada).sort((a,b)=>(b.fixada-a.fixada)||(b.id-a.id));return {lido:0,novas:0,perguntas:ps.map(p=>frDemoJson(p,me,false))}},
+  forumPerguntar:(pin,t,x,a)=>{const me=S.me||{id:'e0',nome:'Ana'};const id=++FORUM_DEMO.n;FORUM_DEMO.ps.push({id,autorId:me.id,autor:me.nome,anonimo:a,titulo:t,texto:x,em:new Date().toISOString(),fixada:false,ap:[],respostas:[]});return {ok:true,id}},
+  forumApoiar:(pin,id)=>{const me=(S.me||{}).id||'e0',p=FORUM_DEMO.ps.find(x=>x.id===id);const i=p.ap.indexOf(me);if(i>=0)p.ap.splice(i,1);else p.ap.push(me);return {ok:true,apoiei:i<0}},
+  forumLer:()=>({ok:true}),forumApagarMinha:(pin,id)=>{FORUM_DEMO.ps.find(x=>x.id===id).apagada=true;return {ok:true}},
+  forumG:()=>({perguntas:FORUM_DEMO.ps.filter(p=>!p.apagada).sort((a,b)=>b.id-a.id).map(p=>frDemoJson(p,null,true))}),
+  forumResponder:(pin,id,t)=>{const rid=++FORUM_DEMO.r;FORUM_DEMO.ps.find(x=>x.id===id).respostas.push({id:rid,autor:'Ianne Tamara',texto:t,em:new Date().toISOString()});return {ok:true,id:rid}},
+  forumAcao:(pin,id,a)=>{if(a==='apagar_resp'){FORUM_DEMO.ps.forEach(p=>p.respostas=p.respostas.filter(r=>r.id!==id))}else{const p=FORUM_DEMO.ps.find(x=>x.id===id);if(a==='apagar')p.apagada=true;else p.fixada=a==='fixar'}return {ok:true}},
+});
+
 let TV_MODE=false;try{TV_MODE=new URLSearchParams(location.search).has('tv')}catch(e){}
 if(TV_MODE){S.view='tv';iniciarTv();tvPintar(true)}
 else{
 if(S.me&&location.hash==='#tarefas')S.ctab='tarefas';
 if(S.me&&location.hash==='#quiz')S.ctab='quiz';
 if(S.me&&location.hash==='#desemp')S.ctab='desemp';
+if(S.me&&(location.hash==='#chat'||location.hash==='#chat-grupo')){S.ctab='chat';S.chConv=location.hash==='#chat-grupo'?'grupo':'gestao'}
+if(S.view==='admin'&&location.hash.startsWith('#chat-')){S.tab='chat';S.chatSel=location.hash.slice(6)}
+if(S.me&&location.hash.startsWith('#forum')){S.ctab='chat';S.chConv='forum';S.frAbrir=location.hash.slice(7)||null}
+if(S.view==='admin'&&location.hash.startsWith('#forum')){S.tab='forum';S.frAbrir=location.hash.slice(7)||null;S.frFiltroG='todas'}
 if(S.me&&S.view==='home')registrar('abriu');
 render();
 if(S.view==='admin')carregarGestao();
 carregar();
+setTimeout(()=>{if(S.me&&S.view==='home'){carregarChat();carregarForum()}if(S.view==='admin'&&adminPin){carregarChatG();carregarForumG()}},1500);
 try{if(new URLSearchParams(location.search).has('gestao')&&S.view!=='admin'){S.view='adminLogin';S.pin='';S.pinErr='';render()}}catch(e){}
 }
 </script>
